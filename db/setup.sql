@@ -1,0 +1,3 @@
+DROP DATABASE IF EXISTS ch_test;
+
+CREATE DATABASE ch_test;
