@@ -1,9 +1,10 @@
-var Pool = require("pg").Pool;
-var ENV = process.env.NODE_ENV || "test";
+"use strict";
+const { Pool } = require("pg");
+const ENV = process.env.NODE_ENV || "test";
 require("dotenv").config({
-    path: "".concat(__dirname, "/../.env.").concat(ENV),
+    path: `${__dirname}/../.env.${ENV}`,
 });
-var pool = new Pool({
+const pool = new Pool({
     user: process.env.PGUSER,
     host: process.env.PGHOST,
     database: process.env.PGDATABASE,
