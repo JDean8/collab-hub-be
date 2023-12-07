@@ -1,4 +1,4 @@
-interface Connections {
+export interface Connections {
     user_id_a: number;
     user_id_b: number;
 }

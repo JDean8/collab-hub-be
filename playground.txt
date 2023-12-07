@@ -1,0 +1,8 @@
+You are now connected to database "ch_test" as user "karolinakonior".
+ user_id |   username   |     email      | password |    name    |             bio             |                            avatar_url                            
+---------+--------------+----------------+----------+------------+-----------------------------+------------------------------------------------------------------
+       1 | tickle122    | user1@mail.com | password | Tom Tickle | I love cats and JavaScript! | https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50
+       2 | happyamy2016 | user2@mail.com | password | Amy Happy  | I am a Junior Developer     | https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50
+       3 | grumpy19     | user3@mail.com | password | Paul Smith | I am a Senior Developer     | https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50
+(3 rows)
+

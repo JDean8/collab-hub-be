@@ -1,4 +1,4 @@
-interface Member_request {
+export interface Member_request {
     user_id: number;
     project_id: number;
 }

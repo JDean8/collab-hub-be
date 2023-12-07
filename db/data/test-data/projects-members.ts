@@ -1,4 +1,4 @@
-interface Project_member {
+export interface Project_member {
     project_id: number;
     member_id: number;
 }
