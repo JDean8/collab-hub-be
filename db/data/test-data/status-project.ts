@@ -1,4 +1,4 @@
-interface Status_project {
+export interface Status_project {
     status_id: number;
     project_id: number;
 }
