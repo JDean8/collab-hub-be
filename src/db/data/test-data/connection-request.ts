@@ -1,4 +1,4 @@
-interface Connection_request {
+export interface Connection_request {
     user_id_a: number;
     user_id_b: number;
 }

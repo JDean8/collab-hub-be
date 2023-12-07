@@ -1,4 +1,4 @@
-interface User_skill {
+export interface User_skill {
     user_id: number;
     skill_id: number;
 }
