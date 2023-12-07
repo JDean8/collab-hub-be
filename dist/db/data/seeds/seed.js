@@ -1,10 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.seed = void 0;
-const db = require("../connection.ts");
+const db = require("../../pool");
 const format = require("pg-format");
 const seed = ({ usersData }) => {
-    return db.query(`DROP TABLE IF EXISTS users CASCADE;`)
+    return db
+        .query(`DROP TABLE IF EXISTS users CASCADE;`)
         .then(() => {
         return db.query(`CREATE TABLE users (
             user_id SERIAL PRIMARY KEY,
@@ -20,7 +21,14 @@ const seed = ({ usersData }) => {
         const formattedUsers = format(`INSERT INTO users
             (username, email, password, name, bio, avatar_url)
             VALUES %L RETURNING *;`, usersData.users.map((user) => {
-            return [user.username, user.email, user.password, user.name, user.bio, user.avatar_url];
+            return [
+                user.username,
+                user.email,
+                user.password,
+                user.name,
+                user.bio,
+                user.avatar_url,
+            ];
         }));
         return db.query(formattedUsers);
     });

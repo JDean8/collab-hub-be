@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "setup-dbs": "psql -f ./db/setup.sql",
-    "seed": "ts-node ./db/seeds/run-seed.ts",
+    "setup-dbs": "psql -f ./src/db/setup.sql",
+    "dev": "node ./dist/api.js",
+    "seed": "node ./dist/db/data/seeds/run-seed.js",
     "playground": "psql -f playground.sql > playground.txt"
   },
   "keywords": [],
