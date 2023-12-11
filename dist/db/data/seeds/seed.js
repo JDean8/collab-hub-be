@@ -3,14 +3,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.seed = void 0;
 const db = require("../../pool");
 const format = require("pg-format");
-const seed = ({ usersData, skillsData, usersSkillsData }) => {
-    return db.query(`DROP TABLE IF EXISTS users_skills CASCADE;`)
+const seed = ({ usersData, skillsData, usersSkillsData, statusData, projectsData, projectsSkillsData, }) => {
+    return db
+        .query(`DROP TABLE IF EXISTS users_skills CASCADE;`)
         .then(() => {
         return db
             .query(`DROP TABLE IF EXISTS users CASCADE;`)
             .then(() => {
-            return db
-                .query('DROP TABLE IF EXISTS skills;');
+            return db.query("DROP TABLE IF EXISTS skills;");
+        })
+            .then(() => {
+            return db.query("DROP TABLE IF EXISTS status;");
+        })
+            .then(() => {
+            return db.query("DROP TABLE IF EXISTS projects;");
+        })
+            .then(() => {
+            return db.query("DROP TABLE IF EXISTS projects_skills;");
         })
             .then(() => {
             return db.query(`CREATE TABLE users (
@@ -26,12 +35,32 @@ const seed = ({ usersData, skillsData, usersSkillsData }) => {
             .then(() => {
             return db.query(`CREATE TABLE skills 
     (skill_id SERIAL PRIMARY KEY,
-    skill_name VARCHAR(255) NOT NULL)`);
+    skill_name VARCHAR(255) NOT NULL);`);
         })
             .then(() => {
             return db.query(`CREATE TABLE users_skills
     (user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
-    skill_id INT REFERENCES skills(skill_id) ON DELETE CASCADE)`);
+    skill_id INT REFERENCES skills(skill_id) ON DELETE CASCADE);`);
+        })
+            .then(() => {
+            return db.query(`CREATE TABLE status
+          (status_id SERIAL PRIMARY KEY,
+            status_name VARCHAR(255) NOT NULL);`);
+        })
+            .then(() => {
+            return db.query(`CREATE TABLE projects
+          (project_id SERIAL PRIMARY KEY,
+          project_author INT REFERENCES users(user_id) ON DELETE CASCADE,
+          project_name VARCHAR(255) NOT NULL,
+          project_description VARCHAR(500) NOT NULL,
+          project_created_at BIGINT,
+          required_members INT);`);
+        })
+            .then(() => {
+            return db.query(`
+          CREATE TABLE projects_skills
+          (project_id INT REFERENCES projects(project_id) ON DELETE CASCADE, 
+          skill_id INT REFERENCES skills(skill_id) ON DELETE CASCADE)`);
         })
             .then(() => {
             const formattedSkills = format(`INSERT INTO skills
@@ -64,6 +93,37 @@ const seed = ({ usersData, skillsData, usersSkillsData }) => {
             return [userSkill.user_id, userSkill.skill_id];
         }));
         return db.query(formattedUsersSkills);
+    })
+        .then(() => {
+        const formattedStatusData = format(`INSERT INTO status
+        (status_id, status_name)
+        VALUES %L RETURNING *;`, statusData.status.map((singleStatus) => {
+            return [singleStatus.status_id, singleStatus.status_name];
+        }));
+        return db.query(formattedStatusData);
+    })
+        .then(() => {
+        const formattedProjectsData = format(`INSERT INTO projects
+        (project_id, project_author, project_name, project_description, project_created_at, required_members)
+        VALUES %L RETURNING *;`, projectsData.projects.map((project) => {
+            return [
+                project.project_id,
+                project.project_author,
+                project.project_name,
+                project.project_description,
+                project.project_created_at,
+                project.required_members,
+            ];
+        }));
+        return db.query(formattedProjectsData);
+    })
+        .then(() => {
+        const formattedProjectsSkillsData = format(`INSERT INTO projects_skills
+        (project_id, skill_id)
+        VALUES %L RETURNING *;`, projectsSkillsData.projects_skills.map((projectSkill) => {
+            return [projectSkill.project_id, projectSkill.skill_id];
+        }));
+        return db.query(formattedProjectsSkillsData);
     });
 };
 exports.seed = seed;
