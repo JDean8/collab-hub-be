@@ -1,4 +1,4 @@
-You are now connected to database "ch_test" as user "sophiemelville".
+You are now connected to database "ch_test" as user "karolinakonior".
  user_id |   username   |     email      | password |    name    |             bio             |                            avatar_url                            
 ---------+--------------+----------------+----------+------------+-----------------------------+------------------------------------------------------------------
        1 | tickle122    | user1@mail.com | password | Tom Tickle | I love cats and JavaScript! | https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50
@@ -59,4 +59,43 @@ You are now connected to database "ch_test" as user "sophiemelville".
           5 |        6
           6 |        1
 (7 rows)
+
+ project_id | status_id 
+------------+-----------
+          1 |         1
+          2 |         1
+          3 |         2
+          4 |         2
+          5 |         3
+          6 |         3
+(6 rows)
+
+ project_id | member_id 
+------------+-----------
+          1 |         2
+          1 |         3
+          2 |         1
+          2 |         3
+          3 |         1
+          3 |         2
+(6 rows)
+
+ user_id | project_id 
+---------+------------
+       2 |          1
+       3 |          2
+       1 |          3
+       2 |          3
+(4 rows)
+
+ user_id_a | user_id_b 
+-----------+-----------
+         1 |         2
+         2 |         3
+(2 rows)
+
+ user_id_a | user_id_b 
+-----------+-----------
+         1 |         3
+(1 row)
 

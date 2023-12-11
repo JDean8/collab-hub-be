@@ -3,7 +3,7 @@ export interface Member_request {
     project_id: number;
 }
 
-export const member_reqest: Member_request[] = [
+export const member_request: Member_request[] = [
     {
         user_id: 2,
         project_id: 1
