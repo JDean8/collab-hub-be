@@ -1,8 +1,12 @@
-const db = require("../../db/pool");
-import { User } from "../../db/data/test-data/users";
+const db = require("../../../dist/db/pool.js");
+import { type User } from "../../db/data/test-data/users";
+
+type UserProps = {
+  rows: User[];
+};
 
 exports.selectAllUsers = () => {
-  return db.query("SELECT * FROM users").then((users: User[]) => {
-    console.log(users);
+  return db.query("SELECT * FROM users").then(({ rows }: UserProps) => {
+    return rows;
   });
 };

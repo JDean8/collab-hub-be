@@ -1,14 +1,18 @@
-import { Response } from "express-serve-static-core";
-
+import { Request, Response, NextFunction } from "express";
+import { apiRouter } from "./mvc/routers/api-router";
+const { handleCustomErrors, handlePSQLErrors } = require("./errors");
+const cors = require("cors");
 const express = require("express");
 
-const app = express();
-const port = process.env.PORT || 3000;
+export const app = express();
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Hello, TypeScript Express?!");
+app.use(cors());
+
+app.use("/api", apiRouter);
+
+app.all("/*", (req: Request, res: Response, next: NextFunction) => {
+  res.status(404).send({ msg: "URL not found" });
 });
 
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
-});
+app.use(handleCustomErrors);
+app.use(handlePSQLErrors);

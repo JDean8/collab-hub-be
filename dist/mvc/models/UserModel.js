@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const db = require("../../db/pool");
+const db = require("../../../dist/db/pool.js");
 exports.selectAllUsers = () => {
-    return db.query("SELECT * FROM users").then((users) => {
-        console.log(users);
+    return db.query("SELECT * FROM users").then(({ rows }) => {
+        return rows;
     });
 };
