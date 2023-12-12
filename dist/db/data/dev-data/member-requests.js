@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.member_reqest = void 0;
-exports.member_reqest = [
+exports.member_request = void 0;
+exports.member_request = [
     {
         user_id: 2,
         project_id: 1
