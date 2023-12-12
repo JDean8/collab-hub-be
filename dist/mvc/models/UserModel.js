@@ -6,3 +6,17 @@ exports.selectAllUsers = () => {
         return rows;
     });
 };
+exports.selectUserByID = (userID) => {
+    return db
+        .query(`
+  SELECT * FROM users
+  WHERE user_id = $1`, [userID])
+        .then(({ rows }) => {
+        return rows[0];
+    });
+};
+exports.removeUser = (userID) => {
+    return db.query(`
+    DELETE FROM users
+    WHERE user_id = $1`, [userID]);
+};
