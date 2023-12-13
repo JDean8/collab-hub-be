@@ -17,4 +17,13 @@ describe("GET /api", () => {
         expect(body.endPoints).toEqual(endPoints);
       });
   });
+
+  test("404: responds with a message when passed a non-existent route", () => {
+    return request(app)
+      .get("/apihi")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("URL not found");
+      });
+  });
 });
