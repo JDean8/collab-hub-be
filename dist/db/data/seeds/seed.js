@@ -142,10 +142,9 @@ const seed = ({ usersData, skillsData, usersSkillsData, statusData, projectsData
     })
         .then(() => {
         const formattedProjectsData = format(`INSERT INTO projects
-        (project_id, project_author, project_name, project_description, project_created_at, required_members)
+        (project_author, project_name, project_description, project_created_at, required_members)
         VALUES %L RETURNING *;`, projectsData.projects.map((project) => {
             return [
-                project.project_id,
                 project.project_author,
                 project.project_name,
                 project.project_description,
