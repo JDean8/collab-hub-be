@@ -30,7 +30,7 @@ describe("GET /api/projects", () => {
   });
 });
 
-escribe("POST /api/projects", () => {
+describe("POST /api/projects", () => {
   test("201: responds with a project object", () => {
     return request(app)
       .post("/api/projects")

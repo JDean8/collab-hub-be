@@ -7,6 +7,7 @@ const cors = require("cors");
 const express = require("express");
 exports.app = express();
 exports.app.use(cors());
+exports.app.use(express.json());
 exports.app.use("/api", api_router_1.apiRouter);
 exports.app.all("/*", (req, res, next) => {
     res.status(404).send({ msg: "URL not found" });
