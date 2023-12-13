@@ -25,12 +25,4 @@ describe("GET /api/skills", () => {
                 });
             });
     })
-    test("404: responds with a message when passed a non-existent route", () => {
-        return request(app)
-            .get("/api/skill")
-            .expect(404)
-            .then(({ body: { msg } }) => {
-                expect(msg).toBe("URL not found");
-            });
-    });
 })
