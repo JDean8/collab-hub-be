@@ -1,0 +1,101 @@
+{
+    "GET /api": {
+        "description": "Returns a json representation of all available endpoints od the API."
+    },
+    "GET /api/users": {
+        "description": "Returns an array of all users.",
+        "queries": [],
+        "exampleResponse": {
+            "users": [
+                {
+                    "user_id": 1,
+                    "username": "tickle122",
+                    "email": "user1@mail.com",
+                    "name": "Tom Tickle",
+                    "bio": "I love cats and JavaScript!",
+                    "avatar_url": "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50"
+                },
+                {
+                    "user_id": 2,
+                    "username": "happyamy2016",
+                    "email": "user2@mail.com",
+                    "name": "Amy Happy",
+                    "bio": "I am a Junior Developer",
+                    "avatar_url": "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50"
+                }
+            ]
+        }
+    },
+    "GET /api/skills": {
+        "description": "Returns an array of all skills.",
+        "queries": [],
+        "exampleResponse": {
+            "skills": [
+                {
+                    "skill_id": 1,
+                    "skill_name": "JavaScript"
+                },
+                {
+                    "skill_id": 2,
+                    "skill_name": "HTML"
+                }
+            ]
+        }
+    },
+    "GET /api/status": {
+        "description": "Returns an array of all project statuses.",
+        "queries": [],
+        "exampleResponse": {
+            "status": [
+                {
+                    "status_id": 1,
+                    "status_name": "open"
+                  },
+                  {
+                    "status_id": 2,
+                    "status_name": "in progress"
+                  },
+                  {
+                    "status_id": 3,
+                    "status_name": "completed"
+                  }
+            ]
+        }
+    },
+    "GET /api/projects": {
+        "description": "Returns an array of all projects.",
+        "queries": [],
+        "exampleResponse": {
+            "projects": [
+                {
+                    "project_id": 1,
+                    "project_author": 1,
+                    "project_name": "Project 1",
+                    "project_description": "This is the first project",
+                    "project_created_at": 1669852800000,
+                    "required_members": 3
+                },
+                {
+                    "project_id": 2,
+                    "project_author": 2,
+                    "project_name": "Project 2",
+                    "project_description": "This is the second project",
+                    "project_created_at": 1669852800000,
+                    "required_members": 2
+                }
+            ]
+        }
+    },
+    "POST /api/projects": {
+        "description": "Adds a new project to the database.",
+        "queries": [],
+        "requiredProperties": ["project_author", "project_name", "project_description", "required_members", "project_created_at"],
+        "exampleRequest": {
+            "project_author": 1,
+            "project_name": "Project 1",
+            "project_description": "This is the first project",
+            "required_members": 3,
+            "project_created_at": 1669852800000
+        }
+    }
+}
