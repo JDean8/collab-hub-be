@@ -21,7 +21,7 @@ describe("GET /api/projects", () => {
               project_author: expect.any(Number),
               project_name: expect.any(String),
               project_description: expect.any(String),
-              project_created_at: expect.any(Number),
+              project_created_at: expect.any(String),
               required_members: expect.any(Number),
             })
           );
