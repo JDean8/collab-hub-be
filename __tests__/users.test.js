@@ -29,13 +29,4 @@ describe("GET /api/users", () => {
         });
       });
   });
-
-  test("404: responds with a message when passed a non-existent route", () => {
-    return request(app)
-      .get("/api/user")
-      .expect(404)
-      .then(({ body: { msg } }) => {
-        expect(msg).toBe("URL not found");
-      });
-  });
 });

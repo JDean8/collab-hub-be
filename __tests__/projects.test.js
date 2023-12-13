@@ -57,4 +57,19 @@ describe("POST /api/projects", () => {
         );
       });
   });
+
+  test("400: responds with a message when passed an invalid project object", () => {
+    return request(app)
+      .post("/api/projects")
+      .send({
+        project: {
+          project_description: "test",
+          profile_pic: "https://testuser.com",
+        },
+      })
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
+      });
+  });
 });

@@ -19,7 +19,10 @@ exports.insertProject = (project: Project) => {
     !project.required_members ||
     !project.project_name
   ) {
-    return Promise.reject({ status: 400, msg: "Bad request" });
+    return Promise.reject({
+      status: 400,
+      msg: "Bad request",
+    });
   } else {
     return db
       .query(
