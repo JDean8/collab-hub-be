@@ -3,9 +3,9 @@ const { fetchStatus } = require("../models/StatusModel");
 import { Status } from "../../db/data/test-data/status";
 
 exports.getStatus = (req: Request, res: Response, next: NextFunction) => {
-    fetchStatus()
+  fetchStatus()
     .then((data: Status[]) => {
-        res.status(200).send({status: data})
+      res.status(200).send({ status: data });
     })
-    .catch((err: Error) => next(err))
-}
+    .catch((err: Error) => next(err));
+};
