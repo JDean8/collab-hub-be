@@ -3,9 +3,9 @@ const { fetchAllSkills } = require("../models/SkillsModel");
 import { Skill } from "../../db/data/test-data/skills";
 
 exports.getAllSkills = (req: Request, res: Response, next: NextFunction) => {
-    fetchAllSkills()
+  fetchAllSkills()
     .then((data: Skill[]) => {
-        res.status(200).send({skills: data})
+      res.status(200).send({ skills: data });
     })
-    .catch((err: Error) => next(err))
-}
+    .catch((err: Error) => next(err));
+};
