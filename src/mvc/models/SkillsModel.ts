@@ -23,3 +23,5 @@ exports.fetchUserSkills = (user_id: Number) => {
       return rows;
     });
 };
+
+exports.createUserSkill = () => {};
