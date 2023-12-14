@@ -213,11 +213,10 @@ export const seed = ({
     .then(() => {
       const formattedProjectsData = format(
         `INSERT INTO projects
-        (project_id, project_author, project_name, project_description, project_created_at, required_members)
+        (project_author, project_name, project_description, project_created_at, required_members)
         VALUES %L RETURNING *;`,
         projectsData.projects.map((project: Project) => {
           return [
-            project.project_id,
             project.project_author,
             project.project_name,
             project.project_description,
@@ -233,9 +232,11 @@ export const seed = ({
         `INSERT INTO projects_skills
         (project_id, skill_id)
         VALUES %L RETURNING *;`,
-        projectsSkillsData.projects_skills.map((projectSkill: Project_skill) => {
-          return [projectSkill.project_id, projectSkill.skill_id];
-        })
+        projectsSkillsData.projects_skills.map(
+          (projectSkill: Project_skill) => {
+            return [projectSkill.project_id, projectSkill.skill_id];
+          }
+        )
       );
       return db.query(formattedProjectsSkillsData);
     })
@@ -244,9 +245,11 @@ export const seed = ({
         `INSERT INTO status_project
         (project_id, status_id)
         VALUES %L RETURNING *;`,
-        statusProjectData.status_project.map((statusProject: Status_project) => {
-          return [statusProject.project_id, statusProject.status_id];
-        })
+        statusProjectData.status_project.map(
+          (statusProject: Status_project) => {
+            return [statusProject.project_id, statusProject.status_id];
+          }
+        )
       );
       return db.query(formattedStatusProjectsData);
     })
@@ -255,9 +258,11 @@ export const seed = ({
         `INSERT INTO projects_members
         (project_id, member_id)
         VALUES %L RETURNING *;`,
-        projectsMembersData.projects_members.map((projectMember: Project_member) => {
-          return [projectMember.project_id, projectMember.member_id];
-        })
+        projectsMembersData.projects_members.map(
+          (projectMember: Project_member) => {
+            return [projectMember.project_id, projectMember.member_id];
+          }
+        )
       );
       return db.query(formattedProjectMembersData);
     })
@@ -266,9 +271,11 @@ export const seed = ({
         `INSERT INTO member_request
         (user_id, project_id)
         VALUES %L RETURNING *;`,
-        memberRequestsData.member_request.map((memberRequest: Member_request) => {
-          return [memberRequest.user_id, memberRequest.project_id];
-        })
+        memberRequestsData.member_request.map(
+          (memberRequest: Member_request) => {
+            return [memberRequest.user_id, memberRequest.project_id];
+          }
+        )
       );
       return db.query(formattedMemberRequestsData);
     })
