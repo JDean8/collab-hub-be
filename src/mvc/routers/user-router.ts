@@ -4,4 +4,4 @@ const { getUserSkills } = require("../controllers/SkillsController");
 
 userRouter.route("/").get(getAllUsers);
 
-userRouter.route("/:user_id/skills").get();
+userRouter.route("/:user_id/skills").get(getUserSkills);

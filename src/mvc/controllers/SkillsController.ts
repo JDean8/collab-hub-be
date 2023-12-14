@@ -11,5 +11,11 @@ exports.getAllSkills = (req: Request, res: Response, next: NextFunction) => {
 };
 
 exports.getUserSkills = (req: Request, res: Response, next: NextFunction) => {
-  fetchUserSkills();
+  const { user_id } = req.params;
+
+  fetchUserSkills(user_id)
+    .then((data: Skill[]) => {
+      res.status(200).send({ skills: data });
+    })
+    .catch((err: Error) => next(err));
 };
