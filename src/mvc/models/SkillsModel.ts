@@ -10,3 +10,5 @@ exports.fetchAllSkills = () => {
     return rows;
   });
 };
+
+exports.fetchUserSkills = () => {};

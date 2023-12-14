@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-const { fetchAllSkills } = require("../models/SkillsModel");
+const { fetchAllSkills, fetchUserSkills } = require("../models/SkillsModel");
 import { Skill } from "../../db/data/test-data/skills";
 
 exports.getAllSkills = (req: Request, res: Response, next: NextFunction) => {
@@ -8,4 +8,8 @@ exports.getAllSkills = (req: Request, res: Response, next: NextFunction) => {
       res.status(200).send({ skills: data });
     })
     .catch((err: Error) => next(err));
+};
+
+exports.getUserSkills = (req: Request, res: Response, next: NextFunction) => {
+  fetchUserSkills();
 };
