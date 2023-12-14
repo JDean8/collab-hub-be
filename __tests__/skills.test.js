@@ -26,3 +26,14 @@ describe("GET /api/skills", () => {
       });
   });
 });
+
+describe("GET /api/users/:user_id/skills", () => {
+  test("200: responds with an array of user skills objects", () => {
+    return request(app)
+      .get("/api/users/1/skills")
+      .expect(200)
+      .then(({ body: { skills } }) => {
+        expect(skills).toHaveLength(3);
+      });
+  });
+});
