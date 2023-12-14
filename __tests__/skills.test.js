@@ -55,3 +55,20 @@ describe("GET /api/users/:user_id/skills", () => {
   //     });
   // });
 });
+
+describe("POST /api/users/:user_id/skills", () => {
+  test("201: responds with the posted user skills object", () => {
+    return request(app)
+      .post("/api/users/1/skills")
+      .send({ skill_id: 5 })
+      .expect(201)
+      .then(({ body: { skill } }) => {
+        expect(skill).toEqual(
+          expect.objectContaining({
+            user_id: 1,
+            skill_id: 5,
+          })
+        );
+      });
+  });
+});
