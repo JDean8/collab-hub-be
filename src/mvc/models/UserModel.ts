@@ -20,6 +20,12 @@ exports.selectUserByID = (userID: string) => {
       [userID]
     )
     .then(({ rows }: UserProps) => {
+      if (rows.length === 0) {
+        return Promise.reject({
+          status: 404,
+          msg: "No user found with that ID",
+        });
+      }
       return rows[0];
     });
 };
@@ -50,7 +56,6 @@ exports.insertUser = (user: User) => {
       ]
     )
     .then(({ rows }: UserProps) => {
-      console.log(rows);
       return rows[0];
     });
 };

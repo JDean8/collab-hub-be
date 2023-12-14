@@ -29,7 +29,6 @@ exports.deleteUser = (req, res, next) => {
 };
 exports.postUser = (req, res, next) => {
     const { user } = req.body;
-    console.log(user);
     insertUser(user)
         .then((user) => {
         res.status(201).send({ user: user });
