@@ -12,7 +12,13 @@ exports.fetchUserSkills = (user_id) => {
     LEFT JOIN users_skills ON skills.skill_id = users_skills.skill_id
     WHERE users_skills.user_id = $1;`, [user_id])
         .then(({ rows }) => {
-        console.log(rows);
         return rows;
+    });
+};
+exports.createUserSkill = (userId, skill) => {
+    return db
+        .query(`INSERT INTO users_skills (user_id, skill_id) VALUES ($1, $2) RETURNING *;`, [userId, skill.skill_id])
+        .then(({ rows }) => {
+        return rows[0];
     });
 };

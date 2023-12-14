@@ -5,6 +5,10 @@ type SkillsProps = {
   rows: Skill[];
 };
 
+type NewSkillProps = {
+  skill_id: Number;
+};
+
 exports.fetchAllSkills = () => {
   return db.query("SELECT * FROM skills").then(({ rows }: SkillsProps) => {
     return rows;
@@ -24,4 +28,13 @@ exports.fetchUserSkills = (user_id: Number) => {
     });
 };
 
-exports.createUserSkill = () => {};
+exports.createUserSkill = (userId: Number, skill: NewSkillProps) => {
+  return db
+    .query(
+      `INSERT INTO users_skills (user_id, skill_id) VALUES ($1, $2) RETURNING *;`,
+      [userId, skill.skill_id]
+    )
+    .then(({ rows }: SkillsProps) => {
+      return rows[0];
+    });
+};
