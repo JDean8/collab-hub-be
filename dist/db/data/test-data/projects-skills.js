@@ -27,7 +27,7 @@ exports.projects_skills = [
         skill_id: 6
     },
     {
-        project_id: 6,
+        project_id: 5,
         skill_id: 1
     }
 ];

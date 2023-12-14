@@ -97,5 +97,43 @@
             "required_members": 3,
             "project_created_at": 1669852800000
         }
+    },
+    "GET /api/projects/:project_id": {
+        "description": "Returns a project object with the specified project_id.",
+        "queries": [],
+        "exampleResponse": {
+            "project": {
+                "project_id": 1,
+                "project_author": 1,
+                "project_name": "Project 1",
+                "project_description": "This is the first project",
+                "project_created_at": 1669852800000,
+                "required_members": 3
+            }
+        }
+    },
+    "PATCH /api/projects/:project_id": {
+        "description": "Updates a project object with the specified project_id.",
+        "queries": [],
+        "requiredProperties": ["project_name", "project_description", "required_members"],
+        "exampleRequest": {
+            "project_name": "Project 1",
+            "project_description": "This is the first project",
+            "required_members": 3
+        }
+    },
+    "DELETE /api/projects/:project_id": {
+        "description": "Deletes a project object with the specified project_id.",
+        "queries": [],
+        "exampleResponse": {
+            "message": "Status 204."
+        }
+    },
+    "GET /api/projects/:project_id/skills": {
+        "description": "Returns an array of all skills required for the project with the specified project_id.",
+        "queries": [],
+        "exampleResponse": {
+            "skills": ["JavaScript", "React"]
+        }
     }
 }
