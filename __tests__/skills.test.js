@@ -36,4 +36,22 @@ describe("GET /api/users/:user_id/skills", () => {
         expect(skills).toHaveLength(3);
       });
   });
+
+  test("200: responds with an empty array if user doesn't have any skills yet", () => {
+    return request(app)
+      .get("/api/users/4/skills")
+      .expect(200)
+      .then(({ body: { skills } }) => {
+        expect(skills).toHaveLength(0);
+      });
+  });
+
+  test("404: responds with a message when passed a non-existent user_id", () => {
+    return request(app)
+      .get("/api/users/100/skills")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("User not found");
+      });
+  });
 });
