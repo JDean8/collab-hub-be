@@ -6,7 +6,7 @@ type SkillsProps = {
 };
 
 type NewSkillProps = {
-  skill_id: Number;
+  skill_id: number;
 };
 
 exports.fetchAllSkills = () => {
@@ -15,7 +15,7 @@ exports.fetchAllSkills = () => {
   });
 };
 
-exports.fetchUserSkills = (user_id: Number) => {
+exports.fetchUserSkills = (user_id: number) => {
   return db
     .query(
       `SELECT skills.skill_name, skills.skill_id FROM skills
@@ -28,12 +28,23 @@ exports.fetchUserSkills = (user_id: Number) => {
     });
 };
 
-exports.createUserSkill = (userId: Number, skill: NewSkillProps) => {
+exports.createUserSkill = (userId: number, skill: NewSkillProps) => {
   return db
-    .query(
-      `INSERT INTO users_skills (user_id, skill_id) VALUES ($1, $2) RETURNING *;`,
-      [userId, skill.skill_id]
-    )
+    .query("SELECT * FROM skills")
+    .then(({ rows }: SkillsProps) => {
+      const mappedSkills = rows.map((skill: Skill) => {
+        return skill.skill_id;
+      });
+
+      if (!mappedSkills.includes(skill.skill_id)) {
+        return Promise.reject({ status: 404, msg: "Skill not found" });
+      }
+
+      return db.query(
+        `INSERT INTO users_skills (user_id, skill_id) VALUES ($1, $2) RETURNING *;`,
+        [userId, skill.skill_id]
+      );
+    })
     .then(({ rows }: SkillsProps) => {
       return rows[0];
     });

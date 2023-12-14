@@ -17,7 +17,16 @@ exports.fetchUserSkills = (user_id) => {
 };
 exports.createUserSkill = (userId, skill) => {
     return db
-        .query(`INSERT INTO users_skills (user_id, skill_id) VALUES ($1, $2) RETURNING *;`, [userId, skill.skill_id])
+        .query("SELECT * FROM skills")
+        .then(({ rows }) => {
+        const mappedSkills = rows.map((skill) => {
+            return skill.skill_id;
+        });
+        if (!mappedSkills.includes(skill.skill_id)) {
+            return Promise.reject({ status: 404, msg: "Skill not found" });
+        }
+        return db.query(`INSERT INTO users_skills (user_id, skill_id) VALUES ($1, $2) RETURNING *;`, [userId, skill.skill_id]);
+    })
         .then(({ rows }) => {
         return rows[0];
     });
