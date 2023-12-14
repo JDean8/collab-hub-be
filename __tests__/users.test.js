@@ -68,7 +68,7 @@ describe("Error handling", () => {
   });
 });
 
-describe.only("POST /api/users", () => {
+describe("POST /api/users", () => {
   test("201: should respond with posted user object", () => {
     return request(app)
       .post("/api/users")
