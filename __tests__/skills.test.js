@@ -72,6 +72,31 @@ describe("POST /api/users/:user_id/skills", () => {
       });
   });
 
+  test("201: responds with posted user skills object when passed extra keys", () => {
+    return request(app)
+      .post("/api/users/1/skills")
+      .send({ skill_id: 6, extra: "extra" })
+      .expect(201)
+      .then(({ body: { skill } }) => {
+        expect(skill).toEqual(
+          expect.objectContaining({
+            user_id: 1,
+            skill_id: 6,
+          })
+        );
+      });
+  });
+
+  test("400: responds with bad request when passed a skill_id that has already been added", () => {
+    return request(app)
+      .post("/api/users/1/skills")
+      .send({ skill_id: 1 })
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("You already added this skill");
+      });
+  });
+
   test("404: responds with a message when passed a non-existent skill_id", () => {
     return request(app)
       .post("/api/users/1/skills")
