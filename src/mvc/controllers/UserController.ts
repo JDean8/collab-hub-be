@@ -4,6 +4,7 @@ const {
   selectAllUsers,
   removeUser,
   selectUserByID,
+  insertUser,
 } = require("../models/UserModel");
 
 exports.getAllUsers = (req: Request, res: Response, next: NextFunction) => {
@@ -31,6 +32,15 @@ exports.deleteUser = (req: Request, res: Response, next: NextFunction) => {
     })
     .then((data: User[]) => {
       res.sendStatus(204);
+    })
+    .catch((err: Error) => next(err));
+};
+
+exports.postUser = (req: Request, res: Response, next: NextFunction) => {
+  const { user } = req.body;
+  insertUser(user)
+    .then((user: User) => {
+      res.status(201).send({ user: user });
     })
     .catch((err: Error) => next(err));
 };
