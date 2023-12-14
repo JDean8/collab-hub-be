@@ -67,3 +67,9 @@ describe("Error handling", () => {
       });
   });
 });
+
+describe("PATCH /api/users/:user_id", () => {
+  test("200: response with updated user when successful", () => {
+    return request(app).patch("api/users/1").expect(200).then;
+  });
+});
