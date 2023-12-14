@@ -10,3 +10,25 @@ exports.selectAllUsers = () => {
     return rows;
   });
 };
+
+exports.selectUserByID = (userID: string) => {
+  return db
+    .query(
+      `
+  SELECT * FROM users
+  WHERE user_id = $1`,
+      [userID]
+    )
+    .then(({ rows }: UserProps) => {
+      return rows[0];
+    });
+};
+
+exports.removeUser = (userID: string) => {
+  return db.query(
+    `
+    DELETE FROM users
+    WHERE user_id = $1`,
+    [userID]
+  );
+};
