@@ -4,6 +4,7 @@ const {
   selectAllUsers,
   removeUser,
   selectUserByID,
+  editUser,
 } = require("../models/UserModel");
 
 exports.getAllUsers = (req: Request, res: Response, next: NextFunction) => {
@@ -33,4 +34,19 @@ exports.deleteUser = (req: Request, res: Response, next: NextFunction) => {
       res.sendStatus(204);
     })
     .catch((err: Error) => next(err));
+};
+
+exports.patchUser = (req: Request, res: Response, next: NextFunction) => {
+  const { user_id } = req.params;
+  const { user } = req.body;
+  if (!user) {
+    res.status(400).send({ msg: "Bad request" });
+  }
+  editUser(user, user_id)
+    .then((user: User) => {
+      res.status(200).send({ user: user });
+    })
+    .catch((err: Error) => {
+      return next(err);
+    });
 };
