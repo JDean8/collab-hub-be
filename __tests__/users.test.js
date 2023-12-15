@@ -49,6 +49,22 @@ describe("GET /api/users/:user_id", () => {
         });
       });
   });
+  test("404: responds with error message when user_id that does not exist", () => {
+    return request(app)
+      .get("/api/users/148")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toEqual("No user found with that ID");
+      });
+  });
+  test("400: Bad reqeust, invalid type", () => {
+    return request(app)
+      .get("/api/users/SPACE")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toEqual("Bad request");
+      });
+  });
 });
 
 describe("DELETE /api/users/:user_id", () => {

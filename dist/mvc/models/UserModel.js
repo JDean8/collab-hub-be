@@ -12,6 +12,12 @@ exports.selectUserByID = (userID) => {
   SELECT * FROM users
   WHERE user_id = $1`, [userID])
         .then(({ rows }) => {
+        if (rows.length === 0) {
+            return Promise.reject({
+                status: 404,
+                msg: "No user found with that ID",
+            });
+        }
         return rows[0];
     });
 };
@@ -34,7 +40,6 @@ exports.insertUser = (user) => {
         user.password,
     ])
         .then(({ rows }) => {
-        console.log(rows);
         return rows[0];
     });
 };
