@@ -1,3 +1,4 @@
+const { selectUserByID } = require("./UserModel");
 import { type Skill } from "../../db/data/test-data/skills";
 const db = require("../../../dist/db/pool.js");
 
@@ -66,5 +67,26 @@ exports.createUserSkill = (userId: number, skill: NewSkillProps) => {
     })
     .then(({ rows }: SkillsProps) => {
       return rows[0];
+    });
+};
+
+exports.removeUserSkill = (user_id: number, skill_id: number) => {
+  return selectUserByID(user_id)
+    .then(() => {
+      return db.query("SELECT * FROM skills");
+    })
+    .then(({ rows }: SkillsProps) => {
+      const mappedSkills = rows.map((skill: Skill) => {
+        return skill.skill_id;
+      });
+
+      if (!mappedSkills.includes(+skill_id)) {
+        return Promise.reject({ status: 404, msg: "Skill not found" });
+      }
+
+      return db.query(
+        `DELETE FROM users_skills WHERE user_id = $1 AND skill_id = $2;`,
+        [user_id, skill_id]
+      );
     });
 };
