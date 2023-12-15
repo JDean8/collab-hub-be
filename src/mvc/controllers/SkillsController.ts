@@ -3,6 +3,7 @@ const {
   fetchAllSkills,
   fetchUserSkills,
   createUserSkill,
+  removeUserSkill,
 } = require("../models/SkillsModel");
 const { selectUserByID } = require("../models/UserModel");
 import { Skill } from "../../db/data/test-data/skills";
@@ -41,8 +42,10 @@ exports.postUserSkill = (req: Request, res: Response, next: NextFunction) => {
     .catch((err: Error) => next(err));
 };
 
-exports.deleteUserSkill = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {};
+exports.deleteUserSkill = (req: Request, res: Response, next: NextFunction) => {
+  const { user_id, skill_id } = req.params;
+
+  removeUserSkill(user_id, skill_id).then(() => {
+    res.status(204).send();
+  });
+};

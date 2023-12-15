@@ -45,3 +45,6 @@ exports.createUserSkill = (userId, skill) => {
         return rows[0];
     });
 };
+exports.removeUserSkill = (user_id, skill_id) => {
+    return db.query(`DELETE FROM users_skills WHERE user_id = $1 AND skill_id = $2;`, [user_id, skill_id]);
+};

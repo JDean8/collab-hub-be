@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const { fetchAllSkills, fetchUserSkills, createUserSkill, } = require("../models/SkillsModel");
+const { fetchAllSkills, fetchUserSkills, createUserSkill, removeUserSkill, } = require("../models/SkillsModel");
 const { selectUserByID } = require("../models/UserModel");
 exports.getAllSkills = (req, res, next) => {
     fetchAllSkills()
@@ -30,4 +30,10 @@ exports.postUserSkill = (req, res, next) => {
         res.status(201).send({ skill });
     })
         .catch((err) => next(err));
+};
+exports.deleteUserSkill = (req, res, next) => {
+    const { user_id, skill_id } = req.params;
+    removeUserSkill(user_id, skill_id).then(() => {
+        res.status(204).send();
+    });
 };
