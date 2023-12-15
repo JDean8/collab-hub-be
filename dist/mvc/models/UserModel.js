@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const db = require("../../../dist/db/pool.js");
+const bcrypt = require("bcrypt");
 exports.selectAllUsers = () => {
     return db.query("SELECT * FROM users").then(({ rows }) => {
         return rows;
@@ -27,18 +28,36 @@ exports.removeUser = (userID) => {
     WHERE user_id = $1`, [userID]);
 };
 exports.insertUser = (user) => {
-    return db
-        .query(`INSERT INTO users
-  (user_id, username, avatar_url, email, name, bio, password)
-  VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;`, [
-        user.user_id,
-        user.username,
-        user.avatar_url,
-        user.email,
-        user.name,
-        user.bio,
-        user.password,
-    ])
+    if (!user.email ||
+        !user.password ||
+        !user.avatar_url ||
+        !user.name ||
+        !user.username ||
+        !user.bio) {
+        return Promise.reject({
+            status: 400,
+            msg: "Bad request",
+        });
+    }
+    return bcrypt
+        .genSalt(10)
+        .then((response) => {
+        const hashedPassword = bcrypt.hash(user.password, response);
+        return hashedPassword;
+    })
+        .then((hashedPassword) => {
+        return db.query(`INSERT INTO users
+    (user_id, username, avatar_url, email, name, bio, password)
+    VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;`, [
+            user.user_id,
+            user.username,
+            user.avatar_url,
+            user.email,
+            user.name,
+            user.bio,
+            hashedPassword,
+        ]);
+    })
         .then(({ rows }) => {
         return rows[0];
     });
