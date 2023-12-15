@@ -117,3 +117,9 @@ describe("POST /api/users/:user_id/skills", () => {
       });
   });
 });
+
+describe("DELETE /api/users/:user_id/skills/:skill_id", () => {
+  test("204: responds with no content", () => {
+    return request(app).delete("/api/users/1/skills/1").expect(204);
+  });
+});
