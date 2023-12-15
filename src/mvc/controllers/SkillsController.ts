@@ -45,7 +45,9 @@ exports.postUserSkill = (req: Request, res: Response, next: NextFunction) => {
 exports.deleteUserSkill = (req: Request, res: Response, next: NextFunction) => {
   const { user_id, skill_id } = req.params;
 
-  removeUserSkill(user_id, skill_id).then(() => {
-    res.status(204).send();
-  });
+  removeUserSkill(user_id, skill_id)
+    .then(() => {
+      res.status(204).send();
+    })
+    .catch((err: Error) => next(err));
 };

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const { selectUserByID } = require("./UserModel");
 const db = require("../../../dist/db/pool.js");
 exports.fetchAllSkills = () => {
     return db.query("SELECT * FROM skills").then(({ rows }) => {
@@ -46,5 +47,18 @@ exports.createUserSkill = (userId, skill) => {
     });
 };
 exports.removeUserSkill = (user_id, skill_id) => {
-    return db.query(`DELETE FROM users_skills WHERE user_id = $1 AND skill_id = $2;`, [user_id, skill_id]);
+    return selectUserByID(user_id)
+        .then(() => {
+        return db.query("SELECT * FROM skills");
+    })
+        .then(({ rows }) => {
+        const mappedSkills = rows.map((skill) => {
+            return skill.skill_id;
+        });
+        if (!mappedSkills.includes(+skill_id)) {
+            console.log(typeof skill_id, mappedSkills);
+            return Promise.reject({ status: 404, msg: "Skill not found" });
+        }
+        return db.query(`DELETE FROM users_skills WHERE user_id = $1 AND skill_id = $2;`, [user_id, skill_id]);
+    });
 };
