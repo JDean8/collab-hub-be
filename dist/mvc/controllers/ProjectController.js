@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const { selectAllProjects, insertProject, selectProjectById, selectSkillsByProjectId, updateProjectById, deleteProject } = require("../models/ProjectModel");
+const { selectAllProjects, insertProject, selectProjectById, selectSkillsByProjectId, updateProjectById, deleteProject, fetchProjectStatus, postProjectStatus, patchStatusById } = require("../models/ProjectModel");
 exports.getAllProjects = (req, res, next) => {
     selectAllProjects()
         .then((data) => {
@@ -51,6 +51,32 @@ exports.deleteProjectById = (req, res, next) => {
     deleteProject(project_id)
         .then(() => {
         res.sendStatus(204);
+    })
+        .catch((err) => next(err));
+};
+exports.getProjectStatusByProjectId = (req, res, next) => {
+    return selectProjectById(req.params.project_id)
+        .then(() => {
+        return fetchProjectStatus(req.params.project_id);
+    })
+        .then((status) => {
+        res.status(200).send({ status });
+    })
+        .catch((err) => next(err));
+};
+exports.postProjectStatusByProjectId = (req, res, next) => {
+    const { status } = req.body;
+    return postProjectStatus(req.params.project_id, status)
+        .then((status_project) => {
+        res.status(201).send(status_project);
+    })
+        .catch((err) => next(err));
+};
+exports.patchProjectStatusById = (req, res, next) => {
+    const { status } = req.body;
+    patchStatusById(req.params.project_id, status)
+        .then((status_project) => {
+        res.status(200).send(status_project);
     })
         .catch((err) => next(err));
 };

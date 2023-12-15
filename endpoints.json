@@ -135,5 +135,30 @@
         "exampleResponse": {
             "skills": ["JavaScript", "React"]
         }
+    },
+    "GET /api/projects/:project_id/status": {
+        "description": "Returns the status of the project with the specified project_id.",
+        "queries": [],
+        "exampleResponse": {
+            "status": "open"
+        }
+    },
+    "POST /api/projects/:project_id/status": {
+        "description": "Posts the status of the project with the specified project_id.",
+        "queries": [],
+        "requiredProperties": ["status"],
+        "exampleRequest": {
+            "status_id": 1,
+            "project_id": 1
+        }
+    },
+    "PATCH /api/projects/:project_id/status": {
+        "description": "Updates the status of the project with the specified project_id.",
+        "queries": [],
+        "requiredProperties": ["status"],
+        "exampleRequest": {
+            "status_id": 1,
+            "project_id": 1
+        }
     }
 }

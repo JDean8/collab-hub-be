@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const db = require("../../../dist/db/pool.js");
+const { fetchStatus } = require("./StatusModel");
 exports.selectAllProjects = () => {
     return db.query("SELECT * FROM projects").then(({ rows }) => {
         return rows;
@@ -59,4 +60,50 @@ exports.selectSkillsByProjectId = (project_id) => {
 exports.deleteProject = (project_id) => {
     return db
         .query("DELETE FROM projects WHERE project_id = $1", [project_id]);
+};
+exports.fetchProjectStatus = (project_id) => {
+    return db
+        .query("SELECT status_name FROM status LEFT JOIN status_project ON status.status_id = status_project.status_id WHERE project_id = $1", [project_id])
+        .then(({ rows }) => {
+        return rows[0].status_name;
+    });
+};
+exports.postProjectStatus = (project_id, status) => {
+    return fetchStatus()
+        .then((statusObj) => {
+        let status_id = 0;
+        statusObj.forEach((statusObj) => {
+            if (statusObj.status_name === status.status) {
+                status_id = statusObj.status_id;
+            }
+        });
+        return db
+            .query("INSERT INTO status_project (status_id, project_id) VALUES ($1, $2) RETURNING *", [status_id, project_id]);
+    })
+        .then(({ rows }) => {
+        return rows[0];
+    });
+};
+exports.patchStatusById = (project_id, status) => {
+    return fetchStatus()
+        .then((statusObj) => {
+        let status_id;
+        statusObj.forEach((statusObj) => {
+            if (statusObj.status_name === status.status) {
+                status_id = statusObj.status_id;
+            }
+        });
+        return status_id;
+    })
+        .then((status_id) => {
+        if (status_id === undefined)
+            return Promise.reject({ status: 400, msg: "Bad request" });
+        return db
+            .query("UPDATE status_project SET status_id = $1 WHERE project_id = $2 RETURNING *", [status_id, project_id]);
+    })
+        .then(({ rows }) => {
+        if (rows.length === 0)
+            return Promise.reject({ status: 404, msg: "Project not found" });
+        return rows[0];
+    });
 };

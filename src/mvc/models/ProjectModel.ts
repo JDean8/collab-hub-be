@@ -1,6 +1,10 @@
 const db = require("../../../dist/db/pool.js");
+import { stat } from "fs";
 import { type Project } from "../../db/data/test-data/projects";
 import { type Skill } from "../../db/data/test-data/skills";
+import { type Status } from "../../db/data/test-data/status";
+import { type Status_project } from "../../db/data/test-data/status-project";
+const { fetchStatus } = require("./StatusModel");
 
 type ProjectProps = {
   rows: Project[];
@@ -9,6 +13,14 @@ type ProjectProps = {
 type SkillProps = {
   rows: Skill[];
 };
+
+type StatusProps = {
+  rows: Status[];
+}
+
+type StatusProjectProps = {
+  rows: Status_project[];
+}
 
 exports.selectAllProjects = () => {
   return db.query("SELECT * FROM projects").then(({ rows }: ProjectProps) => {
@@ -76,4 +88,51 @@ exports.selectSkillsByProjectId = (project_id: number) => {
 exports.deleteProject = (project_id: number) => {
   return db
   .query("DELETE FROM projects WHERE project_id = $1", [project_id])
+}
+
+exports.fetchProjectStatus = (project_id: number) => {
+  return db
+  .query("SELECT status_name FROM status LEFT JOIN status_project ON status.status_id = status_project.status_id WHERE project_id = $1", [project_id])
+  .then(({ rows }: StatusProps) => {
+    return rows[0].status_name;
+  })
+}
+
+exports.postProjectStatus = (project_id: number,  status : any) => {
+  return fetchStatus()
+  .then((statusObj: Status[]) => {
+    let status_id = 0;
+      statusObj.forEach((statusObj: Status) => {
+      if(statusObj.status_name === status.status) {
+         status_id = statusObj.status_id;
+      }
+    })
+    return db
+        .query("INSERT INTO status_project (status_id, project_id) VALUES ($1, $2) RETURNING *", [status_id, project_id])
+  })
+  .then(({ rows }: StatusProjectProps) => {
+    return rows[0];
+  })
+}
+
+exports.patchStatusById = (project_id: number, status: any) => {
+  return fetchStatus()
+  .then((statusObj: Status[]) => {
+    let status_id;
+    statusObj.forEach((statusObj: Status) => {
+      if(statusObj.status_name === status.status) {
+        status_id = statusObj.status_id;
+      }
+    })
+    return status_id;
+  })
+  .then((status_id: any) => {
+    if(status_id === undefined) return Promise.reject({status: 400, msg: "Bad request"})
+    return db
+    .query("UPDATE status_project SET status_id = $1 WHERE project_id = $2 RETURNING *", [status_id, project_id])
+  })
+  .then(({ rows }: StatusProjectProps) => {
+    if(rows.length === 0) return Promise.reject({status: 404, msg: "Project not found"})
+    return rows[0];
+  })
 }

@@ -1,7 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import { type Project } from "../../db/data/test-data/projects";
 import { type Skill } from "../../db/data/test-data/skills";
-const { selectAllProjects, insertProject, selectProjectById, selectSkillsByProjectId, updateProjectById, deleteProject } = require("../models/ProjectModel");
+import { type Status_project } from "../../db/data/test-data/status-project";
+const { selectAllProjects, insertProject, selectProjectById, selectSkillsByProjectId, updateProjectById, deleteProject, fetchProjectStatus, postProjectStatus, patchStatusById } = require("../models/ProjectModel");
 
 exports.getAllProjects = (req: Request, res: Response, next: NextFunction) => {
   selectAllProjects()
@@ -57,6 +58,35 @@ exports.deleteProjectById = (req: Request, res: Response, next: NextFunction) =>
   deleteProject(project_id)
   .then(() => {
     res.sendStatus(204);
+  })
+  .catch((err: Error) => next(err));
+}
+
+exports.getProjectStatusByProjectId = (req: Request, res: Response, next: NextFunction) => {
+  return selectProjectById(req.params.project_id)
+  .then(() => {
+    return fetchProjectStatus(req.params.project_id)
+  })
+  .then((status: string) => {
+    res.status(200).send({ status });
+  })
+  .catch((err: Error) => next(err));
+}
+
+exports.postProjectStatusByProjectId = (req: Request, res: Response, next: NextFunction) => {
+  const { status } = req.body;
+  return postProjectStatus(req.params.project_id, status)
+  .then((status_project: Status_project) => {
+    res.status(201).send(status_project);
+  })
+  .catch((err: Error) => next(err));
+}
+
+exports.patchProjectStatusById = (req: Request, res: Response, next: NextFunction) => {
+  const { status } = req.body;
+  patchStatusById(req.params.project_id, status)
+  .then((status_project: Status_project) => {
+    res.status(200).send(status_project);
   })
   .catch((err: Error) => next(err));
 }
