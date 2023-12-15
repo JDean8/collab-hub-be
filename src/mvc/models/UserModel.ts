@@ -1,4 +1,5 @@
 const db = require("../../../dist/db/pool.js");
+const bcrypt = require("bcrypt");
 import { type User } from "../../db/data/test-data/users";
 
 type UserProps = {
@@ -40,21 +41,41 @@ exports.removeUser = (userID: string) => {
 };
 
 exports.insertUser = (user: User) => {
-  return db
-    .query(
-      `INSERT INTO users
-  (user_id, username, avatar_url, email, name, bio, password)
-  VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;`,
-      [
-        user.user_id,
-        user.username,
-        user.avatar_url,
-        user.email,
-        user.name,
-        user.bio,
-        user.password,
-      ]
-    )
+  if (
+    !user.email ||
+    !user.password ||
+    !user.avatar_url ||
+    !user.name ||
+    !user.username ||
+    !user.bio
+  ) {
+    return Promise.reject({
+      status: 400,
+      msg: "Bad request",
+    });
+  }
+  return bcrypt
+    .genSalt(10)
+    .then((response: string) => {
+      const hashedPassword = bcrypt.hash(user.password, response);
+      return hashedPassword;
+    })
+    .then((hashedPassword: string) => {
+      return db.query(
+        `INSERT INTO users
+    (user_id, username, avatar_url, email, name, bio, password)
+    VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;`,
+        [
+          user.user_id,
+          user.username,
+          user.avatar_url,
+          user.email,
+          user.name,
+          user.bio,
+          hashedPassword,
+        ]
+      );
+    })
     .then(({ rows }: UserProps) => {
       return rows[0];
     });

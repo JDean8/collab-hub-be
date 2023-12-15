@@ -56,7 +56,6 @@ exports.removeUserSkill = (user_id, skill_id) => {
             return skill.skill_id;
         });
         if (!mappedSkills.includes(+skill_id)) {
-            console.log(typeof skill_id, mappedSkills);
             return Promise.reject({ status: 404, msg: "Skill not found" });
         }
         return db.query(`DELETE FROM users_skills WHERE user_id = $1 AND skill_id = $2;`, [user_id, skill_id]);
