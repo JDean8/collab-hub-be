@@ -40,3 +40,9 @@ exports.postUserSkill = (req: Request, res: Response, next: NextFunction) => {
     })
     .catch((err: Error) => next(err));
 };
+
+exports.deleteUserSkill = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {};

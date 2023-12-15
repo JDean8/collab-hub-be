@@ -68,3 +68,5 @@ exports.createUserSkill = (userId: number, skill: NewSkillProps) => {
       return rows[0];
     });
 };
+
+exports.removeUserSkill = () => {};
