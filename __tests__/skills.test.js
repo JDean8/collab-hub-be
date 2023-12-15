@@ -107,4 +107,13 @@ describe("POST /api/users/:user_id/skills", () => {
       });
   });
 
+  test("404: responds with a message when passed a non-existent user_id", () => {
+    return request(app)
+      .post("/api/users/100/skills")
+      .send({ skill_id: 5 })
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("No user found with that ID");
+      });
+  });
 });
