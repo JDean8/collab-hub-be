@@ -46,14 +46,14 @@ describe("GET /api/users/:user_id/skills", () => {
       });
   });
 
-  // test("404: responds with a message when passed a non-existent user_id", () => {
-  //   return request(app)
-  //     .get("/api/users/100/skills")
-  //     .expect(404)
-  //     .then(({ body: { msg } }) => {
-  //       expect(msg).toBe("User not found");
-  //     });
-  // });
+  test("404: responds with a message when passed a non-existent user_id", () => {
+    return request(app)
+      .get("/api/users/100/skills")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("No user found with that ID");
+      });
+  });
 });
 
 describe("POST /api/users/:user_id/skills", () => {
@@ -106,4 +106,5 @@ describe("POST /api/users/:user_id/skills", () => {
         expect(msg).toBe("Skill not found");
       });
   });
+
 });

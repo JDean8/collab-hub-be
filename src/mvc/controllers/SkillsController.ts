@@ -4,6 +4,7 @@ const {
   fetchUserSkills,
   createUserSkill,
 } = require("../models/SkillsModel");
+const { selectUserByID } = require("../models/UserModel");
 import { Skill } from "../../db/data/test-data/skills";
 
 exports.getAllSkills = (req: Request, res: Response, next: NextFunction) => {
@@ -17,7 +18,10 @@ exports.getAllSkills = (req: Request, res: Response, next: NextFunction) => {
 exports.getUserSkills = (req: Request, res: Response, next: NextFunction) => {
   const { user_id } = req.params;
 
-  fetchUserSkills(user_id)
+  selectUserByID(user_id)
+    .then(() => {
+      return fetchUserSkills(user_id);
+    })
     .then((data: Skill[]) => {
       res.status(200).send({ skills: data });
     })
