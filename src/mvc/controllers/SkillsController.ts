@@ -31,7 +31,10 @@ exports.getUserSkills = (req: Request, res: Response, next: NextFunction) => {
 exports.postUserSkill = (req: Request, res: Response, next: NextFunction) => {
   const { user_id } = req.params;
 
-  createUserSkill(user_id, req.body)
+  selectUserByID(user_id)
+    .then(() => {
+      return createUserSkill(user_id, req.body);
+    })
     .then((skill: Skill) => {
       res.status(201).send({ skill });
     })
