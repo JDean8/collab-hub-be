@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const { selectAllProjects, insertProject, selectProjectById, selectSkillsByProjectId, updateProjectById, deleteProject, fetchProjectStatus, postProjectStatus, patchStatusById } = require("../models/ProjectModel");
+const { selectAllProjects, insertProject, selectProjectById, selectSkillsByProjectId, updateProjectById, deleteProject, fetchProjectStatus, postProjectStatus, patchStatusById, postSkills, deleteSkill } = require("../models/ProjectModel");
 exports.getAllProjects = (req, res, next) => {
     selectAllProjects()
         .then((data) => {
@@ -77,6 +77,39 @@ exports.patchProjectStatusById = (req, res, next) => {
     patchStatusById(req.params.project_id, status)
         .then((status_project) => {
         res.status(200).send(status_project);
+    })
+        .catch((err) => next(err));
+};
+exports.postSkillsByProjectId = (req, res, next) => {
+    const { skill } = req.body;
+    postSkills(req.params.project_id, skill)
+        .then((skills) => {
+        res.status(201).send(skills);
+    })
+        .catch((err) => {
+        next(err);
+    });
+};
+exports.deleteSkillById = (req, res, next) => {
+    const { skill_id } = req.params;
+    const { project_id } = req.params;
+    return selectProjectById(req.params.project_id)
+        .then(() => {
+        return selectSkillsByProjectId(req.params.project_id);
+    })
+        .then((skills) => {
+        let doesSkillExist = false;
+        skills.forEach((singleSkill) => {
+            if (singleSkill.skill_id === Number(skill_id)) {
+                doesSkillExist = true;
+            }
+        });
+        if (doesSkillExist === false)
+            return Promise.reject({ status: 404, msg: "Skill not found" });
+        return deleteSkill(skill_id, project_id);
+    })
+        .then(() => {
+        res.sendStatus(204);
     })
         .catch((err) => next(err));
 };

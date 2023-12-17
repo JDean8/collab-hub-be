@@ -54,6 +54,7 @@ describe("GET /api/users/:user_id/skills", () => {
   //       expect(msg).toBe("User not found");
   //     });
   // });
+  
 });
 
 describe("POST /api/users/:user_id/skills", () => {

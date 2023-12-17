@@ -34,7 +34,6 @@ exports.insertUser = (user) => {
         user.password,
     ])
         .then(({ rows }) => {
-        console.log(rows);
         return rows[0];
     });
 };

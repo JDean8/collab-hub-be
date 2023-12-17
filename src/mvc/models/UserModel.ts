@@ -50,7 +50,6 @@ exports.insertUser = (user: User) => {
       ]
     )
     .then(({ rows }: UserProps) => {
-      console.log(rows);
       return rows[0];
     });
 };
