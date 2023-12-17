@@ -5,6 +5,7 @@ const {
   getUserByID,
   deleteUser,
   postUser,
+  patchUser,
 } = require("../controllers/UserController");
 
 const {
@@ -14,6 +15,6 @@ const {
 } = require("../controllers/SkillsController");
 
 userRouter.route("/").get(getAllUsers).post(postUser);
-userRouter.route("/:user_id").get(getUserByID).delete(deleteUser);
+userRouter.route("/:user_id").get(getUserByID).delete(deleteUser).patch(patchUser);
 userRouter.route("/:user_id/skills").get(getUserSkills).post(postUserSkill);
 userRouter.route("/:user_id/skills/:skill_id").delete(deleteUserSkill);

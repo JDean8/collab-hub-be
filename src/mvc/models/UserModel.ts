@@ -40,6 +40,35 @@ exports.removeUser = (userID: string) => {
   );
 };
 
+exports.editUser = (user: User, userID: string) => {
+  if (
+    !user.username ||
+    !user.email ||
+    !user.password ||
+    !user.name ||
+    !user.bio ||
+    !user.avatar_url
+  ) {
+    return Promise.reject({ status: 400, msg: "Bad request" });
+  }
+  return db
+    .query(
+      "UPDATE users SET username = $1, email = $2, password = $3, name = $4, bio = $5, avatar_url = $6 WHERE user_id = $7 RETURNING *",
+      [
+        user.username,
+        user.email,
+        user.password,
+        user.name,
+        user.bio,
+        user.avatar_url,
+        userID,
+      ]
+    )
+    .then(({ rows }: any) => {
+      if (!rows.length)
+        return Promise.reject({ status: 404, msg: "User not found" });
+  })
+
 exports.insertUser = (user: User) => {
   if (
     !user.email ||
