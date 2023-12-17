@@ -29,7 +29,7 @@ export const projects_skills: Project_skill[] = [
         skill_id: 6
     },
     {
-        project_id: 6,
+        project_id: 5,
         skill_id: 1
     }
 ]

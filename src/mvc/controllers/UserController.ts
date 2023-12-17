@@ -5,6 +5,7 @@ const {
   removeUser,
   selectUserByID,
   editUser,
+  insertUser,
 } = require("../models/UserModel");
 
 exports.getAllUsers = (req: Request, res: Response, next: NextFunction) => {
@@ -49,4 +50,12 @@ exports.patchUser = (req: Request, res: Response, next: NextFunction) => {
     .catch((err: Error) => {
       return next(err);
     });
+
+exports.postUser = (req: Request, res: Response, next: NextFunction) => {
+  const { user } = req.body;
+  insertUser(user)
+    .then((user: User) => {
+      res.status(201).send({ user: user });
+    })
+    .catch((err: Error) => next(err));
 };

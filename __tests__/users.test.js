@@ -13,7 +13,7 @@ describe("GET /api/users", () => {
       .get("/api/users")
       .expect(200)
       .then(({ body: { users } }) => {
-        expect(users).toHaveLength(3);
+        expect(users).toHaveLength(4);
         users.forEach((user) => {
           expect(user).toEqual(
             expect.objectContaining({
@@ -47,6 +47,22 @@ describe("GET /api/users/:user_id", () => {
           avatar_url:
             "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
         });
+      });
+  });
+  test("404: responds with error message when user_id that does not exist", () => {
+    return request(app)
+      .get("/api/users/148")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toEqual("No user found with that ID");
+      });
+  });
+  test("400: Bad reqeust, invalid type", () => {
+    return request(app)
+      .get("/api/users/SPACE")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toEqual("Bad request");
       });
   });
 });
@@ -144,6 +160,47 @@ describe("PATCH /api/users/:user_id", () => {
         bio: "I love cats and JavaScript!",
         avatar_url:
           "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+      })
+
+describe("POST /api/users", () => {
+  test("201: should respond with posted user object", () => {
+    return request(app)
+      .post("/api/users")
+      .send({
+        user: {
+          user_id: 29,
+          username: "BigLad13",
+          avatar_url:
+            "https://previews.123rf.com/images/ratoca/ratoca1203/ratoca120300226/12748273-funny-cartoon-face.jpg",
+          email: "biglad13@gmail.com",
+          name: "James",
+          bio: "I like trains",
+          password: "password1",
+        },
+      })
+      .expect(201)
+      .then(({ body: { user } }) => {
+        expect(user).toEqual(
+          expect.objectContaining({
+            user_id: expect.any(Number),
+            username: expect.any(String),
+            avatar_url: expect.any(String),
+            email: expect.any(String),
+            name: expect.any(String),
+            bio: expect.any(String),
+            password: expect.any(String),
+          })
+        );
+      });
+  });
+  test("400: returns error message when passed invalid user object", () => {
+    return request(app)
+      .post("/api/users")
+      .send({
+        user: {
+          user_id: 29,
+          username: "BigLad13",
+        },
       })
       .expect(400)
       .then(({ body: { msg } }) => {
