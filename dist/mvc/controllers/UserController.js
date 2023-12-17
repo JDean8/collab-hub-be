@@ -1,8 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-
-const { selectAllUsers, removeUser, selectUserByID, insertUser, editUser} = require("../models/UserModel");
-
+const { selectAllUsers, removeUser, selectUserByID, editUser, insertUser, } = require("../models/UserModel");
 exports.getAllUsers = (req, res, next) => {
     selectAllUsers()
         .then((data) => {
@@ -29,7 +27,6 @@ exports.deleteUser = (req, res, next) => {
     })
         .catch((err) => next(err));
 };
-
 exports.patchUser = (req, res, next) => {
     const { user_id } = req.params;
     const { user } = req.body;
@@ -41,10 +38,9 @@ exports.patchUser = (req, res, next) => {
         res.status(200).send({ user: user });
     })
         .catch((err) => {
-        console.log(err);
         return next(err);
     });
-
+};
 exports.postUser = (req, res, next) => {
     const { user } = req.body;
     insertUser(user)

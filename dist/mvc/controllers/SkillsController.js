@@ -11,7 +11,7 @@ exports.getAllSkills = (req, res, next) => {
 };
 exports.getUserSkills = (req, res, next) => {
     const { user_id } = req.params;
-    selectUserByID(user_id)
+    return selectUserByID(user_id)
         .then(() => {
         return fetchUserSkills(user_id);
     })

@@ -50,6 +50,7 @@ exports.patchUser = (req: Request, res: Response, next: NextFunction) => {
     .catch((err: Error) => {
       return next(err);
     });
+};
 
 exports.postUser = (req: Request, res: Response, next: NextFunction) => {
   const { user } = req.body;
