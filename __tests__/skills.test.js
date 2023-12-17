@@ -46,15 +46,14 @@ describe("GET /api/users/:user_id/skills", () => {
       });
   });
 
-  // test("404: responds with a message when passed a non-existent user_id", () => {
-  //   return request(app)
-  //     .get("/api/users/100/skills")
-  //     .expect(404)
-  //     .then(({ body: { msg } }) => {
-  //       expect(msg).toBe("User not found");
-  //     });
-  // });
-  
+  test("404: responds with a message when passed a non-existent user_id", () => {
+    return request(app)
+      .get("/api/users/100/skills")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("No user found with that ID");
+      });
+  });
 });
 
 describe("POST /api/users/:user_id/skills", () => {
@@ -102,6 +101,40 @@ describe("POST /api/users/:user_id/skills", () => {
     return request(app)
       .post("/api/users/1/skills")
       .send({ skill_id: 100 })
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Skill not found");
+      });
+  });
+
+  test("404: responds with a message when passed a non-existent user_id", () => {
+    return request(app)
+      .post("/api/users/100/skills")
+      .send({ skill_id: 5 })
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("No user found with that ID");
+      });
+  });
+});
+
+describe("DELETE /api/users/:user_id/skills/:skill_id", () => {
+  test("204: responds with no content", () => {
+    return request(app).delete("/api/users/1/skills/1").expect(204);
+  });
+
+  test("404: responds with a message when passed a non-existent user_id", () => {
+    return request(app)
+      .delete("/api/users/100/skills/1")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("No user found with that ID");
+      });
+  });
+
+  test("404: responds with a message when passed a non-existent skill_id", () => {
+    return request(app)
+      .delete("/api/users/1/skills/100")
       .expect(404)
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Skill not found");

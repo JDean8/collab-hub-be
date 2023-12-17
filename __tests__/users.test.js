@@ -49,6 +49,22 @@ describe("GET /api/users/:user_id", () => {
         });
       });
   });
+  test("404: responds with error message when user_id that does not exist", () => {
+    return request(app)
+      .get("/api/users/148")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toEqual("No user found with that ID");
+      });
+  });
+  test("400: Bad reqeust, invalid type", () => {
+    return request(app)
+      .get("/api/users/SPACE")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toEqual("Bad request");
+      });
+  });
 });
 
 describe("DELETE /api/users/:user_id", () => {
@@ -67,6 +83,84 @@ describe("Error handling", () => {
       });
   });
 });
+
+describe("PATCH /api/users/:user_id", () => {
+  test("200: responds with updated user when successful", () => {
+    return request(app)
+      .patch("/api/users/1")
+      .send({
+        user: {
+          username: "AngryTom",
+          email: "newEmail@mail.com",
+          password: "password",
+          name: "Thomas Tickle",
+          bio: "I love cats and JavaScript!",
+          avatar_url:
+            "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+        },
+      })
+      .expect(200)
+      .then(({ body: { user } }) => {
+        expect(user).toMatchObject({
+          username: "AngryTom",
+          email: "newEmail@mail.com",
+          password: "password",
+          name: "Thomas Tickle",
+          bio: "I love cats and JavaScript!",
+          avatar_url:
+            "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+        });
+      });
+  });
+  test("404: responds with error if invalid user", () => {
+    return request(app)
+      .patch("/api/users/13000")
+      .send({
+        user: {
+          username: "AngryTom",
+          email: "newEmail@mail.com",
+          password: "password",
+          name: "Thomas Tickle",
+          bio: "I love cats and JavaScript!",
+          avatar_url:
+            "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+        },
+      })
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("User not found");
+      });
+  });
+  test("400: responds with error when passed invalid user objects", () => {
+    return request(app)
+      .patch("/api/users/1")
+      .send({
+        user: {
+          email: "newEmail@mail.com",
+          password: "password",
+          name: "Thomas Tickle",
+          bio: "I love cats and JavaScript!",
+          avatar_url:
+            "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+        },
+      })
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
+      });
+  });
+  test("400: responds with error when passed invalid user objects", () => {
+    return request(app)
+      .patch("/api/users/1")
+      .send({
+        username: "AngryTom",
+        email: "newEmail@mail.com",
+        password: "password",
+        name: "Thomas Tickle",
+        bio: "I love cats and JavaScript!",
+        avatar_url:
+          "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+      })
 
 describe("POST /api/users", () => {
   test("201: should respond with posted user object", () => {
