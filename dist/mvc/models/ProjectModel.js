@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const db = require("../../../dist/db/pool.js");
+const { fetchStatus } = require("./StatusModel");
+const { fetchAllSkills } = require("./SkillsModel");
 exports.selectAllProjects = () => {
     return db.query("SELECT * FROM projects").then(({ rows }) => {
         return rows;
@@ -47,16 +49,99 @@ exports.updateProjectById = (project_id, project) => {
         return rows[0];
     });
 };
-exports.selectSkillsByProjectId = (project_id) => {
+const selectSkillsByProjectId = (project_id) => {
     return db
-        .query(`SELECT skills.skill_name FROM projects_skills LEFT JOIN skills ON projects_skills.skill_id = skills.skill_id WHERE project_id = $1`, [project_id])
+        .query(`SELECT skills.skill_name, skills.skill_id FROM projects_skills LEFT JOIN skills ON projects_skills.skill_id = skills.skill_id WHERE project_id = $1`, [project_id])
         .then(({ rows }) => {
-        return rows.map((row) => {
-            return row.skill_name;
-        });
+        return rows;
     });
 };
+module.exports.selectSkillsByProjectId = selectSkillsByProjectId;
 exports.deleteProject = (project_id) => {
     return db
         .query("DELETE FROM projects WHERE project_id = $1", [project_id]);
+};
+exports.fetchProjectStatus = (project_id) => {
+    return db
+        .query("SELECT status_name FROM status LEFT JOIN status_project ON status.status_id = status_project.status_id WHERE project_id = $1", [project_id])
+        .then(({ rows }) => {
+        return rows[0].status_name;
+    });
+};
+exports.postProjectStatus = (project_id, status) => {
+    return fetchStatus()
+        .then((statusObj) => {
+        let status_id = 0;
+        statusObj.forEach((statusObj) => {
+            if (statusObj.status_name === status.status) {
+                status_id = statusObj.status_id;
+            }
+        });
+        return db
+            .query("INSERT INTO status_project (status_id, project_id) VALUES ($1, $2) RETURNING *", [status_id, project_id]);
+    })
+        .then(({ rows }) => {
+        return rows[0];
+    });
+};
+exports.patchStatusById = (project_id, status) => {
+    return fetchStatus()
+        .then((statusObj) => {
+        let status_id;
+        statusObj.forEach((statusObj) => {
+            if (statusObj.status_name === status.status) {
+                status_id = statusObj.status_id;
+            }
+        });
+        return status_id;
+    })
+        .then((status_id) => {
+        if (status_id === undefined)
+            return Promise.reject({ status: 400, msg: "Bad request" });
+        return db
+            .query("UPDATE status_project SET status_id = $1 WHERE project_id = $2 RETURNING *", [status_id, project_id]);
+    })
+        .then(({ rows }) => {
+        if (rows.length === 0)
+            return Promise.reject({ status: 404, msg: "Project not found" });
+        return rows[0];
+    });
+};
+exports.postSkills = (project_id, skills) => {
+    return selectSkillsByProjectId(project_id)
+        .then((skillsArr) => {
+        let doesSkillExist = false;
+        skillsArr.forEach((singleSkill) => {
+            if (singleSkill.skill_name === skills.skill_name) {
+                doesSkillExist = true;
+            }
+        });
+        if (doesSkillExist)
+            return Promise.reject({ status: 400, msg: "Skill already exists" });
+    })
+        .then(() => {
+        return fetchAllSkills();
+    })
+        .then((skillsObj) => {
+        let skill_id;
+        skillsObj.forEach((skillObj) => {
+            if (skillObj.skill_name === skills.skill_name) {
+                skill_id = skillObj.skill_id;
+            }
+        });
+        return skill_id;
+    })
+        .then((skill_id) => {
+        if (skill_id === undefined)
+            return Promise.reject({ status: 400, msg: "Bad request" });
+        return db
+            .query("INSERT INTO projects_skills (project_id, skill_id) VALUES ($1, $2) RETURNING *", [project_id, skill_id]);
+    })
+        .then(({ rows }) => {
+        return rows[0];
+    });
+};
+exports.deleteSkill = (skill_id, project_id) => {
+    return db
+        .query("DELETE FROM projects_skills WHERE skill_id = $1 AND project_id = $2", [skill_id, project_id]);
 };

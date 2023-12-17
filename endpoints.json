@@ -135,5 +135,47 @@
         "exampleResponse": {
             "skills": ["JavaScript", "React"]
         }
+    },
+    "POST /api/projects/:project_id/skills": {
+        "description": "Adds a new skill to the project with the specified project_id.",
+        "queries": [],
+        "requiredProperties": ["skill_name"],
+        "exampleResponse": {
+             "project_id": 1, 
+             "skill_id": 3 
+        }
+    },
+    "DELETE /api/projects/:project_id/skills/:skill_id": {
+        "description": "Deletes a skill from the project with the specified project_id.",
+        "queries": [],
+        "requiredProperties": [],
+        "exampleResponse": {
+            "message": "Status 204."
+        }
+    },
+    "GET /api/projects/:project_id/status": {
+        "description": "Returns the status of the project with the specified project_id.",
+        "queries": [],
+        "exampleResponse": {
+            "status": "open"
+        }
+    },
+    "POST /api/projects/:project_id/status": {
+        "description": "Posts the status of the project with the specified project_id.",
+        "queries": [],
+        "requiredProperties": ["status"],
+        "exampleRequest": {
+            "status_id": 1,
+            "project_id": 1
+        }
+    },
+    "PATCH /api/projects/:project_id/status": {
+        "description": "Updates the status of the project with the specified project_id.",
+        "queries": [],
+        "requiredProperties": ["status"],
+        "exampleRequest": {
+            "status_id": 1,
+            "project_id": 1
+        }
     }
 }

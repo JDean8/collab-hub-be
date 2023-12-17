@@ -21,9 +21,5 @@ exports.status_project = [
     {
         status_id: 3,
         project_id: 5
-    },
-    {
-        status_id: 3,
-        project_id: 6
     }
 ];

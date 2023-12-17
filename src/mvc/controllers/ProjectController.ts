@@ -1,7 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import { type Project } from "../../db/data/test-data/projects";
 import { type Skill } from "../../db/data/test-data/skills";
-const { selectAllProjects, insertProject, selectProjectById, selectSkillsByProjectId, updateProjectById, deleteProject } = require("../models/ProjectModel");
+import { type Status_project } from "../../db/data/test-data/status-project";
+const { selectAllProjects, insertProject, selectProjectById, selectSkillsByProjectId, updateProjectById, deleteProject, fetchProjectStatus, postProjectStatus, patchStatusById, postSkills, deleteSkill } = require("../models/ProjectModel");
 
 exports.getAllProjects = (req: Request, res: Response, next: NextFunction) => {
   selectAllProjects()
@@ -55,6 +56,68 @@ exports.getSkillsByProjectId = (req: Request, res: Response, next: NextFunction)
 exports.deleteProjectById = (req: Request, res: Response, next: NextFunction) => {
   const { project_id } = req.params;
   deleteProject(project_id)
+  .then(() => {
+    res.sendStatus(204);
+  })
+  .catch((err: Error) => next(err));
+}
+
+exports.getProjectStatusByProjectId = (req: Request, res: Response, next: NextFunction) => {
+  return selectProjectById(req.params.project_id)
+  .then(() => {
+    return fetchProjectStatus(req.params.project_id)
+  })
+  .then((status: string) => {
+    res.status(200).send({ status });
+  })
+  .catch((err: Error) => next(err));
+}
+
+exports.postProjectStatusByProjectId = (req: Request, res: Response, next: NextFunction) => {
+  const { status } = req.body;
+  return postProjectStatus(req.params.project_id, status)
+  .then((status_project: Status_project) => {
+    res.status(201).send(status_project);
+  })
+  .catch((err: Error) => next(err));
+}
+
+exports.patchProjectStatusById = (req: Request, res: Response, next: NextFunction) => {
+  const { status } = req.body;
+  patchStatusById(req.params.project_id, status)
+  .then((status_project: Status_project) => {
+    res.status(200).send(status_project);
+  })
+  .catch((err: Error) => next(err));
+}
+
+exports.postSkillsByProjectId = (req: Request, res: Response, next: NextFunction) => {
+  const { skill } = req.body;
+  postSkills(req.params.project_id, skill)
+  .then((skills: Skill[]) => {
+    res.status(201).send(skills);
+  })
+  .catch((err: Error) => { 
+    next(err) });
+}
+
+exports.deleteSkillById = (req: Request, res: Response, next: NextFunction) => {
+  const { skill_id } = req.params;
+  const { project_id } = req.params;
+  return selectProjectById(req.params.project_id)
+  .then(() => {
+    return selectSkillsByProjectId(req.params.project_id)
+  })
+  .then((skills: Skill[]) => {
+    let doesSkillExist = false;
+    skills.forEach((singleSkill: Skill) => {
+      if(singleSkill.skill_id === Number(skill_id)) {
+        doesSkillExist = true;
+      }
+    })
+    if(doesSkillExist === false) return Promise.reject({status: 404, msg: "Skill not found"})
+    return deleteSkill(skill_id, project_id)
+  })
   .then(() => {
     res.sendStatus(204);
   })

@@ -216,7 +216,7 @@ describe("GET /api/projects/:project_id/skills", () => {
       .expect(200)
       .then(({ body: { skills } }) => {
         expect(skills).toHaveLength(2);
-        expect(skills).toEqual(["JavaScript", "React"])
+        expect(skills).toEqual([ { skill_id: 1, skill_name: 'JavaScript' }, { skill_id: 2, skill_name: 'React' } ])
       });
   })
   test("200: responds with an empty array when passed a project_id with no skills", () => {
@@ -250,5 +250,242 @@ describe("DELETE /api/projects/:project_id", () => {
     return request(app)
       .delete("/api/projects/5")
       .expect(204)
+  })
+})
+
+describe("GET /api/projects/:project_id/status", () => {
+  test("200: responds with a status object", () => {
+    return request(app)
+      .get("/api/projects/1/status")
+      .expect(200)
+      .then(({ body: { status } }) => {
+        expect(status).toBe("open")
+      });
+  })
+  test("404: responds with a message when passed a non-existent project_id", () => {
+    return request(app)
+      .get("/api/projects/100/status")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Project not found");
+      });
+  })
+})
+
+describe("POST /api/projects/:project_id/status", () => {
+  test("201: responds with a status object", () => {
+    return request(app)
+      .post("/api/projects/6/status")
+      .send({
+        status: {
+          status: "completed",
+        },
+      })
+      .expect(201)
+      .then((result) => {
+        expect(result.body).toEqual({ project_id: 6, status_id: 3 })
+      });
+  })
+  test("201: responds with a status object when passed extra keys", () => {
+    return request(app)
+      .post("/api/projects/6/status")
+      .send({
+        status: {
+          status: "completed",
+          extra_key: "extra",
+        },
+      })
+      .expect(201)
+      .then((result) => {
+        expect(result.body).toEqual({ project_id: 6, status_id: 3 })
+      });
+  })
+  test("400: responds with a message when passed an invalid status object", () => {
+    return request(app)
+      .post("/api/projects/6/status")
+      .send({
+        status: {
+          status: "invalid",
+        },
+      })
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
+      });
+  })
+  test("404: responds with a message when passed a non-existent project_id", () => {
+    return request(app)
+      .post("/api/projects/100/status")
+      .send({
+        status: {
+          status: "completed",
+        },
+      })
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
+      });
+  })
+})
+
+describe("PATCH /api/projects/:project_id/status", () => {
+  test("200: responds with a status object", () => {
+    return request(app)
+      .patch("/api/projects/1/status")
+      .send({
+        status: {
+          status: "completed",
+        },
+      })
+      .expect(200)
+      .then((result) => {
+        expect(result.body).toEqual({ project_id: 1, status_id: 3 })
+      });
+  })
+  test("200: responds with a status object when passed extra keys", () => {
+    return request(app)
+      .patch("/api/projects/1/status")
+      .send({
+        status: {
+          status: "completed",
+          extra_key: "extra",
+        },
+      })
+      .expect(200)
+      .then((result) => {
+        expect(result.body).toEqual({ project_id: 1, status_id: 3 })
+      });
+  })
+  test("400: responds with a message when passed an invalid status object", () => {
+    return request(app)
+      .patch("/api/projects/1/status")
+      .send({
+        status: {
+          status: "invalid",
+        },
+      })
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
+      });
+  })
+  test("404: responds with a message when passed a non-existent project_id", () => {
+    return request(app)
+      .patch("/api/projects/100/status")
+      .send({
+        status: {
+          status: "completed",
+        },
+      })
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Project not found");
+      });
+  })
+  test("400: responds with a message when passed an invalid project_id", () => {
+    return request(app)
+      .patch("/api/projects/abc/status")
+      .send({
+        status: {
+          status: "completed",
+        },
+      })
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
+      });
+  })
+})
+
+describe("POST /api/projects/:project_id/skills", () => {
+  test("201: responds with a skill object", () => {
+    return request(app)
+      .post("/api/projects/1/skills")
+      .send({
+        skill: {
+          skill_name: "Node",
+        },
+      })
+      .expect(201)
+      .then((result) => {
+        expect(result.body).toEqual({ project_id: 1, skill_id: 3 })
+      });
+  })
+  test("201: responds with a skill object when passed extra keys", () => {
+    return request(app)
+      .post("/api/projects/1/skills")
+      .send({
+        skill: {
+          skill_name: "Node",
+          extra_key: "extra",
+        },
+      })
+      .expect(201)
+      .then((result) => {
+        expect(result.body).toEqual({ project_id: 1, skill_id: 3 })
+      });
+  })
+  test("400: responds with a message when passed an invalid skill object", () => {
+    return request(app)
+      .post("/api/projects/1/skills")
+      .send({
+        skill: {
+          skill_name: 123,
+        },
+      })
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
+      });
+  })
+  test("400: responds with a message when passed a non-existent project_id", () => {
+    return request(app)
+      .post("/api/projects/100/skills")
+      .send({
+        skill: {
+          skill_name: "Node",
+        },
+      })
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
+      });
+  })
+  test("400: responds with a message when passed a skill that already exists", () => {
+    return request(app)
+      .post("/api/projects/1/skills")
+      .send({
+        skill: {
+          skill_name: "React",
+        },
+      })
+      .expect(400)
+      .then(( { body }) => {
+        expect(body.msg).toBe("Skill already exists");
+      });
+  })
+})
+
+describe("DELETE /api/projects/:project_id/skills/:skill_id", () => {
+  test("204: responds with no content", () => {
+    return request(app)
+      .delete("/api/projects/1/skills/1")
+      .expect(204)
+  })
+  test("404: responds with a message when passed a non-existent project_id", () => {
+    return request(app)
+      .delete("/api/projects/100/skills/1")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Project not found");
+      });
+  })
+  test("404: responds with a message when passed a skill that does not exist", () => {
+    return request(app)
+      .delete("/api/projects/1/skills/100")
+      .expect(404)
+      .then(( { body }) => {
+        expect(body.msg).toBe("Skill not found");
+      });
   })
 })

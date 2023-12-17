@@ -19,10 +19,7 @@ exports.getAllSkills = (req: Request, res: Response, next: NextFunction) => {
 exports.getUserSkills = (req: Request, res: Response, next: NextFunction) => {
   const { user_id } = req.params;
 
-  selectUserByID(user_id)
-    .then(() => {
-      return fetchUserSkills(user_id);
-    })
+  fetchUserSkills(user_id)
     .then((data: Skill[]) => {
       res.status(200).send({ skills: data });
     })
