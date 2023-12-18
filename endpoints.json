@@ -177,5 +177,16 @@
             "status_id": 1,
             "project_id": 1
         }
+    },
+    "GET /api/projects/:project_id/members": {
+        "description": "Returns an array of all members of the project with the specified project_id.",
+        "queries": [],
+        "exampleResponse": {
+            "members": [
+                {
+                    "user_id": 1,
+                    "username": "tickle122"
+                }]
+        }
     }
 }

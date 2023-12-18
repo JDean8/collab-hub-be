@@ -2,7 +2,14 @@ import { Request, Response, NextFunction } from "express";
 import { type Project } from "../../db/data/test-data/projects";
 import { type Skill } from "../../db/data/test-data/skills";
 import { type Status_project } from "../../db/data/test-data/status-project";
-const { selectAllProjects, insertProject, selectProjectById, selectSkillsByProjectId, updateProjectById, deleteProject, fetchProjectStatus, postProjectStatus, patchStatusById, postSkills, deleteSkill } = require("../models/ProjectModel");
+const { selectAllProjects, insertProject, selectProjectById, selectSkillsByProjectId, updateProjectById, deleteProject, fetchProjectStatus, postProjectStatus, patchStatusById, postSkills, deleteSkill, fetchProjectMembers } = require("../models/ProjectModel");
+
+type ProjectMembersProps = {
+  rows: {
+    user_id: number,
+    username: string
+  }[]
+};
 
 exports.getAllProjects = (req: Request, res: Response, next: NextFunction) => {
   selectAllProjects()
@@ -122,4 +129,15 @@ exports.deleteSkillById = (req: Request, res: Response, next: NextFunction) => {
     res.sendStatus(204);
   })
   .catch((err: Error) => next(err));
+}
+
+exports.getProjectMembersByProjectId = (req: Request, res: Response, next: NextFunction) => {
+  return selectProjectById(req.params.project_id)
+  .then(() => {
+    return fetchProjectMembers(req.params.project_id)
+  })
+  .then((members: ProjectMembersProps) => {
+    res.status(200).send({ members });
+  })
+  .catch((err: Error) => next(err))
 }

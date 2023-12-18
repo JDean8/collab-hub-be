@@ -145,3 +145,11 @@ exports.deleteSkill = (skill_id, project_id) => {
     return db
         .query("DELETE FROM projects_skills WHERE skill_id = $1 AND project_id = $2", [skill_id, project_id]);
 };
+exports.fetchProjectMembers = (project_id) => {
+    return db
+        .query("SELECT users.user_id, users.username FROM projects_members LEFT JOIN users ON projects_members.member_id = users.user_id WHERE project_id = $1", [project_id])
+        .then(({ rows }) => {
+        console.log(rows, "rows");
+        return rows;
+    });
+};

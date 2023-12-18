@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const { selectAllProjects, insertProject, selectProjectById, selectSkillsByProjectId, updateProjectById, deleteProject, fetchProjectStatus, postProjectStatus, patchStatusById, postSkills, deleteSkill } = require("../models/ProjectModel");
+const { selectAllProjects, insertProject, selectProjectById, selectSkillsByProjectId, updateProjectById, deleteProject, fetchProjectStatus, postProjectStatus, patchStatusById, postSkills, deleteSkill, fetchProjectMembers } = require("../models/ProjectModel");
 exports.getAllProjects = (req, res, next) => {
     selectAllProjects()
         .then((data) => {
@@ -110,6 +110,16 @@ exports.deleteSkillById = (req, res, next) => {
     })
         .then(() => {
         res.sendStatus(204);
+    })
+        .catch((err) => next(err));
+};
+exports.getProjectMembersByProjectId = (req, res, next) => {
+    return selectProjectById(req.params.project_id)
+        .then(() => {
+        return fetchProjectMembers(req.params.project_id);
+    })
+        .then((members) => {
+        res.status(200).send({ members });
     })
         .catch((err) => next(err));
 };

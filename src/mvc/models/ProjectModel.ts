@@ -27,6 +27,13 @@ type SkillsProjectProps = {
   rows: Project_skill[];
 }
 
+type ProjectMembersProps = {
+  rows: {
+    user_id: number,
+    username: string
+  }[]
+};
+
 exports.selectAllProjects = () => {
   return db.query("SELECT * FROM projects").then(({ rows }: ProjectProps) => {
     return rows;
@@ -178,4 +185,12 @@ exports.postSkills = (project_id: number, skills: any) => {
 exports.deleteSkill = (skill_id: number, project_id: number) => {
   return db
   .query("DELETE FROM projects_skills WHERE skill_id = $1 AND project_id = $2", [skill_id, project_id])
+}
+
+exports.fetchProjectMembers = (project_id: number) => {
+  return db
+  .query("SELECT users.user_id, users.username FROM projects_members LEFT JOIN users ON projects_members.member_id = users.user_id WHERE project_id = $1", [project_id])
+  .then(({ rows }: ProjectMembersProps) => {
+    return rows;
+  })
 }

@@ -489,3 +489,31 @@ describe("DELETE /api/projects/:project_id/skills/:skill_id", () => {
       });
   })
 })
+
+describe("GET /api/projects/:project_id/members", () => {
+  test("200: responds with an array of members for a given project", () => {
+    return request(app)
+      .get("/api/projects/1/members")
+      .expect(200)
+      .then(({ body: { members } }) => {
+        expect(members).toHaveLength(2);
+        expect(members).toEqual([ { user_id: 2, username: 'happyamy2016' }, { user_id: 3, username: 'grumpy19' } ])
+      });
+  })
+  test("200: responds with an empty array when passed a project_id with no members", () => {
+    return request(app)
+      .get("/api/projects/6/members")
+      .expect(200)
+      .then(({ body: { members } }) => {
+        expect(members).toHaveLength(0);
+      });
+  })
+  test("404: responds with a message when passed a non-existent project_id", () => {
+    return request(app)
+      .get("/api/projects/100/members")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Project not found");
+      });
+  })
+})
