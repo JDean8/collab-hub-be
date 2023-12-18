@@ -27,9 +27,7 @@ exports.removeUser = (userID) => {
     DELETE FROM users
     WHERE user_id = $1`, [userID]);
 };
-
 exports.editUser = (user, userID) => {
-    console.log("hello");
     if (!user.username ||
         !user.email ||
         !user.password ||
@@ -51,7 +49,9 @@ exports.editUser = (user, userID) => {
         .then(({ rows }) => {
         if (!rows.length)
             return Promise.reject({ status: 404, msg: "User not found" });
-
+        return rows[0];
+    });
+};
 exports.insertUser = (user) => {
     if (!user.email ||
         !user.password ||

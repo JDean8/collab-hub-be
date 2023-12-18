@@ -67,7 +67,9 @@ exports.editUser = (user: User, userID: string) => {
     .then(({ rows }: any) => {
       if (!rows.length)
         return Promise.reject({ status: 404, msg: "User not found" });
+      return rows[0];
   })
+}
 
 exports.insertUser = (user: User) => {
   if (

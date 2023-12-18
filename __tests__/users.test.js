@@ -161,6 +161,7 @@ describe("PATCH /api/users/:user_id", () => {
         avatar_url:
           "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
       })
+    })
 
 describe("POST /api/users", () => {
   test("201: should respond with posted user object", () => {
@@ -205,6 +206,7 @@ describe("POST /api/users", () => {
       .expect(400)
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Bad request");
-      });
-  });
+      })
+  })
 });
+})
