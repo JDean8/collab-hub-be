@@ -177,5 +177,52 @@
             "status_id": 1,
             "project_id": 1
         }
+    },
+    "GET /api/projects/:project_id/members": {
+        "description": "Returns an array of all members of the project with the specified project_id.",
+        "queries": [],
+        "exampleResponse": {
+            "members": [
+                {
+                    "user_id": 1,
+                    "username": "tickle122"
+                }]
+        }
+    },
+    "GET /api/projects/:project_id/member-request": {
+        "description": "Returns an array of all member requests of the project with the specified project_id.",
+        "queries": [],
+        "exampleResponse": {
+            "member_requests": [
+                {
+                    "user_id": 1,
+                    "username": "tickle122"
+                }]
+        }
+    },
+    "POST /api/projects/:project_id/member-request": {
+        "description": "Adds a new member request to the project with the specified project_id.",
+        "queries": [],
+        "requiredProperties": ["user_id"],
+        "exampleRequest": {
+            "user_id": 1,
+            "project_id": 1
+        }
+    },
+    "DELETE /api/:project_id/member-request/:user_id": {
+        "description": "Deletes a member request from the project with the specified project_id.",
+        "queries": [],
+        "requiredProperties": [],
+        "exampleResponse": {
+            "message": "Status 204."
+        }
+    },
+    "DELETE /api/projects/:project_id/members/:user_id": {
+        "description": "Deletes a member from the project with the specified project_id.",
+        "queries": [],
+        "requiredProperties": [],
+        "exampleResponse": {
+            "message": "Status 204."
+        }
     }
 }

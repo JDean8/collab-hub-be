@@ -48,6 +48,6 @@ exports.projects = [
         project_name: "Project 6",
         project_description: "Project 6 description",
         project_created_at: 1669852800000,
-        required_members: 3,
+        required_members: 1,
     },
 ];
