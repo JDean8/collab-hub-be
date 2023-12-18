@@ -222,3 +222,8 @@ exports.deleteMemberRequest = (project_id: number, user_id: number) => {
   return db
   .query("DELETE FROM member_request WHERE project_id = $1 AND user_id = $2", [project_id, user_id])
 }
+
+exports.deleteMember = (project_id: number, user_id: number) => {
+  return db
+  .query("DELETE FROM projects_members WHERE project_id = $1 AND member_id = $2", [project_id, user_id])
+}

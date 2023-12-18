@@ -664,3 +664,27 @@ describe("DELETE /api/projects/:project_id/member-request/:user_id", () => {
       });
   })
 })
+
+describe("DELETE /api/projects/:project_id/members/:user_id", () => {
+  test("204: responds with no content", () => {
+    return request(app)
+      .delete("/api/projects/1/members/2")
+      .expect(204)
+  })
+  test("404: responds with a message when passed a non-existent project_id", () => {
+    return request(app)
+      .delete("/api/projects/100/members/2")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Project not found");
+      });
+  })
+  test("404: responds with a message when passed a member that does not exist", () => {
+    return request(app)
+      .delete("/api/projects/1/members/100")
+      .expect(404)
+      .then(( { body }) => {
+        expect(body.msg).toBe("Member not found");
+      });
+  })
+})

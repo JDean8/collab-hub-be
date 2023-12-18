@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const { selectAllProjects, insertProject, selectProjectById, selectSkillsByProjectId, updateProjectById, deleteProject, fetchProjectStatus, postProjectStatus, patchStatusById, postSkills, deleteSkill, fetchProjectMembers, fetchMemberRequests, postMemberRequest, deleteMemberRequest } = require("../models/ProjectModel");
+const { selectAllProjects, insertProject, selectProjectById, selectSkillsByProjectId, updateProjectById, deleteProject, fetchProjectStatus, postProjectStatus, patchStatusById, postSkills, deleteSkill, fetchProjectMembers, fetchMemberRequests, postMemberRequest, deleteMemberRequest, deleteMember } = require("../models/ProjectModel");
 exports.getAllProjects = (req, res, next) => {
     selectAllProjects()
         .then((data) => {
@@ -187,7 +187,6 @@ exports.deleteMemberRequestByProjectId = (req, res, next) => {
         return fetchMemberRequests(project_id);
     })
         .then((memberRequests) => {
-        console.log(memberRequests);
         let doesMemberRequestExist = false;
         memberRequests.map((singleMemberRequest) => {
             if (singleMemberRequest.user_id === Number(user_id)) {
@@ -199,6 +198,31 @@ exports.deleteMemberRequestByProjectId = (req, res, next) => {
     })
         .then(() => {
         return deleteMemberRequest(user_id, project_id);
+    })
+        .then(() => {
+        res.sendStatus(204);
+    })
+        .catch((err) => next(err));
+};
+exports.deleteMemberByProjectId = (req, res, next) => {
+    const { user_id } = req.params;
+    const { project_id } = req.params;
+    selectProjectById(project_id)
+        .then(() => {
+        return fetchProjectMembers(project_id);
+    })
+        .then((members) => {
+        let doesMemberExist = false;
+        members.map((singleMember) => {
+            if (singleMember.user_id === Number(user_id)) {
+                doesMemberExist = true;
+            }
+        });
+        if (!doesMemberExist)
+            return Promise.reject({ status: 404, msg: "Member not found" });
+    })
+        .then(() => {
+        return deleteMember(user_id, project_id);
     })
         .then(() => {
         res.sendStatus(204);
