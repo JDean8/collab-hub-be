@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { type Project } from "../../db/data/test-data/projects";
 import { type Skill } from "../../db/data/test-data/skills";
 import { type Status_project } from "../../db/data/test-data/status-project";
-const { selectAllProjects, insertProject, selectProjectById, selectSkillsByProjectId, updateProjectById, deleteProject, fetchProjectStatus, postProjectStatus, patchStatusById, postSkills, deleteSkill, fetchProjectMembers, fetchMemberRequests, postMemberRequest } = require("../models/ProjectModel");
+const { selectAllProjects, insertProject, selectProjectById, selectSkillsByProjectId, updateProjectById, deleteProject, fetchProjectStatus, postProjectStatus, patchStatusById, postSkills, deleteSkill, fetchProjectMembers, fetchMemberRequests, postMemberRequest, deleteMemberRequest } = require("../models/ProjectModel");
 
 type ProjectMembersProps = {
   rows: {
@@ -202,4 +202,30 @@ exports.postMemberRequestByProjectId = (req: Request, res: Response, next: NextF
   .catch((err: Error) => {
     next(err)
   })
+}
+
+exports.deleteMemberRequestByProjectId = (req: Request, res: Response, next: NextFunction) => {
+  const { user_id } = req.params;
+  const { project_id } = req.params;
+  selectProjectById(project_id)
+  .then(() => {
+    return fetchMemberRequests(project_id)
+  })
+  .then((memberRequests: ProjectMemberRequestsProps[]) => {
+    console.log(memberRequests)
+    let doesMemberRequestExist = false;
+    memberRequests.map((singleMemberRequest: any) => {
+      if(singleMemberRequest.user_id === Number(user_id)) {
+        doesMemberRequestExist = true;
+      }
+    })
+    if(!doesMemberRequestExist) return Promise.reject({status: 404, msg: "Member request not found"})
+  })
+  .then(() => {
+    return deleteMemberRequest(user_id, project_id)
+  })
+  .then(() => {
+    res.sendStatus(204);
+  })
+  .catch((err: Error) => next(err))
 }

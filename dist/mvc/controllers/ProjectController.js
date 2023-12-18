@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const { selectAllProjects, insertProject, selectProjectById, selectSkillsByProjectId, updateProjectById, deleteProject, fetchProjectStatus, postProjectStatus, patchStatusById, postSkills, deleteSkill, fetchProjectMembers, fetchMemberRequests, postMemberRequest } = require("../models/ProjectModel");
+const { selectAllProjects, insertProject, selectProjectById, selectSkillsByProjectId, updateProjectById, deleteProject, fetchProjectStatus, postProjectStatus, patchStatusById, postSkills, deleteSkill, fetchProjectMembers, fetchMemberRequests, postMemberRequest, deleteMemberRequest } = require("../models/ProjectModel");
 exports.getAllProjects = (req, res, next) => {
     selectAllProjects()
         .then((data) => {
@@ -178,4 +178,30 @@ exports.postMemberRequestByProjectId = (req, res, next) => {
         .catch((err) => {
         next(err);
     });
+};
+exports.deleteMemberRequestByProjectId = (req, res, next) => {
+    const { user_id } = req.params;
+    const { project_id } = req.params;
+    selectProjectById(project_id)
+        .then(() => {
+        return fetchMemberRequests(project_id);
+    })
+        .then((memberRequests) => {
+        console.log(memberRequests);
+        let doesMemberRequestExist = false;
+        memberRequests.map((singleMemberRequest) => {
+            if (singleMemberRequest.user_id === Number(user_id)) {
+                doesMemberRequestExist = true;
+            }
+        });
+        if (!doesMemberRequestExist)
+            return Promise.reject({ status: 404, msg: "Member request not found" });
+    })
+        .then(() => {
+        return deleteMemberRequest(user_id, project_id);
+    })
+        .then(() => {
+        res.sendStatus(204);
+    })
+        .catch((err) => next(err));
 };

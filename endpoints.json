@@ -208,5 +208,13 @@
             "user_id": 1,
             "project_id": 1
         }
+    },
+    "DELETE /api/:project_id/member-request/:user_id": {
+        "description": "Deletes a member request from the project with the specified project_id.",
+        "queries": [],
+        "requiredProperties": [],
+        "exampleResponse": {
+            "message": "Status 204."
+        }
     }
 }
