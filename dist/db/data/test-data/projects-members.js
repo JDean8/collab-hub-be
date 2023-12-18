@@ -25,5 +25,9 @@ exports.projects_members = [
     {
         project_id: 3,
         member_id: 2
+    },
+    {
+        project_id: 6,
+        member_id: 1
     }
 ];

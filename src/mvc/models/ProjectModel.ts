@@ -34,6 +34,13 @@ type ProjectMembersProps = {
   }[]
 };
 
+type MembersRequestProps = {
+  rows: {
+    project_id: number,
+    user_id: number
+  }[]
+}
+
 exports.selectAllProjects = () => {
   return db.query("SELECT * FROM projects").then(({ rows }: ProjectProps) => {
     return rows;
@@ -192,5 +199,21 @@ exports.fetchProjectMembers = (project_id: number) => {
   .query("SELECT users.user_id, users.username FROM projects_members LEFT JOIN users ON projects_members.member_id = users.user_id WHERE project_id = $1", [project_id])
   .then(({ rows }: ProjectMembersProps) => {
     return rows;
+  })
+}
+
+exports.fetchMemberRequests = (project_id: number) => {
+  return db
+  .query("SELECT users.user_id, users.username FROM member_request LEFT JOIN users ON member_request.user_id = users.user_id WHERE project_id = $1", [project_id])
+  .then(({ rows }: ProjectMembersProps) => {
+    return rows;
+  })
+}
+
+exports.postMemberRequest = (project_id: number, user_id: any) => {
+  return db
+  .query("INSERT INTO member_request (user_id, project_id) VALUES ($1, $2) RETURNING *", [user_id.user_id, project_id])
+  .then(({ rows }: MembersRequestProps) => {
+    return rows[0];
   })
 }

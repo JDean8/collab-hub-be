@@ -149,7 +149,20 @@ exports.fetchProjectMembers = (project_id) => {
     return db
         .query("SELECT users.user_id, users.username FROM projects_members LEFT JOIN users ON projects_members.member_id = users.user_id WHERE project_id = $1", [project_id])
         .then(({ rows }) => {
-        console.log(rows, "rows");
         return rows;
+    });
+};
+exports.fetchMemberRequests = (project_id) => {
+    return db
+        .query("SELECT users.user_id, users.username FROM member_request LEFT JOIN users ON member_request.user_id = users.user_id WHERE project_id = $1", [project_id])
+        .then(({ rows }) => {
+        return rows;
+    });
+};
+exports.postMemberRequest = (project_id, user_id) => {
+    return db
+        .query("INSERT INTO member_request (user_id, project_id) VALUES ($1, $2) RETURNING *", [user_id.user_id, project_id])
+        .then(({ rows }) => {
+        return rows[0];
     });
 };

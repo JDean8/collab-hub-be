@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { type Project } from "../../db/data/test-data/projects";
 import { type Skill } from "../../db/data/test-data/skills";
 import { type Status_project } from "../../db/data/test-data/status-project";
-const { selectAllProjects, insertProject, selectProjectById, selectSkillsByProjectId, updateProjectById, deleteProject, fetchProjectStatus, postProjectStatus, patchStatusById, postSkills, deleteSkill, fetchProjectMembers } = require("../models/ProjectModel");
+const { selectAllProjects, insertProject, selectProjectById, selectSkillsByProjectId, updateProjectById, deleteProject, fetchProjectStatus, postProjectStatus, patchStatusById, postSkills, deleteSkill, fetchProjectMembers, fetchMemberRequests, postMemberRequest } = require("../models/ProjectModel");
 
 type ProjectMembersProps = {
   rows: {
@@ -10,6 +10,13 @@ type ProjectMembersProps = {
     username: string
   }[]
 };
+
+type ProjectMemberRequestsProps = {
+  rows: {
+    user_id: number,
+    username: string
+  }[]
+}
 
 exports.getAllProjects = (req: Request, res: Response, next: NextFunction) => {
   selectAllProjects()
@@ -140,4 +147,59 @@ exports.getProjectMembersByProjectId = (req: Request, res: Response, next: NextF
     res.status(200).send({ members });
   })
   .catch((err: Error) => next(err))
+}
+
+exports.getMemberRequestsByProjectId = (req: Request, res: Response, next: NextFunction) => {
+  selectProjectById(req.params.project_id)
+  .then(() => {
+    return fetchMemberRequests(req.params.project_id)
+  })
+  .then((memberRequests: ProjectMemberRequestsProps) => {
+    res.status(200).send({ memberRequests });
+  })
+  .catch((err: Error) => next(err))
+}
+
+exports.postMemberRequestByProjectId = (req: Request, res: Response, next: NextFunction) => {
+  let requiredMembers = 0;
+  const { memberRequest} = req.body;
+  return fetchMemberRequests(req.params.project_id)
+  .then((memberRequestArr: ProjectMembersProps[]) => {
+    let doesMemberRequestExist = false;
+    memberRequestArr.map((singleMemberRequest: any) => {
+      if(singleMemberRequest.user_id === memberRequest.user_id) {
+        doesMemberRequestExist = true;
+      }
+    })
+    if (doesMemberRequestExist) return Promise.reject({status: 400, msg: "Member request already exists"})
+  })
+  .then(() => {
+    return selectProjectById(req.params.project_id)
+  })
+  .then((project: Project) => {
+    requiredMembers = project.required_members;
+    return requiredMembers
+  })
+  .then(() => {
+    return fetchProjectMembers(req.params.project_id)
+  })
+  .then((members: ProjectMembersProps[]) => {
+    if(members.length >= requiredMembers) return Promise.reject({status: 400, msg: "Project is full"})
+    let doesMemberExist = false;
+    members.map((singleMember: any) => {
+      if(singleMember.user_id === memberRequest.user_id) {
+        doesMemberExist = true;
+      }
+    })
+    if (doesMemberExist) return Promise.reject({status: 400, msg: "User is already a member of this project"})
+  })
+  .then(() => {
+    return postMemberRequest(req.params.project_id, memberRequest)
+  })
+  .then((memberRequest: any) => {
+    res.status(201).send(memberRequest);
+  })
+  .catch((err: Error) => {
+    next(err)
+  })
 }

@@ -502,7 +502,7 @@ describe("GET /api/projects/:project_id/members", () => {
   })
   test("200: responds with an empty array when passed a project_id with no members", () => {
     return request(app)
-      .get("/api/projects/6/members")
+      .get("/api/projects/5/members")
       .expect(200)
       .then(({ body: { members } }) => {
         expect(members).toHaveLength(0);
@@ -514,6 +514,129 @@ describe("GET /api/projects/:project_id/members", () => {
       .expect(404)
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Project not found");
+      });
+  })
+})
+
+describe("GET /api/projects/:project_id/member-request", () => {
+  test("200: responds with an array of member requests for a given project", () => {
+    return request(app)
+      .get("/api/projects/1/member-request")
+      .expect(200)
+      .then(({ body: { memberRequests } }) => {
+        expect(memberRequests).toHaveLength(1);
+        expect(memberRequests).toEqual([ { user_id: 2, username: 'happyamy2016' } ])
+      });
+  })
+  test("200: responds with an empty array when passed a project_id with no member requests", () => {
+    return request(app)
+      .get("/api/projects/6/member-request")
+      .expect(200)
+      .then(({ body: { memberRequests } }) => {
+        expect(memberRequests).toHaveLength(0);
+      });
+  })
+  test("404: responds with a message when passed a non-existent project_id", () => {
+    return request(app)
+      .get("/api/projects/100/member-request")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Project not found");
+      });
+  })
+})
+
+describe("POST /api/projects/:project_id/member-request", () => {
+  test("201: responds with a member request object", () => {
+    return request(app)
+      .post("/api/projects/1/member-request")
+      .send({
+        memberRequest: {
+          user_id: 4,
+        },
+      })
+      .expect(201)
+      .then((result) => {
+        expect(result.body).toEqual({ project_id: 1, user_id: 4 })
+      });
+  })
+  test("201: responds with a member request object when passed extra keys", () => {
+    return request(app)
+      .post("/api/projects/1/member-request")
+      .send({
+        memberRequest: {
+          user_id: 4,
+          extra_key: "extra",
+        },
+      })
+      .expect(201)
+      .then((result) => {
+        expect(result.body).toEqual({ project_id: 1, user_id: 4 })
+      });
+  })
+  test("400: responds with a message when passed an invalid member request object", () => {
+    return request(app)
+      .post("/api/projects/1/member-request")
+      .send({
+        memberRequest: {
+          user_id: "abc",
+        },
+      })
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
+      });
+  })
+  test("400: responds with a message when passed a non-existent project_id", () => {
+    return request(app)
+      .post("/api/projects/100/member-request")
+      .send({
+        memberRequest: {
+          user_id: 4,
+        },
+      })
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Project not found");
+      });
+  })
+  test("400: responds with a message when passed a member request that already exists", () => {
+    return request(app)
+      .post("/api/projects/1/member-request")
+      .send({
+        memberRequest: {
+          user_id: 2,
+        },
+      })
+      .expect(400)
+      .then(( { body }) => {
+        expect(body.msg).toBe("Member request already exists");
+      });
+  })
+  test("400: responds with a message when passed a member request for a project - user is already a member of that project", () => {
+    return request(app)
+      .post("/api/projects/1/member-request")
+      .send({
+        memberRequest: {
+          user_id: 3,
+        },
+      })
+      .expect(400)
+      .then(( { body }) => {
+        expect(body.msg).toBe("User is already a member of this project");
+      });
+  })
+  test("400: responds with a message when passed a member request for a project that is full", () => {
+    return request(app)
+      .post("/api/projects/6/member-request")
+      .send({
+        memberRequest: {
+          user_id: 4,
+        },
+      })
+      .expect(400)
+      .then(( { body }) => {
+        expect(body.msg).toBe("Project is full");
       });
   })
 })
