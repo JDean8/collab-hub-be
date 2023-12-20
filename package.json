@@ -2,7 +2,7 @@
   "name": "collab-hub-be",
   "version": "1.0.0",
   "description": "Repo under construction",
-  "main": "index.js",
+  "main": "listen.js",
   "scripts": {
     "test": "jest --runInBand",
     "setup-dbs": "psql -f ./src/db/setup.sql",
