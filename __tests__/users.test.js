@@ -150,63 +150,61 @@ describe("PATCH /api/users/:user_id", () => {
       });
   });
   test("400: responds with error when passed invalid user objects", () => {
-    return request(app)
-      .patch("/api/users/1")
-      .send({
-        username: "AngryTom",
-        email: "newEmail@mail.com",
-        password: "password",
-        name: "Thomas Tickle",
-        bio: "I love cats and JavaScript!",
-        avatar_url:
-          "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
-      })
-    })
-
-describe("POST /api/users", () => {
-  test("201: should respond with posted user object", () => {
-    return request(app)
-      .post("/api/users")
-      .send({
-        user: {
-          user_id: 29,
-          username: "BigLad13",
-          avatar_url:
-            "https://previews.123rf.com/images/ratoca/ratoca1203/ratoca120300226/12748273-funny-cartoon-face.jpg",
-          email: "biglad13@gmail.com",
-          name: "James",
-          bio: "I like trains",
-          password: "password1",
-        },
-      })
-      .expect(201)
-      .then(({ body: { user } }) => {
-        expect(user).toEqual(
-          expect.objectContaining({
-            user_id: expect.any(Number),
-            username: expect.any(String),
-            avatar_url: expect.any(String),
-            email: expect.any(String),
-            name: expect.any(String),
-            bio: expect.any(String),
-            password: expect.any(String),
-          })
-        );
-      });
+    return request(app).patch("/api/users/1").send({
+      username: "AngryTom",
+      email: "newEmail@mail.com",
+      password: "password",
+      name: "Thomas Tickle",
+      bio: "I love cats and JavaScript!",
+      avatar_url:
+        "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+    });
   });
-  test("400: returns error message when passed invalid user object", () => {
-    return request(app)
-      .post("/api/users")
-      .send({
-        user: {
-          user_id: 29,
-          username: "BigLad13",
-        },
-      })
-      .expect(400)
-      .then(({ body: { msg } }) => {
-        expect(msg).toBe("Bad request");
-      })
-  })
+
+  describe("POST /api/users", () => {
+    test("201: should respond with posted user object", () => {
+      return request(app)
+        .post("/api/users")
+        .send({
+          user: {
+            user_id: 29,
+            username: "BigLad13",
+            avatar_url:
+              "https://previews.123rf.com/images/ratoca/ratoca1203/ratoca120300226/12748273-funny-cartoon-face.jpg",
+            email: "biglad13@gmail.com",
+            name: "James",
+            bio: "I like trains",
+            password: "password1",
+          },
+        })
+        .expect(201)
+        .then(({ body: { user } }) => {
+          expect(user).toEqual(
+            expect.objectContaining({
+              user_id: expect.any(Number),
+              username: expect.any(String),
+              avatar_url: expect.any(String),
+              email: expect.any(String),
+              name: expect.any(String),
+              bio: expect.any(String),
+              password: expect.any(String),
+            })
+          );
+        });
+    });
+    test("400: returns error message when passed invalid user object", () => {
+      return request(app)
+        .post("/api/users")
+        .send({
+          user: {
+            user_id: 29,
+            username: "BigLad13",
+          },
+        })
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("Bad request");
+        });
+    });
+  });
 });
-})
