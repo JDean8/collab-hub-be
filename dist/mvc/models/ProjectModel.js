@@ -44,7 +44,12 @@ exports.selectProjectById = (project_id) => {
 };
 exports.updateProjectById = (project_id, project) => {
     return db
-        .query("UPDATE projects SET project_name = $1, project_description = $2, required_members = $3 WHERE project_id = $4 RETURNING *", [project.project_name, project.project_description, project.required_members, project_id])
+        .query("UPDATE projects SET project_name = $1, project_description = $2, required_members = $3 WHERE project_id = $4 RETURNING *", [
+        project.project_name,
+        project.project_description,
+        project.required_members,
+        project_id,
+    ])
         .then(({ rows }) => {
         return rows[0];
     });
@@ -58,8 +63,7 @@ const selectSkillsByProjectId = (project_id) => {
 };
 module.exports.selectSkillsByProjectId = selectSkillsByProjectId;
 exports.deleteProject = (project_id) => {
-    return db
-        .query("DELETE FROM projects WHERE project_id = $1", [project_id]);
+    return db.query("DELETE FROM projects WHERE project_id = $1", [project_id]);
 };
 exports.fetchProjectStatus = (project_id) => {
     return db
@@ -77,8 +81,7 @@ exports.postProjectStatus = (project_id, status) => {
                 status_id = statusObj.status_id;
             }
         });
-        return db
-            .query("INSERT INTO status_project (status_id, project_id) VALUES ($1, $2) RETURNING *", [status_id, project_id]);
+        return db.query("INSERT INTO status_project (status_id, project_id) VALUES ($1, $2) RETURNING *", [status_id, project_id]);
     })
         .then(({ rows }) => {
         return rows[0];
@@ -98,8 +101,7 @@ exports.patchStatusById = (project_id, status) => {
         .then((status_id) => {
         if (status_id === undefined)
             return Promise.reject({ status: 400, msg: "Bad request" });
-        return db
-            .query("UPDATE status_project SET status_id = $1 WHERE project_id = $2 RETURNING *", [status_id, project_id]);
+        return db.query("UPDATE status_project SET status_id = $1 WHERE project_id = $2 RETURNING *", [status_id, project_id]);
     })
         .then(({ rows }) => {
         if (rows.length === 0)
@@ -134,16 +136,14 @@ exports.postSkills = (project_id, skills) => {
         .then((skill_id) => {
         if (skill_id === undefined)
             return Promise.reject({ status: 400, msg: "Bad request" });
-        return db
-            .query("INSERT INTO projects_skills (project_id, skill_id) VALUES ($1, $2) RETURNING *", [project_id, skill_id]);
+        return db.query("INSERT INTO projects_skills (project_id, skill_id) VALUES ($1, $2) RETURNING *", [project_id, skill_id]);
     })
         .then(({ rows }) => {
         return rows[0];
     });
 };
 exports.deleteSkill = (skill_id, project_id) => {
-    return db
-        .query("DELETE FROM projects_skills WHERE skill_id = $1 AND project_id = $2", [skill_id, project_id]);
+    return db.query("DELETE FROM projects_skills WHERE skill_id = $1 AND project_id = $2", [skill_id, project_id]);
 };
 exports.fetchProjectMembers = (project_id) => {
     return db
@@ -167,10 +167,8 @@ exports.postMemberRequest = (project_id, user_id) => {
     });
 };
 exports.deleteMemberRequest = (project_id, user_id) => {
-    return db
-        .query("DELETE FROM member_request WHERE project_id = $1 AND user_id = $2", [project_id, user_id]);
+    return db.query("DELETE FROM member_request WHERE project_id = $1 AND user_id = $2", [project_id, user_id]);
 };
 exports.deleteMember = (project_id, user_id) => {
-    return db
-        .query("DELETE FROM projects_members WHERE project_id = $1 AND member_id = $2", [project_id, user_id]);
+    return db.query("DELETE FROM projects_members WHERE project_id = $1 AND member_id = $2", [project_id, user_id]);
 };

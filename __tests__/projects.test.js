@@ -88,7 +88,7 @@ describe("GET /api/projects/:project_id", () => {
         expect(project.project_created_at).toBe("1669852800000");
         expect(project.required_members).toBe(3);
       });
-  })
+  });
   test("404: responds with a message when passed a non-existent project_id", () => {
     return request(app)
       .get("/api/projects/100")
@@ -105,7 +105,7 @@ describe("GET /api/projects/:project_id", () => {
         expect(msg).toBe("Bad request");
       });
   });
-})
+});
 
 describe("PATCH /api/projects/:project_id", () => {
   test("200: responds with an updated project object", () => {
@@ -129,7 +129,7 @@ describe("PATCH /api/projects/:project_id", () => {
         expect(project.project_created_at).toBe("1669852800000");
         expect(project.required_members).toBe(4);
       });
-  })
+  });
   test("200: responds with an updated project object when passed extra keys", () => {
     return request(app)
       .patch("/api/projects/1")
@@ -152,7 +152,7 @@ describe("PATCH /api/projects/:project_id", () => {
         expect(project.project_created_at).toBe("1669852800000");
         expect(project.required_members).toBe(4);
       });
-  })
+  });
   test("400: responds with a message when passed an invalid project object", () => {
     return request(app)
       .patch("/api/projects/1")
@@ -167,7 +167,7 @@ describe("PATCH /api/projects/:project_id", () => {
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Bad request");
       });
-  })
+  });
   test("404: responds with a message when passed when passed an empty body", () => {
     return request(app)
       .patch("/api/projects/1")
@@ -176,7 +176,7 @@ describe("PATCH /api/projects/:project_id", () => {
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Bad request");
       });
-  })
+  });
   test("404: responds with a message when passed a non-existent project_id", () => {
     return request(app)
       .patch("/api/projects/100")
@@ -207,7 +207,7 @@ describe("PATCH /api/projects/:project_id", () => {
         expect(msg).toBe("Bad request");
       });
   });
-})
+});
 
 describe("GET /api/projects/:project_id/skills", () => {
   test("200: responds with an array of skills for a given project", () => {
@@ -216,9 +216,12 @@ describe("GET /api/projects/:project_id/skills", () => {
       .expect(200)
       .then(({ body: { skills } }) => {
         expect(skills).toHaveLength(2);
-        expect(skills).toEqual([ { skill_id: 1, skill_name: 'JavaScript' }, { skill_id: 2, skill_name: 'React' } ])
+        expect(skills).toEqual([
+          { skill_id: 1, skill_name: "JavaScript" },
+          { skill_id: 2, skill_name: "React" },
+        ]);
       });
-  })
+  });
   test("200: responds with an empty array when passed a project_id with no skills", () => {
     return request(app)
       .get("/api/projects/6/skills")
@@ -226,7 +229,7 @@ describe("GET /api/projects/:project_id/skills", () => {
       .then(({ body: { skills } }) => {
         expect(skills).toHaveLength(0);
       });
-  })
+  });
   test("404: responds with a message when passed a non-existent project_id", () => {
     return request(app)
       .get("/api/projects/100/skills")
@@ -234,7 +237,7 @@ describe("GET /api/projects/:project_id/skills", () => {
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Project not found");
       });
-  })
+  });
   test("404: responds with a message when passed an invalid project_id", () => {
     return request(app)
       .get("/api/projects/abc/skills")
@@ -242,16 +245,14 @@ describe("GET /api/projects/:project_id/skills", () => {
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Bad request");
       });
-  })
-})
+  });
+});
 
 describe("DELETE /api/projects/:project_id", () => {
   test("204: responds with no content", () => {
-    return request(app)
-      .delete("/api/projects/5")
-      .expect(204)
-  })
-})
+    return request(app).delete("/api/projects/5").expect(204);
+  });
+});
 
 describe("GET /api/projects/:project_id/status", () => {
   test("200: responds with a status object", () => {
@@ -259,9 +260,9 @@ describe("GET /api/projects/:project_id/status", () => {
       .get("/api/projects/1/status")
       .expect(200)
       .then(({ body: { status } }) => {
-        expect(status).toBe("open")
+        expect(status).toBe("open");
       });
-  })
+  });
   test("404: responds with a message when passed a non-existent project_id", () => {
     return request(app)
       .get("/api/projects/100/status")
@@ -269,8 +270,8 @@ describe("GET /api/projects/:project_id/status", () => {
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Project not found");
       });
-  })
-})
+  });
+});
 
 describe("POST /api/projects/:project_id/status", () => {
   test("201: responds with a status object", () => {
@@ -283,9 +284,9 @@ describe("POST /api/projects/:project_id/status", () => {
       })
       .expect(201)
       .then((result) => {
-        expect(result.body).toEqual({ project_id: 6, status_id: 3 })
+        expect(result.body).toEqual({ project_id: 6, status_id: 3 });
       });
-  })
+  });
   test("201: responds with a status object when passed extra keys", () => {
     return request(app)
       .post("/api/projects/6/status")
@@ -297,9 +298,9 @@ describe("POST /api/projects/:project_id/status", () => {
       })
       .expect(201)
       .then((result) => {
-        expect(result.body).toEqual({ project_id: 6, status_id: 3 })
+        expect(result.body).toEqual({ project_id: 6, status_id: 3 });
       });
-  })
+  });
   test("400: responds with a message when passed an invalid status object", () => {
     return request(app)
       .post("/api/projects/6/status")
@@ -312,7 +313,7 @@ describe("POST /api/projects/:project_id/status", () => {
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Bad request");
       });
-  })
+  });
   test("404: responds with a message when passed a non-existent project_id", () => {
     return request(app)
       .post("/api/projects/100/status")
@@ -325,8 +326,8 @@ describe("POST /api/projects/:project_id/status", () => {
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Bad request");
       });
-  })
-})
+  });
+});
 
 describe("PATCH /api/projects/:project_id/status", () => {
   test("200: responds with a status object", () => {
@@ -339,9 +340,9 @@ describe("PATCH /api/projects/:project_id/status", () => {
       })
       .expect(200)
       .then((result) => {
-        expect(result.body).toEqual({ project_id: 1, status_id: 3 })
+        expect(result.body).toEqual({ project_id: 1, status_id: 3 });
       });
-  })
+  });
   test("200: responds with a status object when passed extra keys", () => {
     return request(app)
       .patch("/api/projects/1/status")
@@ -353,9 +354,9 @@ describe("PATCH /api/projects/:project_id/status", () => {
       })
       .expect(200)
       .then((result) => {
-        expect(result.body).toEqual({ project_id: 1, status_id: 3 })
+        expect(result.body).toEqual({ project_id: 1, status_id: 3 });
       });
-  })
+  });
   test("400: responds with a message when passed an invalid status object", () => {
     return request(app)
       .patch("/api/projects/1/status")
@@ -368,7 +369,7 @@ describe("PATCH /api/projects/:project_id/status", () => {
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Bad request");
       });
-  })
+  });
   test("404: responds with a message when passed a non-existent project_id", () => {
     return request(app)
       .patch("/api/projects/100/status")
@@ -381,7 +382,7 @@ describe("PATCH /api/projects/:project_id/status", () => {
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Project not found");
       });
-  })
+  });
   test("400: responds with a message when passed an invalid project_id", () => {
     return request(app)
       .patch("/api/projects/abc/status")
@@ -394,8 +395,8 @@ describe("PATCH /api/projects/:project_id/status", () => {
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Bad request");
       });
-  })
-})
+  });
+});
 
 describe("POST /api/projects/:project_id/skills", () => {
   test("201: responds with a skill object", () => {
@@ -408,9 +409,9 @@ describe("POST /api/projects/:project_id/skills", () => {
       })
       .expect(201)
       .then((result) => {
-        expect(result.body).toEqual({ project_id: 1, skill_id: 3 })
+        expect(result.body).toEqual({ project_id: 1, skill_id: 3 });
       });
-  })
+  });
   test("201: responds with a skill object when passed extra keys", () => {
     return request(app)
       .post("/api/projects/1/skills")
@@ -422,9 +423,9 @@ describe("POST /api/projects/:project_id/skills", () => {
       })
       .expect(201)
       .then((result) => {
-        expect(result.body).toEqual({ project_id: 1, skill_id: 3 })
+        expect(result.body).toEqual({ project_id: 1, skill_id: 3 });
       });
-  })
+  });
   test("400: responds with a message when passed an invalid skill object", () => {
     return request(app)
       .post("/api/projects/1/skills")
@@ -437,7 +438,7 @@ describe("POST /api/projects/:project_id/skills", () => {
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Bad request");
       });
-  })
+  });
   test("400: responds with a message when passed a non-existent project_id", () => {
     return request(app)
       .post("/api/projects/100/skills")
@@ -450,7 +451,7 @@ describe("POST /api/projects/:project_id/skills", () => {
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Bad request");
       });
-  })
+  });
   test("400: responds with a message when passed a skill that already exists", () => {
     return request(app)
       .post("/api/projects/1/skills")
@@ -460,18 +461,16 @@ describe("POST /api/projects/:project_id/skills", () => {
         },
       })
       .expect(400)
-      .then(( { body }) => {
+      .then(({ body }) => {
         expect(body.msg).toBe("Skill already exists");
       });
-  })
-})
+  });
+});
 
 describe("DELETE /api/projects/:project_id/skills/:skill_id", () => {
   test("204: responds with no content", () => {
-    return request(app)
-      .delete("/api/projects/1/skills/1")
-      .expect(204)
-  })
+    return request(app).delete("/api/projects/1/skills/1").expect(204);
+  });
   test("404: responds with a message when passed a non-existent project_id", () => {
     return request(app)
       .delete("/api/projects/100/skills/1")
@@ -479,16 +478,16 @@ describe("DELETE /api/projects/:project_id/skills/:skill_id", () => {
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Project not found");
       });
-  })
+  });
   test("404: responds with a message when passed a skill that does not exist", () => {
     return request(app)
       .delete("/api/projects/1/skills/100")
       .expect(404)
-      .then(( { body }) => {
+      .then(({ body }) => {
         expect(body.msg).toBe("Skill not found");
       });
-  })
-})
+  });
+});
 
 describe("GET /api/projects/:project_id/members", () => {
   test("200: responds with an array of members for a given project", () => {
@@ -497,9 +496,12 @@ describe("GET /api/projects/:project_id/members", () => {
       .expect(200)
       .then(({ body: { members } }) => {
         expect(members).toHaveLength(2);
-        expect(members).toEqual([ { user_id: 2, username: 'happyamy2016' }, { user_id: 3, username: 'grumpy19' } ])
+        expect(members).toEqual([
+          { user_id: 2, username: "happyamy2016" },
+          { user_id: 3, username: "grumpy19" },
+        ]);
       });
-  })
+  });
   test("200: responds with an empty array when passed a project_id with no members", () => {
     return request(app)
       .get("/api/projects/5/members")
@@ -507,7 +509,7 @@ describe("GET /api/projects/:project_id/members", () => {
       .then(({ body: { members } }) => {
         expect(members).toHaveLength(0);
       });
-  })
+  });
   test("404: responds with a message when passed a non-existent project_id", () => {
     return request(app)
       .get("/api/projects/100/members")
@@ -515,8 +517,8 @@ describe("GET /api/projects/:project_id/members", () => {
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Project not found");
       });
-  })
-})
+  });
+});
 
 describe("GET /api/projects/:project_id/member-request", () => {
   test("200: responds with an array of member requests for a given project", () => {
@@ -525,9 +527,11 @@ describe("GET /api/projects/:project_id/member-request", () => {
       .expect(200)
       .then(({ body: { memberRequests } }) => {
         expect(memberRequests).toHaveLength(1);
-        expect(memberRequests).toEqual([ { user_id: 2, username: 'happyamy2016' } ])
+        expect(memberRequests).toEqual([
+          { user_id: 2, username: "happyamy2016" },
+        ]);
       });
-  })
+  });
   test("200: responds with an empty array when passed a project_id with no member requests", () => {
     return request(app)
       .get("/api/projects/6/member-request")
@@ -535,7 +539,7 @@ describe("GET /api/projects/:project_id/member-request", () => {
       .then(({ body: { memberRequests } }) => {
         expect(memberRequests).toHaveLength(0);
       });
-  })
+  });
   test("404: responds with a message when passed a non-existent project_id", () => {
     return request(app)
       .get("/api/projects/100/member-request")
@@ -543,8 +547,8 @@ describe("GET /api/projects/:project_id/member-request", () => {
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Project not found");
       });
-  })
-})
+  });
+});
 
 describe("POST /api/projects/:project_id/member-request", () => {
   test("201: responds with a member request object", () => {
@@ -557,9 +561,9 @@ describe("POST /api/projects/:project_id/member-request", () => {
       })
       .expect(201)
       .then((result) => {
-        expect(result.body).toEqual({ project_id: 1, user_id: 4 })
+        expect(result.body).toEqual({ project_id: 1, user_id: 4 });
       });
-  })
+  });
   test("201: responds with a member request object when passed extra keys", () => {
     return request(app)
       .post("/api/projects/1/member-request")
@@ -571,9 +575,9 @@ describe("POST /api/projects/:project_id/member-request", () => {
       })
       .expect(201)
       .then((result) => {
-        expect(result.body).toEqual({ project_id: 1, user_id: 4 })
+        expect(result.body).toEqual({ project_id: 1, user_id: 4 });
       });
-  })
+  });
   test("400: responds with a message when passed an invalid member request object", () => {
     return request(app)
       .post("/api/projects/1/member-request")
@@ -586,7 +590,7 @@ describe("POST /api/projects/:project_id/member-request", () => {
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Bad request");
       });
-  })
+  });
   test("400: responds with a message when passed a non-existent project_id", () => {
     return request(app)
       .post("/api/projects/100/member-request")
@@ -599,7 +603,7 @@ describe("POST /api/projects/:project_id/member-request", () => {
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Project not found");
       });
-  })
+  });
   test("400: responds with a message when passed a member request that already exists", () => {
     return request(app)
       .post("/api/projects/1/member-request")
@@ -609,10 +613,10 @@ describe("POST /api/projects/:project_id/member-request", () => {
         },
       })
       .expect(400)
-      .then(( { body }) => {
+      .then(({ body }) => {
         expect(body.msg).toBe("Member request already exists");
       });
-  })
+  });
   test("400: responds with a message when passed a member request for a project - user is already a member of that project", () => {
     return request(app)
       .post("/api/projects/1/member-request")
@@ -622,10 +626,10 @@ describe("POST /api/projects/:project_id/member-request", () => {
         },
       })
       .expect(400)
-      .then(( { body }) => {
+      .then(({ body }) => {
         expect(body.msg).toBe("User is already a member of this project");
       });
-  })
+  });
   test("400: responds with a message when passed a member request for a project that is full", () => {
     return request(app)
       .post("/api/projects/6/member-request")
@@ -635,18 +639,16 @@ describe("POST /api/projects/:project_id/member-request", () => {
         },
       })
       .expect(400)
-      .then(( { body }) => {
+      .then(({ body }) => {
         expect(body.msg).toBe("Project is full");
       });
-  })
-})
+  });
+});
 
 describe("DELETE /api/projects/:project_id/member-request/:user_id", () => {
   test("204: responds with no content", () => {
-    return request(app)
-      .delete("/api/projects/1/member-request/2")
-      .expect(204)
-  })
+    return request(app).delete("/api/projects/1/member-request/2").expect(204);
+  });
   test("404: responds with a message when passed a non-existent project_id", () => {
     return request(app)
       .delete("/api/projects/100/member-request/2")
@@ -654,23 +656,21 @@ describe("DELETE /api/projects/:project_id/member-request/:user_id", () => {
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Project not found");
       });
-  })
+  });
   test("404: responds with a message when passed a member request that does not exist", () => {
     return request(app)
       .delete("/api/projects/1/member-request/100")
       .expect(404)
-      .then(( { body }) => {
+      .then(({ body }) => {
         expect(body.msg).toBe("Member request not found");
       });
-  })
-})
+  });
+});
 
 describe("DELETE /api/projects/:project_id/members/:user_id", () => {
   test("204: responds with no content", () => {
-    return request(app)
-      .delete("/api/projects/1/members/2")
-      .expect(204)
-  })
+    return request(app).delete("/api/projects/1/members/2").expect(204);
+  });
   test("404: responds with a message when passed a non-existent project_id", () => {
     return request(app)
       .delete("/api/projects/100/members/2")
@@ -678,13 +678,13 @@ describe("DELETE /api/projects/:project_id/members/:user_id", () => {
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Project not found");
       });
-  })
+  });
   test("404: responds with a message when passed a member that does not exist", () => {
     return request(app)
       .delete("/api/projects/1/members/100")
       .expect(404)
-      .then(( { body }) => {
+      .then(({ body }) => {
         expect(body.msg).toBe("Member not found");
       });
-  })
-})
+  });
+});
