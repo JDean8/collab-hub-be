@@ -8,7 +8,9 @@
     "setup-dbs": "psql -f ./src/db/setup.sql",
     "dev": "node ./dist/api.js",
     "seed": "node ./dist/db/data/seeds/run-seed.js",
-    "playground": "psql -f playground.sql > playground.txt"
+    "playground": "psql -f playground.sql > playground.txt",
+    "start": "node listen.js",
+    "seed-prod": "NODE_ENV=production npm run seed"
   },
   "keywords": [],
   "author": "",
