@@ -6,6 +6,7 @@ const {
   deleteUser,
   postUser,
   patchUser,
+  getUserByEmail,
 } = require("../controllers/UserController");
 
 const {
@@ -22,3 +23,4 @@ userRouter
   .patch(patchUser);
 userRouter.route("/:user_id/skills").get(getUserSkills).post(postUserSkill);
 userRouter.route("/:user_id/skills/:skill_id").delete(deleteUserSkill);
+userRouter.route("/signin/:user_email").get(getUserByEmail);

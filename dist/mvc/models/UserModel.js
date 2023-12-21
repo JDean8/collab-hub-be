@@ -22,6 +22,21 @@ exports.selectUserByID = (userID) => {
         return rows[0];
     });
 };
+exports.selectUserByEmail = (email) => {
+    return db
+        .query(`
+  SELECT * FROM users
+  WHERE email = $1`, [email])
+        .then(({ rows }) => {
+        if (rows.length === 0) {
+            return Promise.reject({
+                status: 404,
+                msg: "No user found with that Email",
+            });
+        }
+        return rows[0];
+    });
+};
 exports.removeUser = (userID) => {
     return db.query(`
     DELETE FROM users
