@@ -85,6 +85,14 @@ describe("GET /api/users/signin/:user_email", () => {
         });
       });
   });
+  test("404: responds with error message when email that does not exist", () => {
+    return request(app)
+      .get("/api/users/signin/user1232@mail.com")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toEqual("No user found with that Email");
+      });
+  });
 });
 
 describe("DELETE /api/users/:user_id", () => {
