@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.projectRouter = void 0;
 exports.projectRouter = require("express").Router();
-const { getAllProjects, postProject, getProjectById, getSkillsByProjectId, patchProjectById, deleteProjectById, getProjectStatusByProjectId, postProjectStatusByProjectId, patchProjectStatusById, postSkillsByProjectId, deleteSkillById, getProjectMembersByProjectId, getMemberRequestsByProjectId, postMemberRequestByProjectId, deleteMemberRequestByProjectId, deleteMemberByProjectId, } = require("../controllers/ProjectController");
+const { getAllProjects, postProject, getProjectById, getSkillsByProjectId, patchProjectById, deleteProjectById, getProjectStatusByProjectId, postProjectStatusByProjectId, patchProjectStatusById, postSkillsByProjectId, deleteSkillById, getProjectMembersByProjectId, getMemberRequestsByProjectId, postMemberRequestByProjectId, deleteMemberRequestByProjectId, deleteMemberByProjectId, postMemberByProjectId } = require("../controllers/ProjectController");
 exports.projectRouter.route("/").get(getAllProjects).post(postProject);
 exports.projectRouter
     .route("/:project_id")
@@ -19,7 +19,7 @@ exports.projectRouter
     .get(getProjectStatusByProjectId)
     .post(postProjectStatusByProjectId)
     .patch(patchProjectStatusById);
-exports.projectRouter.route("/:project_id/members").get(getProjectMembersByProjectId);
+exports.projectRouter.route("/:project_id/members").get(getProjectMembersByProjectId).post(postMemberByProjectId);
 exports.projectRouter
     .route("/:project_id/member-request")
     .get(getMemberRequestsByProjectId)

@@ -3,7 +3,6 @@ const testData = require("../dist/db/data/test-data/index");
 const db = require("../dist/db/pool.js");
 const request = require("supertest");
 const { app } = require("../dist/api.js");
-const { describe } = require("node:test");
 
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
@@ -688,3 +687,66 @@ describe("DELETE /api/projects/:project_id/members/:user_id", () => {
       });
   });
 });
+
+describe("POST /api/projects/:project_id/members", () => {
+  test("201: responds with a member object when project author accepted a member", () => {
+    return request(app)
+      .post("/api/projects/1/members")
+      .send({
+        member: {
+          user_id: 2,
+          decision: "accepted",
+          feedback: "Great addition to the team",
+        },
+      })
+      .expect(201)
+      .then((result) => {
+        expect(result.body).toEqual({ decision: "accepted", feedback: "Great addition to the team" });
+      });
+  })
+  test("201: responds with a member object when project author rejected a member", () => {
+    return request(app)
+      .post("/api/projects/3/members")
+      .send({
+        member: {
+          user_id: 2,
+          decision: "rejected",
+          feedback: "Not the right fit for the team",
+        },
+      })
+      .expect(200)
+      .then(({body}) => {
+        expect(body.msg).toBe("Member request rejected. Feedback: Not the right fit for the team");
+      });
+  })
+  test("400: responds with a message when passed an invalid member object", () => {
+    return request(app)
+      .post("/api/projects/1/members")
+      .send({
+        member: {
+          user_id: 2,
+          decision: "invalid",
+          feedback: "Great addition to the team",
+        },
+      })
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
+      });
+  })
+  test("400: responds with a message when passed non-existent project memmber request", () => {
+    return request(app)
+      .post("/api/projects/1/members")
+      .send({
+        member: {
+          user_id: 4,
+          decision: "accepted",
+          feedback: "Great addition to the team",
+        },
+      })
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Member request not found");
+      });
+  })
+})

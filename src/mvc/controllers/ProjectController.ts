@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { type Project } from "../../db/data/test-data/projects";
 import { type Skill } from "../../db/data/test-data/skills";
 import { type Status_project } from "../../db/data/test-data/status-project";
-const { selectAllProjects, insertProject, selectProjectById, selectSkillsByProjectId, updateProjectById, deleteProject, fetchProjectStatus, postProjectStatus, patchStatusById, postSkills, deleteSkill, fetchProjectMembers, fetchMemberRequests, postMemberRequest, deleteMemberRequest, deleteMember } = require("../models/ProjectModel");
+const { selectAllProjects, insertProject, selectProjectById, selectSkillsByProjectId, updateProjectById, deleteProject, fetchProjectStatus, postProjectStatus, patchStatusById, postSkills, deleteSkill, fetchProjectMembers, fetchMemberRequests, postMemberRequest, deleteMemberRequest, deleteMember, postMember } = require("../models/ProjectModel");
 
 type ProjectMembersProps = {
   rows: {
@@ -250,6 +250,29 @@ exports.deleteMemberByProjectId = (req: Request, res: Response, next: NextFuncti
   })
   .then(() => {
     res.sendStatus(204);
+  })
+  .catch((err: Error) => next(err))
+}
+
+exports.postMemberByProjectId = (req: Request, res: Response, next: NextFunction) => {
+  const { member } = req.body;
+  const { project_id } = req.params;
+  if(member.decision !== "accepted" && member.decision !== "rejected") return next({status: 400, msg: "Bad request"})
+  return fetchMemberRequests(project_id)
+  .then((memberRequests: ProjectMemberRequestsProps[]) => {
+    let doesMemberRequestExist = false;
+    memberRequests.map((singleMemberRequest: any) => {
+      if(singleMemberRequest.user_id === member.user_id) {
+        doesMemberRequestExist = true;
+      }
+    })
+    if(!doesMemberRequestExist) return Promise.reject({status: 404, msg: "Member request not found"})
+  })
+  .then(() => {
+    return postMember(project_id, member)
+  })
+  .then(() => {
+    res.status(201).send({decision: member.decision, feedback: member.feedback});
   })
   .catch((err: Error) => next(err))
 }
