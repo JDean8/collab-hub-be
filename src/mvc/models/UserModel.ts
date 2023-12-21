@@ -94,10 +94,9 @@ exports.insertUser = (user: User) => {
     .then((hashedPassword: string) => {
       return db.query(
         `INSERT INTO users
-    (user_id, username, avatar_url, email, name, bio, password)
-    VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;`,
+    (username, avatar_url, email, name, bio, password)
+    VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;`,
         [
-          user.user_id,
           user.username,
           user.avatar_url,
           user.email,
