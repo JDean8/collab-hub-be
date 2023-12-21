@@ -22,6 +22,7 @@ exports.selectUserByID = (userID) => {
         return rows[0];
     });
 };
+exports.selectUserByEmail = (email) => { };
 exports.removeUser = (userID) => {
     return db.query(`
     DELETE FROM users

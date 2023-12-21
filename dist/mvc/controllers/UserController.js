@@ -16,6 +16,9 @@ exports.getUserByID = (req, res, next) => {
     })
         .catch((err) => next(err));
 };
+exports.getUserByEmail = (req, res, next) => {
+    console.log('hi');
+};
 exports.deleteUser = (req, res, next) => {
     const { user_id } = req.params;
     selectUserByID(user_id)

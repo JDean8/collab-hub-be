@@ -31,6 +31,8 @@ exports.selectUserByID = (userID: string) => {
     });
 };
 
+exports.selectUserByEmail = (email: string) => {};
+
 exports.removeUser = (userID: string) => {
   return db.query(
     `
