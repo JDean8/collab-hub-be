@@ -16,6 +16,7 @@ const {
   postMemberRequestByProjectId,
   deleteMemberRequestByProjectId,
   deleteMemberByProjectId,
+  postMemberByProjectId
 } = require("../controllers/ProjectController");
 
 projectRouter.route("/").get(getAllProjects).post(postProject);
@@ -34,7 +35,7 @@ projectRouter
   .get(getProjectStatusByProjectId)
   .post(postProjectStatusByProjectId)
   .patch(patchProjectStatusById);
-projectRouter.route("/:project_id/members").get(getProjectMembersByProjectId);
+projectRouter.route("/:project_id/members").get(getProjectMembersByProjectId).post(postMemberByProjectId);
 projectRouter
   .route("/:project_id/member-request")
   .get(getMemberRequestsByProjectId)

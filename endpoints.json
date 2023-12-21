@@ -224,5 +224,20 @@
         "exampleResponse": {
             "message": "Status 204."
         }
+    },
+    "POST /api/projects/:project_id/members" : {
+        "description": "Adds or rejects a new member to the project with the specified project_id.",
+        "queries": [],
+        "requiredProperties": ["user_id"],
+        "exampleRequestForAcceptedMembers": {
+            "user_id": 1,
+            "decision": "accepted",
+            "feedback": "Great to have you on board!"
+        },
+        "exampleRequestForRejectedUsers": {
+            "user_id": 1,
+            "decision": "rejected",
+            "feedback": "Not a good fit for the team!"
+        }
     }
 }
