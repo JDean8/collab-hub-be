@@ -167,7 +167,6 @@ describe("PATCH /api/users/:user_id", () => {
         .post("/api/users")
         .send({
           user: {
-            user_id: 29,
             username: "BigLad13",
             avatar_url:
               "https://previews.123rf.com/images/ratoca/ratoca1203/ratoca120300226/12748273-funny-cartoon-face.jpg",
