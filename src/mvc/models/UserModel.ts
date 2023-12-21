@@ -31,7 +31,24 @@ exports.selectUserByID = (userID: string) => {
     });
 };
 
-exports.selectUserByEmail = (email: string) => {};
+exports.selectUserByEmail = (email: string) => {
+  return db
+    .query(
+      `
+  SELECT * FROM users
+  WHERE email = $1`,
+      [email]
+    )
+    .then(({ rows }: UserProps) => {
+      if (rows.length === 0) {
+        return Promise.reject({
+          status: 404,
+          msg: "No user found with that Email",
+        });
+      }
+      return rows[0];
+    });
+};
 
 exports.removeUser = (userID: string) => {
   return db.query(

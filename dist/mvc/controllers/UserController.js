@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const { selectAllUsers, removeUser, selectUserByID, editUser, insertUser, } = require("../models/UserModel");
+const { selectAllUsers, removeUser, selectUserByID, editUser, insertUser, selectUserByEmail, } = require("../models/UserModel");
 exports.getAllUsers = (req, res, next) => {
     selectAllUsers()
         .then((data) => {
@@ -17,7 +17,12 @@ exports.getUserByID = (req, res, next) => {
         .catch((err) => next(err));
 };
 exports.getUserByEmail = (req, res, next) => {
-    console.log('hi');
+    const { user_email } = req.params;
+    selectUserByEmail(user_email)
+        .then((data) => {
+        res.status(200).send({ user: data });
+    })
+        .catch((err) => next(err));
 };
 exports.deleteUser = (req, res, next) => {
     const { user_id } = req.params;

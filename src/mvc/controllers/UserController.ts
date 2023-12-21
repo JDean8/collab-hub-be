@@ -6,6 +6,7 @@ const {
   selectUserByID,
   editUser,
   insertUser,
+  selectUserByEmail,
 } = require("../models/UserModel");
 
 exports.getAllUsers = (req: Request, res: Response, next: NextFunction) => {
@@ -25,12 +26,13 @@ exports.getUserByID = (req: Request, res: Response, next: NextFunction) => {
     .catch((err: Error) => next(err));
 };
 
-exports.getUserByEmail = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  
+exports.getUserByEmail = (req: Request, res: Response, next: NextFunction) => {
+  const { user_email } = req.params;
+  selectUserByEmail(user_email)
+    .then((data: User) => {
+      res.status(200).send({ user: data });
+    })
+    .catch((err: Error) => next(err));
 };
 
 exports.deleteUser = (req: Request, res: Response, next: NextFunction) => {
