@@ -216,8 +216,8 @@ describe("GET /api/projects/:project_id/skills", () => {
       .then(({ body: { skills } }) => {
         expect(skills).toHaveLength(2);
         expect(skills).toEqual([
-          { skill_id: 1, skill_name: "JavaScript" },
-          { skill_id: 2, skill_name: "React" },
+          { skill_id: 1, skill_name: "JavaScript", "skill_avatar": "https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" },
+          { skill_id: 2, skill_name: "React", "skill_avatar": "https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original-wordmark.svg" },
         ]);
       });
   });
@@ -403,7 +403,7 @@ describe("POST /api/projects/:project_id/skills", () => {
       .post("/api/projects/1/skills")
       .send({
         skill: {
-          skill_name: "Node",
+          skill_name: "Node.js",
         },
       })
       .expect(201)
@@ -416,7 +416,7 @@ describe("POST /api/projects/:project_id/skills", () => {
       .post("/api/projects/1/skills")
       .send({
         skill: {
-          skill_name: "Node",
+          skill_name: "Node.js",
           extra_key: "extra",
         },
       })
