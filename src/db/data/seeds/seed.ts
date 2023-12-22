@@ -126,7 +126,7 @@ export const seed = ({
           (project_id SERIAL PRIMARY KEY,
           project_author INT REFERENCES users(user_id) ON DELETE CASCADE,
           project_name VARCHAR(255) NOT NULL,
-          project_description VARCHAR(500) NOT NULL,
+          project_description VARCHAR(750) NOT NULL,
           project_created_at BIGINT,
           required_members INT);`);
     })
