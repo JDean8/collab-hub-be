@@ -56,7 +56,7 @@ exports.updateProjectById = (project_id, project) => {
 };
 const selectSkillsByProjectId = (project_id) => {
     return db
-        .query(`SELECT skills.skill_name, skills.skill_id FROM projects_skills LEFT JOIN skills ON projects_skills.skill_id = skills.skill_id WHERE project_id = $1`, [project_id])
+        .query(`SELECT skills.skill_name, skills.skill_id, skills.skill_avatar FROM projects_skills LEFT JOIN skills ON projects_skills.skill_id = skills.skill_id WHERE project_id = $1`, [project_id])
         .then(({ rows }) => {
         return rows;
     });

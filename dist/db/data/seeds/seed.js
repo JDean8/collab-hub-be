@@ -50,7 +50,8 @@ const seed = ({ usersData, skillsData, usersSkillsData, statusData, projectsData
         .then(() => {
         return db.query(`CREATE TABLE skills 
     (skill_id SERIAL PRIMARY KEY,
-    skill_name VARCHAR(255) NOT NULL);`);
+    skill_name VARCHAR(255) NOT NULL,
+    skill_avatar VARCHAR(500) NOT NULL);`);
     })
         .then(() => {
         return db.query(`CREATE TABLE users_skills
@@ -103,9 +104,9 @@ const seed = ({ usersData, skillsData, usersSkillsData, statusData, projectsData
     })
         .then(() => {
         const formattedSkills = format(`INSERT INTO skills
-      (skill_id, skill_name)
+      (skill_id, skill_name, skill_avatar)
       VALUES %L RETURNING *;`, skillsData.skills.map((skill) => {
-            return [skill.skill_id, skill.skill_name];
+            return [skill.skill_id, skill.skill_name, skill.skill_avatar];
         }));
         return db.query(formattedSkills);
     })

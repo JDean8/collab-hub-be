@@ -20,6 +20,7 @@ describe("GET /api/skills", () => {
             expect.objectContaining({
               skill_id: expect.any(Number),
               skill_name: expect.any(String),
+              skill_avatar: expect.any(String)
             })
           );
         });
