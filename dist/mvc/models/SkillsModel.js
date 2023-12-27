@@ -9,7 +9,7 @@ exports.fetchAllSkills = () => {
 };
 exports.fetchUserSkills = (user_id) => {
     return db
-        .query(`SELECT skills.skill_name, skills.skill_id FROM skills
+        .query(`SELECT skills.skill_name, skills.skill_id, skills.skill_avatar FROM skills
     LEFT JOIN users_skills ON skills.skill_id = users_skills.skill_id
     WHERE users_skills.user_id = $1;`, [user_id])
         .then(({ rows }) => {
