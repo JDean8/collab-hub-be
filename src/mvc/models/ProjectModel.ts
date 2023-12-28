@@ -267,20 +267,26 @@ exports.deleteMember = (project_id: number, user_id: number) => {
 };
 
 exports.postMember = (project_id: number, member: any) => {
-  return db.query(
-      "DELETE FROM member_request WHERE project_id = $1 AND user_id = $2", [project_id, member.user_id]
-   )
-  .then(() => {
-    if(member.decision === "rejected") {
-      return Promise.reject({status: 200, msg: `Member request rejected. Feedback: ${member.feedback}`})
-    }
-  })
-  .then(() => {
-    return db.query(
-      "INSERT INTO projects_members (project_id, member_id) VALUES ($1, $2) RETURNING *", [project_id, member.user_id]
+  return db
+    .query(
+      "DELETE FROM member_request WHERE project_id = $1 AND user_id = $2",
+      [project_id, member.user_id]
     )
-  })
-  .then(({ rows }: any) => {
-    return rows;
-  })
-}
+    .then(() => {
+      if (member.decision === "rejected") {
+        return Promise.reject({
+          status: 200,
+          msg: `Member request rejected. Feedback: ${member.feedback}`,
+        });
+      }
+    })
+    .then(() => {
+      return db.query(
+        "INSERT INTO projects_members (project_id, member_id) VALUES ($1, $2) RETURNING *",
+        [project_id, member.user_id]
+      );
+    })
+    .then(({ rows }: any) => {
+      return rows;
+    });
+};
