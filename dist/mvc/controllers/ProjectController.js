@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const { selectAllProjects, insertProject, selectProjectById, selectSkillsByProjectId, updateProjectById, deleteProject, fetchProjectStatus, postProjectStatus, patchStatusById, postSkills, deleteSkill, fetchProjectMembers, fetchMemberRequests, postMemberRequest, deleteMemberRequest, deleteMember, postMember } = require("../models/ProjectModel");
+const { selectAllProjects, insertProject, selectProjectById, selectSkillsByProjectId, updateProjectById, deleteProject, fetchProjectStatus, postProjectStatus, patchStatusById, postSkills, deleteSkill, fetchProjectMembers, fetchMemberRequests, postMemberRequest, deleteMemberRequest, deleteMember, postMember, } = require("../models/ProjectModel");
 exports.getAllProjects = (req, res, next) => {
     selectAllProjects()
         .then((data) => {
@@ -145,7 +145,10 @@ exports.postMemberRequestByProjectId = (req, res, next) => {
             }
         });
         if (doesMemberRequestExist)
-            return Promise.reject({ status: 400, msg: "Member request already exists" });
+            return Promise.reject({
+                status: 400,
+                msg: "Member request already exists",
+            });
     })
         .then(() => {
         return selectProjectById(req.params.project_id);
@@ -167,7 +170,10 @@ exports.postMemberRequestByProjectId = (req, res, next) => {
             }
         });
         if (doesMemberExist)
-            return Promise.reject({ status: 400, msg: "User is already a member of this project" });
+            return Promise.reject({
+                status: 400,
+                msg: "User is already a member of this project",
+            });
     })
         .then(() => {
         return postMemberRequest(req.params.project_id, memberRequest);
@@ -197,7 +203,7 @@ exports.deleteMemberRequestByProjectId = (req, res, next) => {
             return Promise.reject({ status: 404, msg: "Member request not found" });
     })
         .then(() => {
-        return deleteMemberRequest(user_id, project_id);
+        return deleteMemberRequest(project_id, user_id);
     })
         .then(() => {
         res.sendStatus(204);
@@ -249,7 +255,9 @@ exports.postMemberByProjectId = (req, res, next) => {
         return postMember(project_id, member);
     })
         .then(() => {
-        res.status(201).send({ decision: member.decision, feedback: member.feedback });
+        res
+            .status(201)
+            .send({ decision: member.decision, feedback: member.feedback });
     })
         .catch((err) => next(err));
 };
