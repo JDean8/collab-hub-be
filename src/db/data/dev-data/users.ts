@@ -6,6 +6,7 @@ interface User {
   name: string;
   bio: string;
   avatar_url: string;
+  github_url: string;
 }
 
 export const users: User[] = [
@@ -18,6 +19,7 @@ export const users: User[] = [
     bio: "I am a Senior Developer who likes to travel in my free time.",
     avatar_url:
       "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+    github_url: "https://github.com"
   },
   {
     user_id: 2,
@@ -28,6 +30,7 @@ export const users: User[] = [
     bio: "I am a Junior Developer who likes to play the guitar in my free time.",
     avatar_url:
       "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+    github_url: "https://github.com"
   },
   {
     user_id: 3,
@@ -38,6 +41,7 @@ export const users: User[] = [
     bio: "I am a Senior Developer who likes to play the piano in my free time.",
     avatar_url:
       "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+    github_url: "https://github.com"
   },
   {
     user_id: 4,
@@ -48,6 +52,7 @@ export const users: User[] = [
     bio: "I am a Junior Developer who likes to play the drums in my free time.",
     avatar_url:
       "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+    github_url: "https://github.com"
   },
   {
     user_id: 5,
@@ -58,6 +63,7 @@ export const users: User[] = [
     bio: "I am a Senior Developer who likes to play the bass guitar in my free time.",
     avatar_url:
       "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+    github_url: "https://github.com"
   },
   {
     user_id: 6,
@@ -68,6 +74,7 @@ export const users: User[] = [
     bio: "I am a Junior Developer who likes to play the violin in my free time.",
     avatar_url:
       "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+    github_url: "https://github.com"
   },
   {
     user_id: 7,
@@ -78,6 +85,7 @@ export const users: User[] = [
     bio: "I am a Junior Developer who likes to play the violin in my free time.",
     avatar_url:
       "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+    github_url: "https://github.com"
   },
   {
     user_id: 8,
@@ -88,5 +96,6 @@ export const users: User[] = [
     bio: "I am a Junior Developer who likes to play the violin in my free time.",
     avatar_url:
       "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+    github_url: "https://github.com"
   },
 ];

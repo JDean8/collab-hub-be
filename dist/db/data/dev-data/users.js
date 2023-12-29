@@ -10,6 +10,7 @@ exports.users = [
         name: "Tom Tickle",
         bio: "I am a Senior Developer who likes to travel in my free time.",
         avatar_url: "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+        github_url: "https://github.com"
     },
     {
         user_id: 2,
@@ -19,6 +20,7 @@ exports.users = [
         name: "Amy Happy",
         bio: "I am a Junior Developer who likes to play the guitar in my free time.",
         avatar_url: "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+        github_url: "https://github.com"
     },
     {
         user_id: 3,
@@ -28,6 +30,7 @@ exports.users = [
         name: "Paul Smith",
         bio: "I am a Senior Developer who likes to play the piano in my free time.",
         avatar_url: "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+        github_url: "https://github.com"
     },
     {
         user_id: 4,
@@ -37,6 +40,7 @@ exports.users = [
         name: "Peter Messy",
         bio: "I am a Junior Developer who likes to play the drums in my free time.",
         avatar_url: "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+        github_url: "https://github.com"
     },
     {
         user_id: 5,
@@ -46,6 +50,7 @@ exports.users = [
         name: "Gemma Smith",
         bio: "I am a Senior Developer who likes to play the bass guitar in my free time.",
         avatar_url: "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+        github_url: "https://github.com"
     },
     {
         user_id: 6,
@@ -55,6 +60,7 @@ exports.users = [
         name: "Jess Jelly",
         bio: "I am a Junior Developer who likes to play the violin in my free time.",
         avatar_url: "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+        github_url: "https://github.com"
     },
     {
         user_id: 7,
@@ -64,6 +70,7 @@ exports.users = [
         name: "Jelly Do",
         bio: "I am a Junior Developer who likes to play the violin in my free time.",
         avatar_url: "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+        github_url: "https://github.com"
     },
     {
         user_id: 8,
@@ -73,5 +80,6 @@ exports.users = [
         name: "Jelly Do",
         bio: "I am a Junior Developer who likes to play the violin in my free time.",
         avatar_url: "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+        github_url: "https://github.com"
     },
 ];

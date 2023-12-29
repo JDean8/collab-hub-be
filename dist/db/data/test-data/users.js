@@ -10,6 +10,7 @@ exports.users = [
         name: "Tom Tickle",
         bio: "I love cats and JavaScript!",
         avatar_url: "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+        github_url: "https://github.com"
     },
     {
         user_id: 2,
@@ -19,6 +20,7 @@ exports.users = [
         name: "Amy Happy",
         bio: "I am a Junior Developer",
         avatar_url: "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+        github_url: "https://github.com"
     },
     {
         user_id: 3,
@@ -28,6 +30,7 @@ exports.users = [
         name: "Paul Smith",
         bio: "I am a Senior Developer",
         avatar_url: "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+        github_url: "https://github.com"
     },
     {
         user_id: 4,
@@ -37,5 +40,6 @@ exports.users = [
         name: "Sasha Smith",
         bio: "I am a Senior Developer",
         avatar_url: "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+        github_url: "https://github.com"
     },
 ];

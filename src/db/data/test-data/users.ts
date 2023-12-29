@@ -6,6 +6,7 @@ export interface User {
   name: string;
   bio: string;
   avatar_url: string;
+  github_url: string;
 }
 
 export const users: User[] = [
@@ -18,6 +19,7 @@ export const users: User[] = [
     bio: "I love cats and JavaScript!",
     avatar_url:
       "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+    github_url: "https://github.com"
   },
   {
     user_id: 2,
@@ -28,6 +30,7 @@ export const users: User[] = [
     bio: "I am a Junior Developer",
     avatar_url:
       "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+    github_url: "https://github.com"
   },
   {
     user_id: 3,
@@ -38,6 +41,7 @@ export const users: User[] = [
     bio: "I am a Senior Developer",
     avatar_url:
       "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+    github_url: "https://github.com"
   },
   {
     user_id: 4,
@@ -48,5 +52,6 @@ export const users: User[] = [
     bio: "I am a Senior Developer",
     avatar_url:
       "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+    github_url: "https://github.com"
   },
 ];

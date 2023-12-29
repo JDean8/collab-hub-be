@@ -1,14 +1,14 @@
 You are now connected to database "ch_test" as user "karolinakonior".
- user_id |   username   |     email      | password |    name     |                                    bio                                     |                            avatar_url                            
----------+--------------+----------------+----------+-------------+----------------------------------------------------------------------------+------------------------------------------------------------------
-       1 | tickle122    | user1@mail.com | password | Tom Tickle  | I am a Senior Developer who likes to travel in my free time.               | https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50
-       2 | happyamy2016 | user2@mail.com | password | Amy Happy   | I am a Junior Developer who likes to play the guitar in my free time.      | https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50
-       3 | grumpy19     | user3@mail.com | password | Paul Smith  | I am a Senior Developer who likes to play the piano in my free time.       | https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50
-       4 | cooljmessy   | user4@mail.com | password | Peter Messy | I am a Junior Developer who likes to play the drums in my free time.       | https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50
-       5 | weegembump   | user5@mail.com | password | Gemma Smith | I am a Senior Developer who likes to play the bass guitar in my free time. | https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50
-       6 | jessjelly    | user6@mail.com | password | Jess Jelly  | I am a Junior Developer who likes to play the violin in my free time.      | https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50
-       7 | jelly        | jelly@mail.com | password | Jelly Do    | I am a Junior Developer who likes to play the violin in my free time.      | https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50
-       8 | jonny        | jonny@mail.com | password | Jelly Do    | I am a Junior Developer who likes to play the violin in my free time.      | https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50
+ user_id |   username   |     email      | password |    name     |                                    bio                                     |                            avatar_url                            |     github_url     
+---------+--------------+----------------+----------+-------------+----------------------------------------------------------------------------+------------------------------------------------------------------+--------------------
+       1 | tickle122    | user1@mail.com | password | Tom Tickle  | I am a Senior Developer who likes to travel in my free time.               | https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50 | https://github.com
+       2 | happyamy2016 | user2@mail.com | password | Amy Happy   | I am a Junior Developer who likes to play the guitar in my free time.      | https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50 | https://github.com
+       3 | grumpy19     | user3@mail.com | password | Paul Smith  | I am a Senior Developer who likes to play the piano in my free time.       | https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50 | https://github.com
+       4 | cooljmessy   | user4@mail.com | password | Peter Messy | I am a Junior Developer who likes to play the drums in my free time.       | https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50 | https://github.com
+       5 | weegembump   | user5@mail.com | password | Gemma Smith | I am a Senior Developer who likes to play the bass guitar in my free time. | https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50 | https://github.com
+       6 | jessjelly    | user6@mail.com | password | Jess Jelly  | I am a Junior Developer who likes to play the violin in my free time.      | https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50 | https://github.com
+       7 | jelly        | jelly@mail.com | password | Jelly Do    | I am a Junior Developer who likes to play the violin in my free time.      | https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50 | https://github.com
+       8 | jonny        | jonny@mail.com | password | Jelly Do    | I am a Junior Developer who likes to play the violin in my free time.      | https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50 | https://github.com
 (8 rows)
 
  skill_id |  skill_name  |                                             skill_avatar                                              
@@ -64,41 +64,88 @@ You are now connected to database "ch_test" as user "karolinakonior".
          3 | completed
 (3 rows)
 
- project_id | project_author |      project_name      |                        project_description                         | project_created_at | required_members 
-------------+----------------+------------------------+--------------------------------------------------------------------+--------------------+------------------
-          1 |              1 | Junket                 | Android App for finding travel buddies                             |      1669852800000 |                3
-          2 |              2 | Collab Hub             | Website for software developers to find projects to collaborate on |      1669852800000 |                3
-          3 |              3 | News App               | App for reading news articles                                      |      1669852800000 |                3
-          4 |              1 | TypeScript Project     | Web app for learning TypeScript for beginners                      |      1669852800000 |                3
-          5 |              2 | Friend App             | IoS App for finding friends                                        |      1669852800000 |                3
-          6 |              3 | Meetup for dogs        | Help me create an app for dogs to meet up                          |      1669852800000 |                3
-          7 |              4 | Meetup for cats        | Help me create an app for cats to meet up                          |      1669852800000 |                6
-          8 |              5 | Airport connection app | App for finding people to share a taxi to the airport              |      1669852800000 |                2
-          9 |              6 | Car sharing app        | App for finding people to share a car with                         |      1669852800000 |               10
-         10 |              6 | Travel app             | App for finding people to travel with                              |      1669852800000 |                7
-         11 |              7 | CodeHub                | App for finding people to code with                                |      1669852800000 |                4
-         12 |              8 | News Website           | Website for reading news articles                                  |      1669852800000 |                5
+ project_id | project_author |      project_name      |                                                                                                                                                                                                                                                               project_description                                                                                                                                                                                                                                                               | project_created_at | required_members 
+------------+----------------+------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------+------------------
+          1 |              1 | Junket                 | Seeking talented developers eager to join a transformative journey! Our Android app venture is in search of skilled tech enthusiasts ready to shape the next big thing in travel networking, where your expertise will craft an innovative platform connecting wanderlust-driven individuals, revolutionizing how we explore the world—let's build this adventure together!                                                                                                                                                                     |      1669852800000 |                3
+          2 |              2 | Collab Hub             | Attention all talented developers! I'm spearheading the creation of a groundbreaking platform aimed at fostering collaboration among fellow coders. We're seeking passionate individuals eager to join forces in crafting a website where developers can unite, contribute skills, and embark on exciting projects together. If you're driven by innovation and teamwork, let's collaborate and bring this visionary platform to life!                                                                                                          |      1669852800000 |                3
+          3 |              3 | News App               | Attention developers passionate about information and innovation! I'm leading the development of a cutting-edge news app that revolutionizes how we consume articles. If you're enthusiastic about creating a user-friendly platform for accessing and engaging with news content, join me in crafting an app that redefines the way we stay informed and connected in this digital age. Let's collaborate to shape the future of news reading together!                                                                                        |      1669852800000 |                3
+          4 |              1 | TypeScript Project     | Seeking driven developers eager to revolutionize TypeScript education! I'm embarking on an exciting journey to develop a web app tailored for beginners diving into TypeScript. If you're passionate about empowering learners with an intuitive platform, join me in creating an interactive space that simplifies TypeScript concepts, making learning an engaging and rewarding experience. Let's collaborate and build a gateway for aspiring developers to master TypeScript together!                                                     |      1669852800000 |                3
+          5 |              2 | Friend App             | Attention iOS developers with a passion for social connection! I'm initiating an exciting project to develop an iOS app dedicated to helping users find new friends. If you're enthusiastic about crafting a platform that fosters meaningful connections and enriches lives, join me in creating an app that redefines how friendships are formed in the digital era. Let's collaborate and build an innovative space for individuals to discover and bond with like-minded friends!                                                           |      1669852800000 |                3
+          6 |              3 | Meetup for dogs        | Calling all app developers who love our furry friends! I'm embarking on an exciting project to create an app where dogs can connect for playful meet-ups and socializing. If you're passionate about enhancing the social lives of our canine companions and their owners, join me in crafting an innovative platform that brings joy and community to the world of dogs. Let's collaborate and build an app that makes tail-wagging meet-ups a paw-sitively delightful experience!                                                             |      1669852800000 |                3
+          7 |              4 | Meetup for cats        | Attention app developers who adore our whiskered companions! I'm embarking on an exciting project to develop an app where cats can come together for purr-fect meet-ups and feline-friendly gatherings. If you're passionate about enhancing the social lives of our furry friends and their humans, join me in crafting an innovative platform that creates delightful connections in the world of cats. Let's collaborate and build an app that brings joy and companionship to our feline friends' lives!                                    |      1669852800000 |                6
+          8 |              5 | Airport connection app | Seeking app developers ready to streamline airport travels! I'm diving into a project to create an app that connects travelers looking to share taxis to the airport. If you're passionate about simplifying travel logistics and fostering cost-effective solutions for commuters, join me in crafting an app that redefines how people commute to the airport. Let's collaborate and build a platform that makes airport rides more convenient, cost-efficient, and environmentally friendly for everyone!                                    |      1669852800000 |                2
+          9 |              6 | Car sharing app        | Attention app developers passionate about sustainable transportation! I'm initiating a project to develop an app that connects individuals seeking to share car rides for commuting or travel. If you're enthusiastic about reducing carbon footprints and creating efficient, cost-effective travel solutions, join me in crafting an app that reimagines how people share rides. Let's collaborate and build a platform that promotes carpooling, fostering meaningful connections while contributing to a greener, more sustainable future!  |      1669852800000 |               10
+         10 |              6 | Travel app             | Seeking app developers with a passion for shared adventures! I'm diving into a project to create an app that connects individuals looking to travel together, fostering meaningful journeys and shared experiences. If you're enthusiastic about cultivating new connections and enabling unforgettable travel experiences, join me in crafting an app that redefines how people explore the world. Let's collaborate and build a platform that brings together like-minded travelers, making the journey as extraordinary as the destination!  |      1669852800000 |                7
+         11 |              7 | CodeHub                | Calling all coding enthusiasts! I'm embarking on a project to develop an app that connects individuals eager to code together, fostering collaborative learning and innovative projects. If you're passionate about coding, learning from others, and building a supportive coding community, join me in crafting an app that redefines how people collaborate on coding ventures. Let's collaborate and build a platform that empowers aspiring developers and seasoned coders to come together, share knowledge, and create amazing projects! |      1669852800000 |                4
+         12 |              8 | News Website           | Join me in crafting a revolutionary website dedicated to delivering the latest news articles! I'm seeking skilled developers passionate about creating an immersive platform for readers. If you're excited about redefining how news is consumed online, let's collaborate and build a website that offers a seamless and engaging news-reading experience. Together, we can shape a platform that keeps users informed, inspired, and connected to the world's stories!                                                                       |      1669852800000 |                5
 (12 rows)
 
  project_id | skill_id 
 ------------+----------
           1 |        1
           1 |        2
+          1 |        3
+          1 |        4
+          1 |        5
           2 |        3
+          2 |        4
+          2 |       16
+          2 |       19
+          2 |        7
+          2 |        6
           3 |        4
+          3 |        5
+          3 |        4
+          3 |       16
+          3 |       19
           4 |        5
-          5 |        6
+          4 |       10
+          4 |        5
+          5 |       12
+          4 |       19
+          6 |        1
+          6 |       20
+          6 |       16
           6 |        1
           7 |        1
+          7 |        2
+          7 |        3
+          7 |        4
+          7 |        5
+          7 |        6
           8 |        2
+          8 |        3
           8 |        4
+          8 |        6
+          8 |        7
           8 |       20
           9 |        1
+          9 |        2
+          9 |        3
+          9 |        4
+          9 |        5
+          9 |        6
          10 |        1
+         10 |       20
+         10 |       19
+         10 |        2
+         10 |        3
+         10 |        4
          11 |        1
+         11 |        8
+         11 |       17
+         11 |        2
+         11 |        3
          12 |        1
+         12 |        2
+         12 |        3
+         12 |        4
          12 |        5
-(16 rows)
+         12 |        5
+         12 |        9
+         12 |       16
+         12 |       19
+(63 rows)
 
  project_id | status_id 
 ------------+-----------

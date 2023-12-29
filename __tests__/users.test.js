@@ -24,6 +24,7 @@ describe("GET /api/users", () => {
               name: expect.any(String),
               bio: expect.any(String),
               password: expect.any(String),
+              github_url: expect.any(String)
             })
           );
         });
@@ -46,6 +47,7 @@ describe("GET /api/users/:user_id", () => {
           bio: "I love cats and JavaScript!",
           avatar_url:
             "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+          github_url: "https://github.com"
         });
       });
   });
@@ -82,6 +84,7 @@ describe("GET /api/users/signin/:user_email", () => {
           bio: "I love cats and JavaScript!",
           avatar_url:
             "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+          github_url: "https://github.com"
         });
       });
   });
@@ -125,6 +128,7 @@ describe("PATCH /api/users/:user_id", () => {
           bio: "I love cats and JavaScript!",
           avatar_url:
             "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+          github_url: "https://github.com"
         },
       })
       .expect(200)
@@ -137,6 +141,7 @@ describe("PATCH /api/users/:user_id", () => {
           bio: "I love cats and JavaScript!",
           avatar_url:
             "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+          github_url: "https://github.com"
         });
       });
   });
@@ -202,6 +207,7 @@ describe("PATCH /api/users/:user_id", () => {
             name: "James",
             bio: "I like trains",
             password: "password1",
+            github_url: "https://github.com"
           },
         })
         .expect(201)
@@ -215,6 +221,7 @@ describe("PATCH /api/users/:user_id", () => {
               name: expect.any(String),
               bio: expect.any(String),
               password: expect.any(String),
+              github_url: expect.any(String)
             })
           );
         });
