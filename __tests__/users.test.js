@@ -265,6 +265,14 @@ describe("GET /api/users/:user_id/my-projects", () => {
         });
       });
   })
+  test("200: responds with an empty array when user has no projects", () => {
+    return request(app)
+      .get("/api/users/4/my-projects")
+      .expect(200)
+      .then(({ body: { projects } }) => {
+        expect(projects).toHaveLength(0);
+      });
+  })
   test("404: responds with error message when user_id that does not exist", () => {
     return request(app)
       .get("/api/users/148/my-projects")
