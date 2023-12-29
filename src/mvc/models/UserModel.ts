@@ -1,10 +1,15 @@
 const db = require("../../../dist/db/pool.js");
 const bcrypt = require("bcrypt");
 import { type User } from "../../db/data/test-data/users";
+import { type Project } from "../../db/data/test-data/projects";
 
 type UserProps = {
   rows: User[];
 };
+
+type ProjectProps = {
+  rows: Project[];
+}
 
 exports.selectAllUsers = () => {
   return db.query("SELECT * FROM users").then(({ rows }: UserProps) => {
@@ -132,7 +137,14 @@ exports.insertUser = (user: User) => {
 
 exports.getUserProjectsById = (user_id: number) => {
   return db.query(`SELECT * FROM projects WHERE project_author = $1`, [user_id])
-  .then(({ rows }: any) => {
+  .then(({ rows }: ProjectProps) => {
+    return rows;
+  })
+}
+
+exports.fetchUserProjectsByMember = (user_id: number) => {
+  return db.query(`SELECT * FROM projects_members JOIN projects ON projects.project_id = projects_members.project_id WHERE member_id = $1`, [user_id])
+  .then(({ rows }: ProjectProps) => {
     return rows;
   })
 }

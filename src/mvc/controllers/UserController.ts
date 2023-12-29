@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { User } from "../../db/data/test-data/users";
+import { Project } from "../../db/data/test-data/projects";
 const {
   selectAllUsers,
   removeUser,
@@ -7,7 +8,8 @@ const {
   editUser,
   insertUser,
   selectUserByEmail,
-  getUserProjectsById
+  getUserProjectsById,
+  fetchUserProjectsByMember
 } = require("../models/UserModel");
 
 exports.getAllUsers = (req: Request, res: Response, next: NextFunction) => {
@@ -78,10 +80,21 @@ exports.getUserProjects = (
   next: NextFunction
 ) => {
   selectUserByID(req.params.user_id)
-  .then((data: any) => {
+  .then(() => {
     return getUserProjectsById(req.params.user_id)
   })
-  .then((data: any) => {
+  .then((data: Project) => {
+    res.status(200).send({ projects: data });
+  })
+  .catch((err: Error) => next(err));
+}
+
+exports.getUserProjectsByMember = (req: Request, res: Response, next: NextFunction) => {
+  selectUserByID(req.params.user_id)
+  .then(() => {
+    return fetchUserProjectsByMember(req.params.user_id)
+  })
+  .then((data: Project) => {
     res.status(200).send({ projects: data });
   })
   .catch((err: Error) => next(err));

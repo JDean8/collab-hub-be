@@ -107,3 +107,9 @@ exports.getUserProjectsById = (user_id) => {
         return rows;
     });
 };
+exports.fetchUserProjectsByMember = (user_id) => {
+    return db.query(`SELECT * FROM projects_members JOIN projects ON projects.project_id = projects_members.project_id WHERE member_id = $1`, [user_id])
+        .then(({ rows }) => {
+        return rows;
+    });
+};
