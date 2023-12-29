@@ -44,7 +44,8 @@ const seed = ({ usersData, skillsData, usersSkillsData, statusData, projectsData
             password VARCHAR(255) NOT NULL,
             name VARCHAR(255) NOT NULL,
             bio VARCHAR(500) NOT NULL,
-            avatar_url VARCHAR(255) NOT NULL
+            avatar_url VARCHAR(255) NOT NULL,
+            github_url VARCHAR(255) NOT NULL
         );`);
     })
         .then(() => {
@@ -112,7 +113,7 @@ const seed = ({ usersData, skillsData, usersSkillsData, statusData, projectsData
     })
         .then(() => {
         const formattedUsers = format(`INSERT INTO users
-            (username, email, password, name, bio, avatar_url)
+            (username, email, password, name, bio, avatar_url, github_url)
             VALUES %L RETURNING *;`, usersData.users.map((user) => {
             return [
                 user.username,
@@ -121,6 +122,7 @@ const seed = ({ usersData, skillsData, usersSkillsData, statusData, projectsData
                 user.name,
                 user.bio,
                 user.avatar_url,
+                user.github_url,
             ];
         }));
         return db.query(formattedUsers);

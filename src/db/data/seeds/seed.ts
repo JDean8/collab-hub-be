@@ -102,7 +102,8 @@ export const seed = ({
             password VARCHAR(255) NOT NULL,
             name VARCHAR(255) NOT NULL,
             bio VARCHAR(500) NOT NULL,
-            avatar_url VARCHAR(255) NOT NULL
+            avatar_url VARCHAR(255) NOT NULL,
+            github_url VARCHAR(255) NOT NULL
         );`);
     })
     .then(() => {
@@ -174,7 +175,7 @@ export const seed = ({
     .then(() => {
       const formattedUsers = format(
         `INSERT INTO users
-            (username, email, password, name, bio, avatar_url)
+            (username, email, password, name, bio, avatar_url, github_url)
             VALUES %L RETURNING *;`,
         usersData.users.map((user: User) => {
           return [
@@ -184,6 +185,7 @@ export const seed = ({
             user.name,
             user.bio,
             user.avatar_url,
+            user.github_url,
           ];
         })
       );

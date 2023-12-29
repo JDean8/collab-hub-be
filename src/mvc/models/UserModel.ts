@@ -102,7 +102,8 @@ exports.insertUser = (user: User) => {
     !user.avatar_url ||
     !user.name ||
     !user.username ||
-    !user.bio
+    !user.bio || 
+    !user.github_url
   ) {
     return Promise.reject({
       status: 400,
@@ -118,8 +119,8 @@ exports.insertUser = (user: User) => {
     .then((hashedPassword: string) => {
       return db.query(
         `INSERT INTO users
-    (username, avatar_url, email, name, bio, password)
-    VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;`,
+    (username, avatar_url, email, name, bio, password, github_url)
+    VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;`,
         [
           user.username,
           user.avatar_url,
@@ -127,6 +128,7 @@ exports.insertUser = (user: User) => {
           user.name,
           user.bio,
           hashedPassword,
+          user.github_url,
         ]
       );
     })
