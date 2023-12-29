@@ -239,5 +239,29 @@
             "decision": "rejected",
             "feedback": "Not a good fit for the team!"
         }
+    },
+    "GET /api/users/:user_id/my-projects": {
+        "description": "Returns an array of all projects the user with the specified user_id is an author of.",
+        "queries": [],
+        "exampleResponse": {
+            "projects": [
+                {
+                    "project_id": 1,
+                    "project_author": 1,
+                    "project_name": "Project 1",
+                    "project_description": "This is the first project",
+                    "project_created_at": 1669852800000,
+                    "required_members": 3
+                },
+                {
+                    "project_id": 2,
+                    "project_author": 2,
+                    "project_name": "Project 2",
+                    "project_description": "This is the second project",
+                    "project_created_at": 1669852800000,
+                    "required_members": 2
+                }
+            ]
+        }
     }
 }

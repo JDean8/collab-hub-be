@@ -7,6 +7,7 @@ const {
   editUser,
   insertUser,
   selectUserByEmail,
+  getUserProjectsById
 } = require("../models/UserModel");
 
 exports.getAllUsers = (req: Request, res: Response, next: NextFunction) => {
@@ -70,3 +71,18 @@ exports.postUser = (req: Request, res: Response, next: NextFunction) => {
     })
     .catch((err: Error) => next(err));
 };
+
+exports.getUserProjects = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  selectUserByID(req.params.user_id)
+  .then((data: any) => {
+    return getUserProjectsById(req.params.user_id)
+  })
+  .then((data: any) => {
+    res.status(200).send({ projects: data });
+  })
+  .catch((err: Error) => next(err));
+}

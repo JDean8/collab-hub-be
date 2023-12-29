@@ -235,3 +235,50 @@ describe("PATCH /api/users/:user_id", () => {
     });
   });
 });
+
+describe("GET /api/users/:user_id/my-projects", () => {
+  test("200: responds with an array of projects for a user", () => {
+    return request(app)
+      .get("/api/users/1/my-projects")
+      .expect(200)
+      .then(({ body: { projects } }) => {
+        expect(projects).toHaveLength(2);
+        projects.forEach((project) => {
+          [
+            {
+              project_id: 1,
+              project_author: 1,
+              project_name: 'Project 1',
+              project_description: 'Project 1 description',
+              project_created_at: '1669852800000',
+              required_members: 3
+            },
+            {
+              project_id: 4,
+              project_author: 1,
+              project_name: 'Project 4',
+              project_description: 'Project 4 description',
+              project_created_at: '1669852800000',
+              required_members: 3
+            }
+          ]
+        });
+      });
+  })
+  test("200: responds with an empty array when user has no projects", () => {
+    return request(app)
+      .get("/api/users/4/my-projects")
+      .expect(200)
+      .then(({ body: { projects } }) => {
+        expect(projects).toHaveLength(0);
+      });
+  })
+  test("404: responds with error message when user_id that does not exist", () => {
+    return request(app)
+      .get("/api/users/148/my-projects")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toEqual("No user found with that ID");
+      });
+  })
+})

@@ -290,3 +290,7 @@ exports.postMember = (project_id: number, member: any) => {
       return rows;
     });
 };
+
+exports.getUserProjectsById = (user_id: number) => {
+  console.log("in model")
+}
