@@ -9,7 +9,8 @@ const {
   insertUser,
   selectUserByEmail,
   getUserProjectsById,
-  fetchUserProjectsByMember
+  fetchUserProjectsByMember,
+  fetchUserRequests
 } = require("../models/UserModel");
 
 exports.getAllUsers = (req: Request, res: Response, next: NextFunction) => {
@@ -93,6 +94,17 @@ exports.getUserProjectsByMember = (req: Request, res: Response, next: NextFuncti
   selectUserByID(req.params.user_id)
   .then(() => {
     return fetchUserProjectsByMember(req.params.user_id)
+  })
+  .then((data: Project) => {
+    res.status(200).send({ projects: data });
+  })
+  .catch((err: Error) => next(err));
+}
+
+exports.getUserRequests = (req: Request, res: Response, next: NextFunction) => {
+  selectUserByID(req.params.user_id)
+  .then(() => {
+    return fetchUserRequests(req.params.user_id)
   })
   .then((data: Project) => {
     res.status(200).send({ projects: data });

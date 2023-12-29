@@ -289,5 +289,31 @@
                 }
             ]
         }
+    },
+    "GET /api/users/:user_id/my-requests": {
+        "description": "Returns an array of all projects the user with the specified user_id has requested to join.",
+        "queries": [],
+        "exampleResponse": {
+            "projects": [
+                {
+                    "project_id": 1,
+                    "project_author": 1,
+                    "project_name": "Project 1",
+                    "project_description": "This is the first project",
+                    "project_created_at": 1669852800000,
+                    "required_members": 3,
+                    "user_id": 1
+                },
+                {
+                    "project_id": 2,
+                    "project_author": 2,
+                    "project_name": "Project 2",
+                    "project_description": "This is the second project",
+                    "project_created_at": 1669852800000,
+                    "required_members": 2,
+                    "user_id": 1
+                }
+            ]
+        }
     }
 }
