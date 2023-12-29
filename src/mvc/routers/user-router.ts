@@ -8,7 +8,8 @@ const {
   patchUser,
   getUserByEmail,
   getUserProjects,
-  getUserProjectsByMember
+  getUserProjectsByMember,
+  getUserRequests
 } = require("../controllers/UserController");
 
 const {
@@ -28,3 +29,4 @@ userRouter.route("/:user_id/skills/:skill_id").delete(deleteUserSkill);
 userRouter.route("/signin/:user_email").get(getUserByEmail);
 userRouter.route("/:user_id/my-projects").get(getUserProjects);
 userRouter.route("/:user_id/project-associate").get(getUserProjectsByMember)
+userRouter.route("/:user_id/my-requests").get(getUserRequests);
