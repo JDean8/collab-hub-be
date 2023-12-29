@@ -282,3 +282,61 @@ describe("GET /api/users/:user_id/my-projects", () => {
       });
   })
 })
+
+describe("GET /api/users/:user_id/project-associate", () => {
+  test("200: responds with an array of projects for a user", () => {
+    return request(app)
+      .get("/api/users/1/project-associate")
+      .expect(200)
+      .then(({ body: { projects } }) => {
+        expect(projects).toHaveLength(3);
+        projects.forEach((project) => {
+          [
+            {
+              project_id: 2,
+              member_id: 1,
+              project_author: 2,
+              project_name: 'Project 2',
+              project_description: 'Project 2 description',
+              project_created_at: '1669852800000',
+              required_members: 3
+            },
+            {
+              project_id: 3,
+              member_id: 1,
+              project_author: 3,
+              project_name: 'Project 3',
+              project_description: 'Project 3 description',
+              project_created_at: '1669852800000',
+              required_members: 3
+            },
+            {
+              project_id: 6,
+              member_id: 1,
+              project_author: 3,
+              project_name: 'Project 6',
+              project_description: 'Project 6 description',
+              project_created_at: '1669852800000',
+              required_members: 1
+            }
+          ]
+        });
+      });
+  })
+  test("200: responds with an empty array when user has no projects", () => {
+    return request(app)
+      .get("/api/users/4/project-associate")
+      .expect(200)
+      .then(({ body: { projects } }) => {
+        expect(projects).toHaveLength(0);
+      });
+  })
+  test("404: responds with error message when user_id that does not exist", () => {
+    return request(app)
+      .get("/api/users/148/project-associate")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toEqual("No user found with that ID");
+      });
+  })
+})
