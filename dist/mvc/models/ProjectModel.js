@@ -167,7 +167,6 @@ exports.postMemberRequest = (project_id, user_id) => {
     });
 };
 exports.deleteMemberRequest = (project_id, user_id) => {
-    console.log(project_id, user_id);
     return db.query("DELETE FROM member_request WHERE project_id = $1 AND user_id = $2", [project_id, user_id]);
 };
 exports.deleteMember = (project_id, user_id) => {
@@ -190,4 +189,7 @@ exports.postMember = (project_id, member) => {
         .then(({ rows }) => {
         return rows;
     });
+};
+exports.getUserProjectsById = (user_id) => {
+    console.log("in model");
 };

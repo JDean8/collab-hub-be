@@ -101,3 +101,9 @@ exports.insertUser = (user) => {
         return rows[0];
     });
 };
+exports.getUserProjectsById = (user_id) => {
+    return db.query(`SELECT * FROM projects WHERE project_author = $1`, [user_id])
+        .then(({ rows }) => {
+        return rows;
+    });
+};
