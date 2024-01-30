@@ -13,3 +13,4 @@ SELECT * FROM connections;
 SELECT * FROM connection_request;
 SELECT * FROM chat;
 SELECT * FROM chat_members;
+SELECT * FROM chat_messages;

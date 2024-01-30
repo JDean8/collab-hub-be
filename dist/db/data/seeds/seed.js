@@ -3,9 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.seed = void 0;
 const db = require("../../pool");
 const format = require("pg-format");
-const seed = ({ usersData, skillsData, usersSkillsData, statusData, projectsData, projectsSkillsData, statusProjectData, projectsMembersData, memberRequestsData, connectionsData, connectionRequestsData, chatData, chatMembersData }) => {
+const seed = ({ usersData, skillsData, usersSkillsData, statusData, projectsData, projectsSkillsData, statusProjectData, projectsMembersData, memberRequestsData, connectionsData, connectionRequestsData, chatData, chatMembersData, chatMessagesData }) => {
     return db
         .query(`DROP TABLE IF EXISTS users_skills CASCADE;`)
+        .then(() => {
+        return db.query(`DROP TABLE IF EXISTS chat_messages CASCADE;`);
+    })
         .then(() => {
         return db.query(`DROP TABLE IF EXISTS chat_members CASCADE;`);
     })
@@ -117,6 +120,15 @@ const seed = ({ usersData, skillsData, usersSkillsData, statusData, projectsData
         return db.query(`CREATE TABLE chat_members
       (chat_id VARCHAR(50) REFERENCES chat(chat_id) ON DELETE CASCADE,
       user_id INT REFERENCES users(user_id) ON DELETE CASCADE);`);
+    })
+        .then(() => {
+        return db.query(`CREATE TABLE chat_messages
+      (message_id SERIAL PRIMARY KEY,
+      chat_id VARCHAR(50) REFERENCES chat(chat_id) ON DELETE CASCADE,
+      user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+      message VARCHAR(500) NOT NULL,
+      avatar_url VARCHAR(500) NOT NULL,
+      created_at TIMESTAMP NOT NULL);`);
     })
         .then(() => {
         const formattedSkills = format(`INSERT INTO skills
@@ -235,6 +247,14 @@ const seed = ({ usersData, skillsData, usersSkillsData, statusData, projectsData
             return [chatMember.chat_id, chatMember.user_id];
         }));
         return db.query(formattedChatMembersData);
+    })
+        .then(() => {
+        const formattedChatMessagesData = format(`INSERT INTO chat_messages
+        (chat_id, user_id, message, avatar_url, created_at)
+        VALUES %L RETURNING *;`, chatMessagesData.chatMessages.map((chatMessage) => {
+            return [chatMessage.chat_id, chatMessage.sender_id, chatMessage.message, chatMessage.avatar_url, chatMessage.created_at];
+        }));
+        return db.query(formattedChatMessagesData);
     });
 };
 exports.seed = seed;
