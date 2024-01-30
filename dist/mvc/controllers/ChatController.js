@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const { fetchAllChats, fetchChatMembers, postSingleChat, fetchSingleChatMembers, fetchChatMessages, postSingleChatMessage } = require("../models/ChatModel");
+const { fetchAllChats, fetchChatMembers, postSingleChat, fetchSingleChatMembers, fetchChatMessages, postSingleChatMessage, postMember } = require("../models/ChatModel");
 exports.getAllChats = (req, res, next) => {
     fetchAllChats()
         .then((chats) => {
@@ -60,5 +60,17 @@ exports.postChatMessage = (req, res, next) => {
     postSingleChatMessage(req.params.chat_id, req.body.message, req.body.user_id, req.body.avatar_url)
         .then((message) => {
         res.status(201).send({ message });
+    })
+        .catch((err) => {
+        next(err);
+    });
+};
+exports.postChatMember = (req, res, next) => {
+    postMember(req.params.chat_id, req.body.user_id)
+        .then((member) => {
+        res.status(201).send({ member });
+    })
+        .catch((err) => {
+        next(err);
     });
 };

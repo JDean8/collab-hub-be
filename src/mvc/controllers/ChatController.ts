@@ -1,7 +1,7 @@
-import { Request, Response, NextFunction } from "express";
+import e, { Request, Response, NextFunction } from "express";
 import { Chat } from "../../db/data/test-data/chat";
 import { ChatMembers } from "../../db/data/test-data/chat-members";
-const { fetchAllChats, fetchChatMembers, postSingleChat, fetchSingleChatMembers, fetchChatMessages, postSingleChatMessage } = require("../models/ChatModel")
+const { fetchAllChats, fetchChatMembers, postSingleChat, fetchSingleChatMembers, fetchChatMessages, postSingleChatMessage, postMember } = require("../models/ChatModel")
 
 exports.getAllChats = (req: Request, res: Response, next: NextFunction) => {
     fetchAllChats()
@@ -67,5 +67,18 @@ exports.postChatMessage = (req: Request, res: Response, next: NextFunction) => {
     postSingleChatMessage(req.params.chat_id, req.body.message, req.body.user_id, req.body.avatar_url)
     .then((message: ChatMembers[]) => {
         res.status(201).send({message})
+    })
+    .catch((err: Error) => {
+        next(err)
+    })
+}
+
+exports.postChatMember = (req: Request, res: Response, next: NextFunction) => {
+    postMember(req.params.chat_id, req.body.user_id)
+    .then((member: ChatMembers[]) => {
+        res.status(201).send({member})
+    })
+    .catch((err: Error) => {
+        next(err)
     })
 }

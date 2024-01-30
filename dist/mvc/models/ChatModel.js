@@ -35,7 +35,17 @@ exports.fetchChatMessages = (chat_id) => {
 };
 exports.postSingleChatMessage = (chat_id, message, user_id, avatar_url) => {
     const currentDate = new Date();
+    if (!chat_id || !message || !user_id || !avatar_url)
+        return Promise.reject({ status: 400, msg: "Bad request" });
     return db.query("INSERT INTO chat_messages (chat_id, message, user_id, avatar_url, created_at) VALUES ($1, $2, $3, $4, $5) RETURNING *;", [chat_id, message, user_id, avatar_url, currentDate])
+        .then(({ rows }) => {
+        return rows[0];
+    });
+};
+exports.postMember = (chat_id, user_id) => {
+    if (!chat_id || !user_id)
+        return Promise.reject({ status: 400, msg: "Bad request" });
+    return db.query("INSERT INTO chat_members (chat_id, user_id) VALUES ($1, $2) RETURNING *;", [chat_id, user_id])
         .then(({ rows }) => {
         return rows[0];
     });

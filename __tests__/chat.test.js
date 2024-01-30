@@ -145,4 +145,43 @@ describe("POST /api/chat/messages/:chat_id", () => {
                 expect(body.message).toEqual({ chat_id: "1", message_id: 3, user_id: 1, message: "Hello, how are you doing?", avatar_url: "https://i.imgur.com/1C22Hym.png", created_at: expect.any(String) });
             });
     })
+    test("400: responds with an error message when the message is missing", () => {
+        return request(app)
+            .post("/api/chat/messages/1")
+            .send({ user_id: 1, avatar_url: "https://i.imgur.com/1C22Hym.png" })
+            .expect(400)
+            .then(({ body }) => {
+                expect(body.msg).toBe("Bad request");
+            });
+    })
+})
+
+describe("POST /api/chat/members/:chat_id", () => {
+    test("201: responds with the posted member object", () => {
+        return request(app)
+            .post("/api/chat/members/1")
+            .send({ user_id: 2 })
+            .expect(201)
+            .then(({ body }) => {
+                expect(body.member).toEqual({ chat_id: "1", user_id: 2 });
+            });
+    })
+    test("201: responds with the posted member object when passed extra keys", () => {
+        return request(app)
+            .post("/api/chat/members/1")
+            .send({ user_id: 2, extra: "extra" })
+            .expect(201)
+            .then(({ body }) => {
+                expect(body.member).toEqual({ chat_id: "1", user_id: 2 });
+            });
+    })
+    test("400: responds with an error message when the user_id is missing", () => {
+        return request(app)
+            .post("/api/chat/members/1")
+            .send({})
+            .expect(400)
+            .then(({ body }) => {
+                expect(body.msg).toBe("Bad request");
+            });
+    })
 })
