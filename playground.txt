@@ -201,3 +201,22 @@ You are now connected to database "ch_test" as user "karolinakonior".
          2 |         6
 (3 rows)
 
+ chat_id 
+---------
+ 1
+ 2
+ 3
+(3 rows)
+
+ chat_id | user_id 
+---------+---------
+ 1       |       1
+ 1       |       3
+(2 rows)
+
+ message_id | chat_id | user_id | message |           avatar_url            |     created_at      
+------------+---------+---------+---------+---------------------------------+---------------------
+          1 | 1       |       1 | Hello   | https://i.imgur.com/1C22Hym.png | 2024-01-30 12:30:42
+          2 | 1       |       3 | Hi      | https://i.imgur.com/1C22Hym.png | 2024-01-30 12:32:42
+(2 rows)
+
