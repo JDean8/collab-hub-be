@@ -1,3 +1,4 @@
+import { Chat } from "../test-data/chat";
 import { Connection_request } from "../test-data/connection-request";
 import { Connections } from "../test-data/connections";
 import { Member_request } from "../test-data/member-requests";
@@ -9,6 +10,7 @@ import { Status } from "../test-data/status";
 import { Status_project } from "../test-data/status-project";
 import { User } from "../test-data/users";
 import { User_skill } from "../test-data/users-skills";
+import { ChatMembers } from "../test-data/chat-members";
 
 const db = require("../../pool");
 const format = require("pg-format");
@@ -47,6 +49,12 @@ type Data = {
   memberRequestsData: {
     member_request: Member_request[];
   };
+  chatData: {
+    chat: Chat[]
+  };
+  chatMembersData: {
+    chatMembers: ChatMembers[]
+  }
 };
 
 export const seed = ({
@@ -61,9 +69,17 @@ export const seed = ({
   memberRequestsData,
   connectionsData,
   connectionRequestsData,
+  chatData,
+  chatMembersData
 }: Data) => {
   return db
     .query(`DROP TABLE IF EXISTS users_skills CASCADE;`)
+    .then(() => {
+      return db.query(`DROP TABLE IF EXISTS chat_members CASCADE;`);
+    })
+    .then(() => {
+      return db.query(`DROP TABLE IF EXISTS chat CASCADE;`);
+    })
     .then(() => {
       return db.query(`DROP TABLE IF EXISTS member_request;`);
     })
@@ -160,6 +176,15 @@ export const seed = ({
       return db.query(`CREATE TABLE connection_request
           (user_id_a INT REFERENCES users(user_id) ON DELETE CASCADE,
           user_id_b INT REFERENCES users(user_id) ON DELETE CASCADE);`);
+    })
+    .then(() => {
+      return db.query(`CREATE TABLE chat
+      (chat_id VARCHAR(50) UNIQUE NOT NULL);`);
+    })
+    .then(() => {
+      return db.query(`CREATE TABLE chat_members
+      (chat_id VARCHAR(50) REFERENCES chat(chat_id) ON DELETE CASCADE,
+      user_id INT REFERENCES users(user_id) ON DELETE CASCADE);`);
     })
     .then(() => {
       const formattedSkills = format(
@@ -305,5 +330,27 @@ export const seed = ({
         )
       );
       return db.query(formattedConnectionRequestsData);
-    });
+    })
+    .then(() => {
+      const formattedChatData = format(
+        `INSERT INTO chat
+        (chat_id)
+        VALUES %L RETURNING *;`,
+        chatData.chat.map((chat: Chat) => {
+          return [chat.chat_id];
+        })
+      );
+        return db.query(formattedChatData);
+    })
+    .then(() => {
+      const formattedChatMembersData = format(
+        `INSERT INTO chat_members
+        (chat_id, user_id)
+        VALUES %L RETURNING *;`,
+        chatMembersData.chatMembers.map((chatMember: ChatMembers) => {
+          return [chatMember.chat_id, chatMember.user_id];
+        })
+      )
+      return db.query(formattedChatMembersData)
+    })
 };

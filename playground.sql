@@ -11,3 +11,5 @@ SELECT * FROM projects_members;
 SELECT * FROM member_request;
 SELECT * FROM connections;
 SELECT * FROM connection_request;
+SELECT * FROM chat;
+SELECT * FROM chat_members;

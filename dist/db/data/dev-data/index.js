@@ -10,3 +10,5 @@ exports.statusProjectData = require("./status-project");
 exports.connectionsData = require("./connections");
 exports.connectionRequestsData = require("./connection-request");
 exports.memberRequestsData = require("./member-requests");
+exports.chatData = require("./chat");
+exports.chatMembersData = require("./chat-members");

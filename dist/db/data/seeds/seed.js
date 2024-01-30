@@ -3,9 +3,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.seed = void 0;
 const db = require("../../pool");
 const format = require("pg-format");
-const seed = ({ usersData, skillsData, usersSkillsData, statusData, projectsData, projectsSkillsData, statusProjectData, projectsMembersData, memberRequestsData, connectionsData, connectionRequestsData, }) => {
+const seed = ({ usersData, skillsData, usersSkillsData, statusData, projectsData, projectsSkillsData, statusProjectData, projectsMembersData, memberRequestsData, connectionsData, connectionRequestsData, chatData, chatMembersData }) => {
     return db
         .query(`DROP TABLE IF EXISTS users_skills CASCADE;`)
+        .then(() => {
+        return db.query(`DROP TABLE IF EXISTS chat_members CASCADE;`);
+    })
+        .then(() => {
+        return db.query(`DROP TABLE IF EXISTS chat CASCADE;`);
+    })
         .then(() => {
         return db.query(`DROP TABLE IF EXISTS member_request;`);
     })
@@ -102,6 +108,15 @@ const seed = ({ usersData, skillsData, usersSkillsData, statusData, projectsData
         return db.query(`CREATE TABLE connection_request
           (user_id_a INT REFERENCES users(user_id) ON DELETE CASCADE,
           user_id_b INT REFERENCES users(user_id) ON DELETE CASCADE);`);
+    })
+        .then(() => {
+        return db.query(`CREATE TABLE chat
+      (chat_id VARCHAR(50) UNIQUE NOT NULL);`);
+    })
+        .then(() => {
+        return db.query(`CREATE TABLE chat_members
+      (chat_id VARCHAR(50) REFERENCES chat(chat_id) ON DELETE CASCADE,
+      user_id INT REFERENCES users(user_id) ON DELETE CASCADE);`);
     })
         .then(() => {
         const formattedSkills = format(`INSERT INTO skills
@@ -204,6 +219,22 @@ const seed = ({ usersData, skillsData, usersSkillsData, statusData, projectsData
             return [connectionRequest.user_id_a, connectionRequest.user_id_b];
         }));
         return db.query(formattedConnectionRequestsData);
+    })
+        .then(() => {
+        const formattedChatData = format(`INSERT INTO chat
+        (chat_id)
+        VALUES %L RETURNING *;`, chatData.chat.map((chat) => {
+            return [chat.chat_id];
+        }));
+        return db.query(formattedChatData);
+    })
+        .then(() => {
+        const formattedChatMembersData = format(`INSERT INTO chat_members
+        (chat_id, user_id)
+        VALUES %L RETURNING *;`, chatMembersData.chatMembers.map((chatMember) => {
+            return [chatMember.chat_id, chatMember.user_id];
+        }));
+        return db.query(formattedChatMembersData);
     });
 };
 exports.seed = seed;

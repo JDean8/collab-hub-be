@@ -201,3 +201,16 @@ You are now connected to database "ch_test" as user "karolinakonior".
          2 |         6
 (3 rows)
 
+ chat_id 
+---------
+ 1
+ 2
+ 3
+(3 rows)
+
+ chat_id | user_id 
+---------+---------
+ 1       |       1
+ 1       |       3
+(2 rows)
+
