@@ -184,4 +184,22 @@ describe("POST /api/chat/members/:chat_id", () => {
                 expect(body.msg).toBe("Bad request");
             });
     })
+    test("404: responds with an error message when the chat_id is not found", () => {
+        return request(app)
+            .post("/api/chat/members/4")
+            .send({ user_id: 2 })
+            .expect(404)
+            .then(({ body }) => {
+                expect(body.msg).toBe("Chat not found");
+            });
+    })
+    test("400: responds with an error message when user is already a member of the chat", () => {
+        return request(app)
+            .post("/api/chat/members/1")
+            .send({ user_id: 1 })
+            .expect(400)
+            .then(({ body }) => {
+                expect(body.msg).toBe("User already in chat");
+            });
+    })
 })

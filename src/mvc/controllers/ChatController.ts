@@ -74,7 +74,25 @@ exports.postChatMessage = (req: Request, res: Response, next: NextFunction) => {
 }
 
 exports.postChatMember = (req: Request, res: Response, next: NextFunction) => {
-    postMember(req.params.chat_id, req.body.user_id)
+    fetchAllChats()
+    .then((chats: Chat[]) => {
+        const chat = chats.find((c: Chat) => c.chat_id === req.params.chat_id);
+        if (!chat) {
+            throw { status: 404, msg: "Chat not found" };
+        }
+    })
+    .then(() => {
+        return fetchSingleChatMembers(req.params.chat_id)
+    })
+    .then((members: ChatMembers[]) => {
+        const member = members.find((m: ChatMembers) => m.user_id === req.body.user_id);
+        if (member) {
+            throw { status: 400, msg: "User already in chat" };
+        }
+    })
+    .then(() => {
+        return postMember(req.params.chat_id, req.body.user_id)
+    })
     .then((member: ChatMembers[]) => {
         res.status(201).send({member})
     })

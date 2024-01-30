@@ -66,7 +66,25 @@ exports.postChatMessage = (req, res, next) => {
     });
 };
 exports.postChatMember = (req, res, next) => {
-    postMember(req.params.chat_id, req.body.user_id)
+    fetchAllChats()
+        .then((chats) => {
+        const chat = chats.find((c) => c.chat_id === req.params.chat_id);
+        if (!chat) {
+            throw { status: 404, msg: "Chat not found" };
+        }
+    })
+        .then(() => {
+        return fetchSingleChatMembers(req.params.chat_id);
+    })
+        .then((members) => {
+        const member = members.find((m) => m.user_id === req.body.user_id);
+        if (member) {
+            throw { status: 400, msg: "User already in chat" };
+        }
+    })
+        .then(() => {
+        return postMember(req.params.chat_id, req.body.user_id);
+    })
         .then((member) => {
         res.status(201).send({ member });
     })
