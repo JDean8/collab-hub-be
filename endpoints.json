@@ -315,5 +315,100 @@
                 }
             ]
         }
+    },
+    "GET /api/chat": {
+        "description": "Returns an array of all chats",
+        "queries": [],
+        "exampleResponse": {
+                "chats": [ 
+                    { "chat_id": "1"},
+                    { "chat_id": "2"},
+                    { "chat_id": "3"}
+                ]
+            }
+    },
+    "POST /api/chat": {
+        "description": "Adds a new chat to the database.",
+        "queries": [],
+        "requiredProperties": ["chat_id"],
+        "exampleRequest": {
+            "chat_id": "4"
+        }
+    },
+    "GET /api/chat/members": {
+        "description": "Returns an array of all members of all chats.",
+        "queries": [],
+        "exampleResponse": {
+            "members": [
+                {
+                    "chat_id": "1",
+                    "user_id": 1
+                },
+                {
+                    "chat_id": "2",
+                    "user_id": 2
+                }
+            ]
+        }
+    },
+    "GET /api/chat/members/:chat_id": {
+        "description": "Returns an array of all members of the chat with the specified chat_id.",
+        "queries": [],
+        "exampleResponse": {
+            "members": [
+                {
+                    "chat_id": "1",
+                    "user_id": 1
+                },
+                {
+                    "chat_id": "1",
+                    "user_id": 2
+                }
+            ]
+        }
+    },
+    "GET /api/chat/messages/:chat_id": {
+        "description": "Returns an array of all messages of the chat with the specified chat_id.",
+        "queries": [],
+        "exampleResponse": {
+            "messages": [
+                {   "chat_id": "1", 
+                    "message_id": 1, 
+                    "user_id": 1, 
+                    "message": "Hello", 
+                    "avatar_url": "https://i.imgur.com/1C22Hym.png",
+                    "created_at": "2024-01-30T12:30:42.000Z" 
+                },
+                { 
+                    "chat_id": "1", 
+                    "message_id": 2, 
+                    "user_id": 3, 
+                    "message": "Hi", 
+                    "created_at": "2024-01-30T12:32:42.000Z", 
+                    "avatar_url": "https://i.imgur.com/1C22Hym.png"
+                }
+            ]
+        }
+    },
+    "POST /api/chat/messages/:chat_id": {
+        "description": "Adds a new message to the chat with the specified chat_id.",
+        "queries": [],
+        "requiredProperties": ["user_id", "message", "avatar_url"],
+        "exampleResponse": {
+            "user_id": 1,
+            "message": "Hello",
+            "avatar_url": "https://i.imgur.com/1C22Hym.png",
+            "message_id": 3,
+            "created_at": "2024-01-30T12:32:42.000Z"
+        }
+    },
+    "POST /api/chat/members/:chat_id": {
+        "description": "Adds a new member to the chat with the specified chat_id.",
+        "queries": [],
+        "requiredProperties": ["user_id"],
+        "exampleResponse": {
+            "chat_id": "1",
+            "user_id": 1
+        }
     }
 }

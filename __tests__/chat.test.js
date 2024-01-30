@@ -103,7 +103,7 @@ describe("GET /api/chat/messages/:chat_id", () => {
                     [ 
                         { chat_id: "1", message_id: 1, user_id: 1, message: "Hello", avatar_url: "https://i.imgur.com/1C22Hym.png",
                         created_at: "2024-01-30T12:30:42.000Z" },
-                        { chat_id: "1", message_id: 2, user_id: 3, message: "Hi", created_at: "2024-01-30T12:32:42.000Z", avatar_url: "https://i.imgur.com/1C22Hym.png"}
+                        { chat_id: "1", message_id: 2, user_id: 3, message: "Hi", created_at: "2024-01-30T12:32:42.000Z", avatar_url: "https://i.imgur.com/1C22Hym.png" }
                 ]
                 );
             });
