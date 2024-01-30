@@ -33,3 +33,10 @@ exports.fetchChatMessages = (chat_id) => {
         return rows;
     });
 };
+exports.postSingleChatMessage = (chat_id, message, user_id, avatar_url) => {
+    const currentDate = new Date();
+    return db.query("INSERT INTO chat_messages (chat_id, message, user_id, avatar_url, created_at) VALUES ($1, $2, $3, $4, $5) RETURNING *;", [chat_id, message, user_id, avatar_url, currentDate])
+        .then(({ rows }) => {
+        return rows[0];
+    });
+};

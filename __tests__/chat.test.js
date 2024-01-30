@@ -125,3 +125,24 @@ describe("GET /api/chat/messages/:chat_id", () => {
             });
     })
 })
+
+describe("POST /api/chat/messages/:chat_id", () => {
+    test("201: responds with the posted message object", () => {
+        return request(app)
+            .post("/api/chat/messages/1")
+            .send({ message: "Hello, how are you doing?", user_id: 1, avatar_url: "https://i.imgur.com/1C22Hym.png" })
+            .expect(201)
+            .then(({ body }) => {
+                expect(body.message).toEqual({ chat_id: "1", message_id: 3, user_id: 1, message: "Hello, how are you doing?", avatar_url: "https://i.imgur.com/1C22Hym.png", created_at: expect.any(String) });
+            });
+    })
+    test("201: responds with the posted message object when passed extra keys", () => {
+        return request(app)
+            .post("/api/chat/messages/1")
+            .send({ message: "Hello, how are you doing?", user_id: 1, avatar_url: "https://i.imgur.com/1C22Hym.png", extra: "extra" })
+            .expect(201)
+            .then(({ body }) => {
+                expect(body.message).toEqual({ chat_id: "1", message_id: 3, user_id: 1, message: "Hello, how are you doing?", avatar_url: "https://i.imgur.com/1C22Hym.png", created_at: expect.any(String) });
+            });
+    })
+})
