@@ -41,6 +41,15 @@ type MembersRequestProps = {
   }[];
 };
 
+type InsertedProject = {
+  project_id: number;
+  project_author: number;
+  project_name: string;
+  project_description: string;
+  project_created_at: number;
+  required_members: number
+}
+
 exports.selectAllProjects = () => {
   return db.query("SELECT * FROM projects").then(({ rows }: ProjectProps) => {
     return rows;
@@ -48,6 +57,14 @@ exports.selectAllProjects = () => {
 };
 
 exports.insertProject = (project: Project) => {
+  let newProject: InsertedProject = {
+    project_id: 0,
+    project_author: 0,
+    project_name: "",
+    project_description: "",
+    project_created_at: 0,
+    required_members: 0
+  }
   if (
     !project.project_author ||
     !project.project_created_at ||
@@ -59,22 +76,38 @@ exports.insertProject = (project: Project) => {
       status: 400,
       msg: "Bad request",
     });
-  } else {
-    return db
-      .query(
-        "INSERT INTO projects (project_author, project_name, project_description, project_created_at, required_members) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-        [
-          project.project_author,
-          project.project_name,
-          project.project_description,
-          project.project_created_at,
-          project.required_members,
-        ]
-      )
-      .then(({ rows }: ProjectProps) => {
-        return rows[0];
-      });
-  }
+  } 
+  return db
+    .query(
+      "INSERT INTO projects (project_author, project_name, project_description, project_created_at, required_members) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+      [
+        project.project_author,
+        project.project_name,
+        project.project_description,
+        project.project_created_at,
+        project.required_members,
+      ]
+    )
+    .then(({ rows }: ProjectProps) => {
+      newProject = {
+        project_id: rows[0].project_id,
+        project_author: rows[0].project_author,
+        project_name: rows[0].project_name,
+        project_description: rows[0].project_description,
+        required_members: rows[0].required_members,
+        project_created_at: rows[0].project_created_at,
+      };
+      return newProject;
+    })
+    .then(() => {
+      return db.query(
+        `INSERT INTO projects_members (project_id, member_id) VALUES ($1, $2) RETURNING *`,
+        [newProject.project_id, project.project_author]
+      );
+    })
+    .then(() => {
+      return newProject;
+    });
 };
 
 exports.selectProjectById = (project_id: number) => {
