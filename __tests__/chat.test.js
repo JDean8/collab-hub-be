@@ -142,7 +142,7 @@ describe("POST /api/chat/messages/:chat_id", () => {
           chat_id: "1",
           message_id: 3,
           user_id: 1,
-          message: "Hello, how are you doing?",
+          message: expect.any(String),
           avatar_url: "https://i.imgur.com/1C22Hym.png",
           created_at: expect.any(String),
         });
@@ -163,7 +163,7 @@ describe("POST /api/chat/messages/:chat_id", () => {
           chat_id: "1",
           message_id: 3,
           user_id: 1,
-          message: "Hello, how are you doing?",
+          message: expect.any(String),
           avatar_url: "https://i.imgur.com/1C22Hym.png",
           created_at: expect.any(String),
         });

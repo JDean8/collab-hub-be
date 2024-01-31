@@ -1,6 +1,7 @@
 import { Chat } from "../../db/data/test-data/chat";
 import { ChatMembers } from "../../db/data/test-data/chat-members";
 import { ChatMessage } from "../../db/data/test-data/chat-messages";
+const bcrypt = require("bcrypt");
 const db = require("../../../dist/db/pool");
 
 type ChatsProps = {
@@ -63,13 +64,21 @@ exports.postSingleChatMessage = (
   const currentDate = new Date();
   if (!chat_id || !message || !user_id || !avatar_url)
     return Promise.reject({ status: 400, msg: "Bad request" });
-  return db
-    .query(
-      "INSERT INTO chat_messages (chat_id, message, user_id, avatar_url, created_at) VALUES ($1, $2, $3, $4, $5) RETURNING *;",
-      [chat_id, message, user_id, avatar_url, currentDate]
-    )
-    .then(({ rows }: ChatMessageProps) => {
-      return rows[0];
+  return bcrypt
+    .genSalt(10)
+    .then((response: string) => {
+      const hashedMessage = bcrypt.hash(message, response);
+      return hashedMessage;
+    })
+    .then((hashedMessage: string) => {
+      return db
+        .query(
+          "INSERT INTO chat_messages (chat_id, message, user_id, avatar_url, created_at) VALUES ($1, $2, $3, $4, $5) RETURNING *;",
+          [chat_id, hashedMessage, user_id, avatar_url, currentDate]
+        )
+        .then(({ rows }: ChatMessageProps) => {
+          return rows[0];
+        });
     });
 };
 

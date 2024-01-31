@@ -24,7 +24,7 @@ describe("GET /api/users", () => {
               name: expect.any(String),
               bio: expect.any(String),
               password: expect.any(String),
-              github_url: expect.any(String)
+              github_url: expect.any(String),
             })
           );
         });
@@ -47,7 +47,7 @@ describe("GET /api/users/:user_id", () => {
           bio: "I love cats and JavaScript!",
           avatar_url:
             "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
-          github_url: "https://github.com"
+          github_url: "https://github.com",
         });
       });
   });
@@ -84,7 +84,7 @@ describe("GET /api/users/signin/:user_email", () => {
           bio: "I love cats and JavaScript!",
           avatar_url:
             "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
-          github_url: "https://github.com"
+          github_url: "https://github.com",
         });
       });
   });
@@ -128,7 +128,7 @@ describe("PATCH /api/users/:user_id", () => {
           bio: "I love cats and JavaScript!",
           avatar_url:
             "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
-          github_url: "https://github.com"
+          github_url: "https://github.com",
         },
       })
       .expect(200)
@@ -141,7 +141,7 @@ describe("PATCH /api/users/:user_id", () => {
           bio: "I love cats and JavaScript!",
           avatar_url:
             "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
-          github_url: "https://github.com"
+          github_url: "https://github.com",
         });
       });
   });
@@ -207,7 +207,7 @@ describe("PATCH /api/users/:user_id", () => {
             name: "James",
             bio: "I like trains",
             password: "password1",
-            github_url: "https://github.com"
+            github_url: "https://github.com",
           },
         })
         .expect(201)
@@ -221,7 +221,7 @@ describe("PATCH /api/users/:user_id", () => {
               name: expect.any(String),
               bio: expect.any(String),
               password: expect.any(String),
-              github_url: expect.any(String)
+              github_url: expect.any(String),
             })
           );
         });
@@ -255,23 +255,23 @@ describe("GET /api/users/:user_id/my-projects", () => {
             {
               project_id: 1,
               project_author: 1,
-              project_name: 'Project 1',
-              project_description: 'Project 1 description',
-              project_created_at: '1669852800000',
-              required_members: 3
+              project_name: "Project 1",
+              project_description: "Project 1 description",
+              project_created_at: "1669852800000",
+              required_members: 3,
             },
             {
               project_id: 4,
               project_author: 1,
-              project_name: 'Project 4',
-              project_description: 'Project 4 description',
-              project_created_at: '1669852800000',
-              required_members: 3
-            }
-          ]
+              project_name: "Project 4",
+              project_description: "Project 4 description",
+              project_created_at: "1669852800000",
+              required_members: 3,
+            },
+          ];
         });
       });
-  })
+  });
   test("200: responds with an empty array when user has no projects", () => {
     return request(app)
       .get("/api/users/4/my-projects")
@@ -279,7 +279,7 @@ describe("GET /api/users/:user_id/my-projects", () => {
       .then(({ body: { projects } }) => {
         expect(projects).toHaveLength(0);
       });
-  })
+  });
   test("404: responds with error message when user_id that does not exist", () => {
     return request(app)
       .get("/api/users/148/my-projects")
@@ -287,8 +287,8 @@ describe("GET /api/users/:user_id/my-projects", () => {
       .then(({ body: { msg } }) => {
         expect(msg).toEqual("No user found with that ID");
       });
-  })
-})
+  });
+});
 
 describe("GET /api/users/:user_id/project-associate", () => {
   test("200: responds with an array of projects for a user", () => {
@@ -303,33 +303,33 @@ describe("GET /api/users/:user_id/project-associate", () => {
               project_id: 2,
               member_id: 1,
               project_author: 2,
-              project_name: 'Project 2',
-              project_description: 'Project 2 description',
-              project_created_at: '1669852800000',
-              required_members: 3
+              project_name: "Project 2",
+              project_description: "Project 2 description",
+              project_created_at: "1669852800000",
+              required_members: 3,
             },
             {
               project_id: 3,
               member_id: 1,
               project_author: 3,
-              project_name: 'Project 3',
-              project_description: 'Project 3 description',
-              project_created_at: '1669852800000',
-              required_members: 3
+              project_name: "Project 3",
+              project_description: "Project 3 description",
+              project_created_at: "1669852800000",
+              required_members: 3,
             },
             {
               project_id: 6,
               member_id: 1,
               project_author: 3,
-              project_name: 'Project 6',
-              project_description: 'Project 6 description',
-              project_created_at: '1669852800000',
-              required_members: 1
-            }
-          ]
+              project_name: "Project 6",
+              project_description: "Project 6 description",
+              project_created_at: "1669852800000",
+              required_members: 1,
+            },
+          ];
         });
       });
-  })
+  });
   test("200: responds with an empty array when user has no projects", () => {
     return request(app)
       .get("/api/users/4/project-associate")
@@ -337,7 +337,7 @@ describe("GET /api/users/:user_id/project-associate", () => {
       .then(({ body: { projects } }) => {
         expect(projects).toHaveLength(0);
       });
-  })
+  });
   test("404: responds with error message when user_id that does not exist", () => {
     return request(app)
       .get("/api/users/148/project-associate")
@@ -345,8 +345,8 @@ describe("GET /api/users/:user_id/project-associate", () => {
       .then(({ body: { msg } }) => {
         expect(msg).toEqual("No user found with that ID");
       });
-  })
-})
+  });
+});
 
 describe("GET /api/users/:user_id/my-requests", () => {
   test("200: responds with an array of project members requests for a user", () => {
@@ -358,14 +358,14 @@ describe("GET /api/users/:user_id/my-requests", () => {
         expect(projects[0]).toEqual({
           project_id: 3,
           project_author: 3,
-          project_name: 'Project 3',
-          project_description: 'Project 3 description',
-          project_created_at: '1669852800000',
+          project_name: "Project 3",
+          project_description: "Project 3 description",
+          project_created_at: "1669852800000",
           required_members: 3,
-          user_id: 1
-        })
+          user_id: 1,
+        });
       });
-  })
+  });
   test("200: responds with an empty array when user has no projects", () => {
     return request(app)
       .get("/api/users/4/my-requests")
@@ -373,7 +373,7 @@ describe("GET /api/users/:user_id/my-requests", () => {
       .then(({ body: { projects } }) => {
         expect(projects).toHaveLength(0);
       });
-  })
+  });
   test("404: responds with error message when user_id that does not exist", () => {
     return request(app)
       .get("/api/users/148/my-requests")
@@ -381,5 +381,5 @@ describe("GET /api/users/:user_id/my-requests", () => {
       .then(({ body: { msg } }) => {
         expect(msg).toEqual("No user found with that ID");
       });
-  })
-})
+  });
+});
