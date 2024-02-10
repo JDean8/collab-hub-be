@@ -4,7 +4,7 @@ const db = require("../../../dist/db/pool.js");
 const { fetchStatus } = require("./StatusModel");
 const { fetchAllSkills } = require("./SkillsModel");
 exports.selectAllProjects = () => {
-    return db.query("SELECT * FROM projects").then(({ rows }) => {
+    return db.query("SELECT * FROM projects ORDER BY project_created_at DESC").then(({ rows }) => {
         return rows;
     });
 };
