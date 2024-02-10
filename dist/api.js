@@ -12,7 +12,7 @@ exports.app.use(cors());
 exports.server = http.createServer(exports.app);
 const io = new socket_io_1.Server(exports.server, {
     cors: {
-        origin: "http://localhost:5173",
+        origin: "https://collub-hub.netlify.app/",
         methods: ["GET", "POST"],
     },
 });
