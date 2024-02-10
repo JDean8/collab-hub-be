@@ -58,10 +58,6 @@ export const projects_skills: Project_skill[] = [
   },
   {
     project_id: 3,
-    skill_id: 4,
-  },
-  {
-    project_id: 3,
     skill_id: 16,
   },
   {
@@ -75,10 +71,6 @@ export const projects_skills: Project_skill[] = [
   {
     project_id: 4,
     skill_id: 10,
-  },
-  {
-    project_id: 4,
-    skill_id: 5,
   },
   {
     project_id: 5,
@@ -99,10 +91,6 @@ export const projects_skills: Project_skill[] = [
   {
     project_id: 6,
     skill_id: 16,
-  },
-  {
-    project_id: 6,
-    skill_id: 1,
   },
   {
     project_id: 7,
@@ -235,10 +223,6 @@ export const projects_skills: Project_skill[] = [
   {
     project_id: 12,
     skill_id: 4,
-  },
-  {
-    project_id: 12,
-    skill_id: 5,
   },
   {
     project_id: 12,

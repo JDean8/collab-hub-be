@@ -56,10 +56,6 @@ exports.projects_skills = [
     },
     {
         project_id: 3,
-        skill_id: 4,
-    },
-    {
-        project_id: 3,
         skill_id: 16,
     },
     {
@@ -73,10 +69,6 @@ exports.projects_skills = [
     {
         project_id: 4,
         skill_id: 10,
-    },
-    {
-        project_id: 4,
-        skill_id: 5,
     },
     {
         project_id: 5,
@@ -97,10 +89,6 @@ exports.projects_skills = [
     {
         project_id: 6,
         skill_id: 16,
-    },
-    {
-        project_id: 6,
-        skill_id: 1,
     },
     {
         project_id: 7,
@@ -233,10 +221,6 @@ exports.projects_skills = [
     {
         project_id: 12,
         skill_id: 4,
-    },
-    {
-        project_id: 12,
-        skill_id: 5,
     },
     {
         project_id: 12,
