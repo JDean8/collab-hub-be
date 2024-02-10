@@ -51,7 +51,7 @@ type InsertedProject = {
 }
 
 exports.selectAllProjects = () => {
-  return db.query("SELECT * FROM projects").then(({ rows }: ProjectProps) => {
+  return db.query("SELECT * FROM projects ORDER BY project_created_at DESC").then(({ rows }: ProjectProps) => {
     return rows;
   });
 };
