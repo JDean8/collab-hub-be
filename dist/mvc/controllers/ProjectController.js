@@ -228,7 +228,7 @@ exports.deleteMemberByProjectId = (req, res, next) => {
             return Promise.reject({ status: 404, msg: "Member not found" });
     })
         .then(() => {
-        return deleteMember(user_id, project_id);
+        return deleteMember(project_id, user_id);
     })
         .then(() => {
         res.sendStatus(204);
