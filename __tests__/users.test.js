@@ -226,6 +226,46 @@ describe("PATCH /api/users/:user_id", () => {
           );
         });
     });
+    test("400: returns error message when passed email which is already in use", () => {
+      return request(app)
+        .post("/api/users")
+        .send({
+          user: {
+            username: "BigLad13",
+            avatar_url:
+              "https://previews.123rf.com/images/ratoca/ratoca1203/ratoca120300226/12748273-funny-cartoon-face.jpg",
+            email: "user1@mail.com",
+            name: "James",
+            bio: "I like trains",
+            password: "password1",
+            github_url: "https://github.com",
+          },
+        })
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("email is already in use");
+        });
+    });
+    test("400: returns error message when passed username which is already in use", () => {
+      return request(app)
+        .post("/api/users")
+        .send({
+          user: {
+            username: "tickle122",
+            avatar_url:
+              "https://previews.123rf.com/images/ratoca/ratoca1203/ratoca120300226/12748273-funny-cartoon-face.jpg",
+            email: "biglad13@gmail.com",
+            name: "James",
+            bio: "I like trains",
+            password: "password1",
+            github_url: "https://github.com",
+          },
+        })
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("username is already in use");
+        });
+    });
     test("400: returns error message when passed invalid user object", () => {
       return request(app)
         .post("/api/users")
