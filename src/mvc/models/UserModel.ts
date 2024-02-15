@@ -9,7 +9,7 @@ type UserProps = {
 
 type ProjectProps = {
   rows: Project[];
-}
+};
 
 exports.selectAllUsers = () => {
   return db.query("SELECT * FROM users").then(({ rows }: UserProps) => {
@@ -102,7 +102,7 @@ exports.insertUser = (user: User) => {
     !user.avatar_url ||
     !user.name ||
     !user.username ||
-    !user.bio || 
+    !user.bio ||
     !user.github_url
   ) {
     return Promise.reject({
@@ -110,11 +110,25 @@ exports.insertUser = (user: User) => {
       msg: "Bad request",
     });
   }
-  return bcrypt
-    .genSalt(10)
-    .then((response: string) => {
-      const hashedPassword = bcrypt.hash(user.password, response);
-      return hashedPassword;
+  return db
+    .query("SELECT * FROM users")
+    .then(({ rows }: UserProps) => {
+      const emailExists = rows.some((u) => u.email === user.email);
+      const usernameExists = rows.some((u) => u.username === user.username);
+
+      if (emailExists)
+        return Promise.reject({ status: 400, msg: "email is already in use" });
+
+      if (usernameExists)
+        return Promise.reject({
+          status: 400,
+          msg: "username is already in use",
+        });
+
+      return bcrypt.genSalt(10).then((response: string) => {
+        const hashedPassword = bcrypt.hash(user.password, response);
+        return hashedPassword;
+      });
     })
     .then((hashedPassword: string) => {
       return db.query(
@@ -138,22 +152,31 @@ exports.insertUser = (user: User) => {
 };
 
 exports.getUserProjectsById = (user_id: number) => {
-  return db.query(`SELECT * FROM projects WHERE project_author = $1`, [user_id])
-  .then(({ rows }: ProjectProps) => {
-    return rows;
-  })
-}
+  return db
+    .query(`SELECT * FROM projects WHERE project_author = $1`, [user_id])
+    .then(({ rows }: ProjectProps) => {
+      return rows;
+    });
+};
 
 exports.fetchUserProjectsByMember = (user_id: number) => {
-  return db.query(`SELECT * FROM projects_members JOIN projects ON projects.project_id = projects_members.project_id WHERE member_id = $1`, [user_id])
-  .then(({ rows }: ProjectProps) => {
-    return rows;
-  })
-}
+  return db
+    .query(
+      `SELECT * FROM projects_members JOIN projects ON projects.project_id = projects_members.project_id WHERE member_id = $1`,
+      [user_id]
+    )
+    .then(({ rows }: ProjectProps) => {
+      return rows;
+    });
+};
 
 exports.fetchUserRequests = (user_id: number) => {
-  return db.query(`SELECT * FROM projects JOIN member_request ON projects.project_id = member_request.project_id WHERE user_id = $1`, [user_id])
-  .then(({ rows }: ProjectProps) => {
-    return rows;
-  })
-}
+  return db
+    .query(
+      `SELECT * FROM projects JOIN member_request ON projects.project_id = member_request.project_id WHERE user_id = $1`,
+      [user_id]
+    )
+    .then(({ rows }: ProjectProps) => {
+      return rows;
+    });
+};

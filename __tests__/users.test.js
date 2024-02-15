@@ -200,10 +200,10 @@ describe("PATCH /api/users/:user_id", () => {
         .post("/api/users")
         .send({
           user: {
-            username: "BigLad13",
+            username: "BigLad14",
             avatar_url:
               "https://previews.123rf.com/images/ratoca/ratoca1203/ratoca120300226/12748273-funny-cartoon-face.jpg",
-            email: "biglad13@gmail.com",
+            email: "biglad14@gmail.com",
             name: "James",
             bio: "I like trains",
             password: "password1",

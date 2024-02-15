@@ -80,11 +80,22 @@ exports.insertUser = (user) => {
             msg: "Bad request",
         });
     }
-    return bcrypt
-        .genSalt(10)
-        .then((response) => {
-        const hashedPassword = bcrypt.hash(user.password, response);
-        return hashedPassword;
+    return db
+        .query("SELECT * FROM users")
+        .then(({ rows }) => {
+        const emailExists = rows.some((u) => u.email === user.email);
+        const usernameExists = rows.some((u) => u.username === user.username);
+        if (emailExists)
+            return Promise.reject({ status: 400, msg: "email is already in use" });
+        if (usernameExists)
+            return Promise.reject({
+                status: 400,
+                msg: "username is already in use",
+            });
+        return bcrypt.genSalt(10).then((response) => {
+            const hashedPassword = bcrypt.hash(user.password, response);
+            return hashedPassword;
+        });
     })
         .then((hashedPassword) => {
         return db.query(`INSERT INTO users
@@ -104,19 +115,22 @@ exports.insertUser = (user) => {
     });
 };
 exports.getUserProjectsById = (user_id) => {
-    return db.query(`SELECT * FROM projects WHERE project_author = $1`, [user_id])
+    return db
+        .query(`SELECT * FROM projects WHERE project_author = $1`, [user_id])
         .then(({ rows }) => {
         return rows;
     });
 };
 exports.fetchUserProjectsByMember = (user_id) => {
-    return db.query(`SELECT * FROM projects_members JOIN projects ON projects.project_id = projects_members.project_id WHERE member_id = $1`, [user_id])
+    return db
+        .query(`SELECT * FROM projects_members JOIN projects ON projects.project_id = projects_members.project_id WHERE member_id = $1`, [user_id])
         .then(({ rows }) => {
         return rows;
     });
 };
 exports.fetchUserRequests = (user_id) => {
-    return db.query(`SELECT * FROM projects JOIN member_request ON projects.project_id = member_request.project_id WHERE user_id = $1`, [user_id])
+    return db
+        .query(`SELECT * FROM projects JOIN member_request ON projects.project_id = member_request.project_id WHERE user_id = $1`, [user_id])
         .then(({ rows }) => {
         return rows;
     });
