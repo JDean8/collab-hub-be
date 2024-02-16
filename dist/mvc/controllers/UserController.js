@@ -1,6 +1,17 @@
 "use strict";
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const { selectAllUsers, removeUser, selectUserByID, editUser, insertUser, selectUserByEmail, getUserProjectsById, fetchUserProjectsByMember, fetchUserRequests } = require("../models/UserModel");
+const { selectAllUsers, removeUser, selectUserByID, editUser, insertUser, selectUserByEmail, getUserProjectsById, fetchUserProjectsByMember, fetchUserRequests, signInWithEmail, } = require("../models/UserModel");
 exports.getAllUsers = (req, res, next) => {
     selectAllUsers()
         .then((data) => {
@@ -84,6 +95,15 @@ exports.getUserRequests = (req, res, next) => {
     })
         .then((data) => {
         res.status(200).send({ projects: data });
+    })
+        .catch((err) => next(err));
+};
+exports.loginWithEmailAndPassword = (req, res, next) => {
+    const { password, email } = req.body;
+    signInWithEmail(password, email)
+        .then((data) => {
+        const { password } = data, copyOfTheUser = __rest(data, ["password"]);
+        res.status(201).send({ user: copyOfTheUser });
     })
         .catch((err) => next(err));
 };

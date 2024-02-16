@@ -3,6 +3,7 @@ const testData = require("../dist/db/data/test-data/index");
 const db = require("../dist/db/pool.js");
 const request = require("supertest");
 const { app } = require("../dist/api.js");
+const { describe } = require("node:test");
 
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
@@ -13,7 +14,7 @@ describe("GET /api/users", () => {
       .get("/api/users")
       .expect(200)
       .then(({ body: { users } }) => {
-        expect(users).toHaveLength(4);
+        expect(users).toHaveLength(5);
         users.forEach((user) => {
           expect(user).toEqual(
             expect.objectContaining({
@@ -42,7 +43,8 @@ describe("GET /api/users/:user_id", () => {
           user_id: 1,
           username: "tickle122",
           email: "user1@mail.com",
-          password: "password",
+          password:
+            "$2b$10$08sjmFeFNNgdGhjq4Kig.OfDzLpXr/K.MoFI3ynd9EZlrbbOnVn5m",
           name: "Tom Tickle",
           bio: "I love cats and JavaScript!",
           avatar_url:
@@ -79,7 +81,8 @@ describe("GET /api/users/signin/:user_email", () => {
           user_id: 1,
           username: "tickle122",
           email: "user1@mail.com",
-          password: "password",
+          password:
+            "$2b$10$08sjmFeFNNgdGhjq4Kig.OfDzLpXr/K.MoFI3ynd9EZlrbbOnVn5m",
           name: "Tom Tickle",
           bio: "I love cats and JavaScript!",
           avatar_url:
@@ -200,10 +203,10 @@ describe("PATCH /api/users/:user_id", () => {
         .post("/api/users")
         .send({
           user: {
-            username: "BigLad13",
+            username: "BigLad14",
             avatar_url:
               "https://previews.123rf.com/images/ratoca/ratoca1203/ratoca120300226/12748273-funny-cartoon-face.jpg",
-            email: "biglad13@gmail.com",
+            email: "biglad14@gmail.com",
             name: "James",
             bio: "I like trains",
             password: "password1",
@@ -224,6 +227,46 @@ describe("PATCH /api/users/:user_id", () => {
               github_url: expect.any(String),
             })
           );
+        });
+    });
+    test("400: returns error message when passed email which is already in use", () => {
+      return request(app)
+        .post("/api/users")
+        .send({
+          user: {
+            username: "BigLad13",
+            avatar_url:
+              "https://previews.123rf.com/images/ratoca/ratoca1203/ratoca120300226/12748273-funny-cartoon-face.jpg",
+            email: "user1@mail.com",
+            name: "James",
+            bio: "I like trains",
+            password: "password1",
+            github_url: "https://github.com",
+          },
+        })
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("email is already in use");
+        });
+    });
+    test("400: returns error message when passed username which is already in use", () => {
+      return request(app)
+        .post("/api/users")
+        .send({
+          user: {
+            username: "tickle122",
+            avatar_url:
+              "https://previews.123rf.com/images/ratoca/ratoca1203/ratoca120300226/12748273-funny-cartoon-face.jpg",
+            email: "biglad13@gmail.com",
+            name: "James",
+            bio: "I like trains",
+            password: "password1",
+            github_url: "https://github.com",
+          },
+        })
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("username is already in use");
         });
     });
     test("400: returns error message when passed invalid user object", () => {
@@ -380,6 +423,57 @@ describe("GET /api/users/:user_id/my-requests", () => {
       .expect(404)
       .then(({ body: { msg } }) => {
         expect(msg).toEqual("No user found with that ID");
+      });
+  });
+});
+
+describe("POST /api/users/login", () => {
+  test("201: responds with user object when login was successful", () => {
+    return request(app)
+      .post("/api/users/login")
+      .send({
+        email: "sasha1@mail.com",
+        password: "password",
+      })
+      .expect(201)
+      .then(({ body: { user } }) => {
+        expect(user).toEqual(
+          expect.objectContaining({
+            user_id: expect.any(Number),
+            username: expect.any(String),
+            avatar_url: expect.any(String),
+            email: expect.any(String),
+            name: expect.any(String),
+            bio: expect.any(String),
+            github_url: expect.any(String),
+          })
+        );
+      });
+  });
+
+  test("404: responds with error message when email that does not exist", () => {
+    return request(app)
+      .post("/api/users/login")
+      .send({
+        email: "asqwe@gmail.com",
+        password: "password",
+      })
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toEqual("No user found with that Email");
+      });
+  });
+
+  test("404: responds with error message when password is incorrect", () => {
+    return request(app)
+      .post("/api/users/login")
+      .send({
+        email: "sasha1@mail.com",
+        password: "password1",
+      })
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toEqual("Password is incorrect!");
       });
   });
 });

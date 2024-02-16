@@ -1,4 +1,13 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const db = require("../../../dist/db/pool.js");
 const bcrypt = require("bcrypt");
@@ -80,11 +89,22 @@ exports.insertUser = (user) => {
             msg: "Bad request",
         });
     }
-    return bcrypt
-        .genSalt(10)
-        .then((response) => {
-        const hashedPassword = bcrypt.hash(user.password, response);
-        return hashedPassword;
+    return db
+        .query("SELECT * FROM users")
+        .then(({ rows }) => {
+        const emailExists = rows.some((u) => u.email === user.email);
+        const usernameExists = rows.some((u) => u.username === user.username);
+        if (emailExists)
+            return Promise.reject({ status: 400, msg: "email is already in use" });
+        if (usernameExists)
+            return Promise.reject({
+                status: 400,
+                msg: "username is already in use",
+            });
+        return bcrypt.genSalt(10).then((response) => {
+            const hashedPassword = bcrypt.hash(user.password, response);
+            return hashedPassword;
+        });
     })
         .then((hashedPassword) => {
         return db.query(`INSERT INTO users
@@ -104,20 +124,44 @@ exports.insertUser = (user) => {
     });
 };
 exports.getUserProjectsById = (user_id) => {
-    return db.query(`SELECT * FROM projects WHERE project_author = $1`, [user_id])
+    return db
+        .query(`SELECT * FROM projects WHERE project_author = $1`, [user_id])
         .then(({ rows }) => {
         return rows;
     });
 };
 exports.fetchUserProjectsByMember = (user_id) => {
-    return db.query(`SELECT * FROM projects_members JOIN projects ON projects.project_id = projects_members.project_id WHERE member_id = $1`, [user_id])
+    return db
+        .query(`SELECT * FROM projects_members JOIN projects ON projects.project_id = projects_members.project_id WHERE member_id = $1`, [user_id])
         .then(({ rows }) => {
         return rows;
     });
 };
 exports.fetchUserRequests = (user_id) => {
-    return db.query(`SELECT * FROM projects JOIN member_request ON projects.project_id = member_request.project_id WHERE user_id = $1`, [user_id])
+    return db
+        .query(`SELECT * FROM projects JOIN member_request ON projects.project_id = member_request.project_id WHERE user_id = $1`, [user_id])
         .then(({ rows }) => {
         return rows;
     });
+};
+exports.signInWithEmail = (password, email) => {
+    return db
+        .query(`
+SELECT * FROM users
+WHERE email = $1`, [email])
+        .then(({ rows }) => __awaiter(void 0, void 0, void 0, function* () {
+        if (rows.length === 0) {
+            return Promise.reject({
+                status: 404,
+                msg: "No user found with that Email",
+            });
+        }
+        const passwordMatch = yield bcrypt.compare(password, rows[0].password);
+        if (!passwordMatch)
+            return Promise.reject({
+                status: 400,
+                msg: "Password is incorrect!",
+            });
+        return rows[0];
+    }));
 };

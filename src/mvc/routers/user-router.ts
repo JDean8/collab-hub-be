@@ -9,7 +9,8 @@ const {
   getUserByEmail,
   getUserProjects,
   getUserProjectsByMember,
-  getUserRequests
+  getUserRequests,
+  loginWithEmailAndPassword
 } = require("../controllers/UserController");
 
 const {
@@ -30,3 +31,4 @@ userRouter.route("/signin/:user_email").get(getUserByEmail);
 userRouter.route("/:user_id/my-projects").get(getUserProjects);
 userRouter.route("/:user_id/project-associate").get(getUserProjectsByMember)
 userRouter.route("/:user_id/my-requests").get(getUserRequests);
+userRouter.route("/login").post(loginWithEmailAndPassword);
