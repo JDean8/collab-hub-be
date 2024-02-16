@@ -450,4 +450,18 @@ describe("POST /api/users/login", () => {
         );
       });
   });
+
+  test("404: responds with error message when email that does not exist", () => {
+    return request(app)
+      .post("/api/users/login")
+      .send({
+        email: "asqwe@gmail.com",
+        password: "password",
+      })
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toEqual("No user found with that Email");
+      });
+  });
+  
 });
