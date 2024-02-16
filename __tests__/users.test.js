@@ -3,6 +3,7 @@ const testData = require("../dist/db/data/test-data/index");
 const db = require("../dist/db/pool.js");
 const request = require("supertest");
 const { app } = require("../dist/api.js");
+const { describe } = require("node:test");
 
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
@@ -420,6 +421,31 @@ describe("GET /api/users/:user_id/my-requests", () => {
       .expect(404)
       .then(({ body: { msg } }) => {
         expect(msg).toEqual("No user found with that ID");
+      });
+  });
+});
+
+describe("POST /api/login", () => {
+  test("201: responds with user object when login was successful", () => {
+    return request(app)
+      .post("/api/login")
+      .send({
+        email: "user1@mail.com",
+        password: "password",
+      })
+      .expect(201)
+      .then(({ body: { user } }) => {
+        expect(user).toEqual(
+          expect.objectContaining({
+            user_id: expect.any(Number),
+            username: expect.any(String),
+            avatar_url: expect.any(String),
+            email: expect.any(String),
+            name: expect.any(String),
+            bio: expect.any(String),
+            github_url: expect.any(String),
+          })
+        );
       });
   });
 });

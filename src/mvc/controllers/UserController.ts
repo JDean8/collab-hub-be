@@ -111,3 +111,6 @@ exports.getUserRequests = (req: Request, res: Response, next: NextFunction) => {
   })
   .catch((err: Error) => next(err));
 }
+
+exports.loginWithEmailAndPassword = (req: Request, res: Response, next: NextFunction) => {
+}

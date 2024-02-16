@@ -87,3 +87,5 @@ exports.getUserRequests = (req, res, next) => {
     })
         .catch((err) => next(err));
 };
+exports.loginWithEmailAndPassword = (req, res, next) => {
+};
