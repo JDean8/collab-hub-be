@@ -463,5 +463,17 @@ describe("POST /api/users/login", () => {
         expect(msg).toEqual("No user found with that Email");
       });
   });
-  
+
+  test("404: responds with error message when password is incorrect", () => {
+    return request(app)
+      .post("/api/users/login")
+      .send({
+        email: "sasha1@mail.com",
+        password: "password1",
+      })
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toEqual("Password is incorrect!");
+      });
+  });
 });
