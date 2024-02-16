@@ -180,3 +180,30 @@ exports.fetchUserRequests = (user_id: number) => {
       return rows;
     });
 };
+
+exports.signInWithEmail = (password: string, email: string) => {
+  return db
+    .query(
+      `
+SELECT * FROM users
+WHERE email = $1`,
+      [email]
+    )
+    .then(async ({ rows }: UserProps) => {
+      if (rows.length === 0) {
+        return Promise.reject({
+          status: 404,
+          msg: "No user found with that Email",
+        });
+      }
+      const passwordMatch = await bcrypt.compare(password, rows[0].password);
+
+      if (!passwordMatch)
+        return Promise.reject({
+          status: 400,
+          msg: "Password is incorrect!",
+        });
+
+      return rows[0];
+    });
+};

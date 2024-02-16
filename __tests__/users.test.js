@@ -14,7 +14,7 @@ describe("GET /api/users", () => {
       .get("/api/users")
       .expect(200)
       .then(({ body: { users } }) => {
-        expect(users).toHaveLength(4);
+        expect(users).toHaveLength(5);
         users.forEach((user) => {
           expect(user).toEqual(
             expect.objectContaining({
@@ -43,7 +43,8 @@ describe("GET /api/users/:user_id", () => {
           user_id: 1,
           username: "tickle122",
           email: "user1@mail.com",
-          password: "password",
+          password:
+            "$2b$10$08sjmFeFNNgdGhjq4Kig.OfDzLpXr/K.MoFI3ynd9EZlrbbOnVn5m",
           name: "Tom Tickle",
           bio: "I love cats and JavaScript!",
           avatar_url:
@@ -80,7 +81,8 @@ describe("GET /api/users/signin/:user_email", () => {
           user_id: 1,
           username: "tickle122",
           email: "user1@mail.com",
-          password: "password",
+          password:
+            "$2b$10$08sjmFeFNNgdGhjq4Kig.OfDzLpXr/K.MoFI3ynd9EZlrbbOnVn5m",
           name: "Tom Tickle",
           bio: "I love cats and JavaScript!",
           avatar_url:
@@ -425,12 +427,12 @@ describe("GET /api/users/:user_id/my-requests", () => {
   });
 });
 
-describe("POST /api/login", () => {
+describe("POST /api/users/login", () => {
   test("201: responds with user object when login was successful", () => {
     return request(app)
-      .post("/api/login")
+      .post("/api/users/login")
       .send({
-        email: "user1@mail.com",
+        email: "sasha1@mail.com",
         password: "password",
       })
       .expect(201)

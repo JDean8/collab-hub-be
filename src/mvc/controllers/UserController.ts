@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import { User } from "../../db/data/test-data/users";
-import { Project } from "../../db/data/test-data/projects";
+import { type User } from "../../db/data/test-data/users";
+import { type Project } from "../../db/data/test-data/projects";
 const {
   selectAllUsers,
   removeUser,
@@ -10,7 +10,8 @@ const {
   selectUserByEmail,
   getUserProjectsById,
   fetchUserProjectsByMember,
-  fetchUserRequests
+  fetchUserRequests,
+  signInWithEmail,
 } = require("../models/UserModel");
 
 exports.getAllUsers = (req: Request, res: Response, next: NextFunction) => {
@@ -75,42 +76,54 @@ exports.postUser = (req: Request, res: Response, next: NextFunction) => {
     .catch((err: Error) => next(err));
 };
 
-exports.getUserProjects = (
+exports.getUserProjects = (req: Request, res: Response, next: NextFunction) => {
+  selectUserByID(req.params.user_id)
+    .then(() => {
+      return getUserProjectsById(req.params.user_id);
+    })
+    .then((data: Project) => {
+      res.status(200).send({ projects: data });
+    })
+    .catch((err: Error) => next(err));
+};
+
+exports.getUserProjectsByMember = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   selectUserByID(req.params.user_id)
-  .then(() => {
-    return getUserProjectsById(req.params.user_id)
-  })
-  .then((data: Project) => {
-    res.status(200).send({ projects: data });
-  })
-  .catch((err: Error) => next(err));
-}
-
-exports.getUserProjectsByMember = (req: Request, res: Response, next: NextFunction) => {
-  selectUserByID(req.params.user_id)
-  .then(() => {
-    return fetchUserProjectsByMember(req.params.user_id)
-  })
-  .then((data: Project) => {
-    res.status(200).send({ projects: data });
-  })
-  .catch((err: Error) => next(err));
-}
+    .then(() => {
+      return fetchUserProjectsByMember(req.params.user_id);
+    })
+    .then((data: Project) => {
+      res.status(200).send({ projects: data });
+    })
+    .catch((err: Error) => next(err));
+};
 
 exports.getUserRequests = (req: Request, res: Response, next: NextFunction) => {
   selectUserByID(req.params.user_id)
-  .then(() => {
-    return fetchUserRequests(req.params.user_id)
-  })
-  .then((data: Project) => {
-    res.status(200).send({ projects: data });
-  })
-  .catch((err: Error) => next(err));
-}
+    .then(() => {
+      return fetchUserRequests(req.params.user_id);
+    })
+    .then((data: Project) => {
+      res.status(200).send({ projects: data });
+    })
+    .catch((err: Error) => next(err));
+};
 
-exports.loginWithEmailAndPassword = (req: Request, res: Response, next: NextFunction) => {
-}
+exports.loginWithEmailAndPassword = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { password, email } = req.body;
+  signInWithEmail(password, email)
+    .then((data: User) => {
+      const { password, ...copyOfTheUser } = data;
+
+      res.status(201).send({ user: copyOfTheUser });
+    })
+    .catch((err: Error) => next(err));
+};
